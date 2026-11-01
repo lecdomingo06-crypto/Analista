@@ -1,0 +1,110 @@
+<?php
+
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommunityChatController;
+use App\Http\Controllers\DirectMessageController;
+use App\Http\Controllers\EvaluatorVerificationController;
+use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\ProfilePhotoController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\PublicController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Middleware\EnsureActive;
+use App\Http\Middleware\ThrottleCommunityChat;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', [PublicController::class, 'home'])->name('home');
+Route::get('/evaluators', [PublicController::class, 'evaluators'])->name('evaluators.index');
+Route::get('/evaluators/{evaluator}', [PublicController::class, 'evaluator'])->name('evaluators.show');
+Route::get('/tutorials', [PublicController::class, 'tutorials'])->name('tutorials.index');
+Route::get('/tutorials/{tutorial:slug}', [PublicController::class, 'tutorial'])->name('tutorials.show');
+Route::get('/guidelines', [PublicController::class, 'guidelines'])->name('guidelines');
+Route::view('/faq', 'faq')->name('faq');
+Route::get('/session-status', [AuthController::class, 'sessionStatus'])->name('session.status');
+Route::prefix('community-chat')->name('community-chat.')
+    ->withoutMiddleware(EnsureActive::class)
+    ->middleware(ThrottleCommunityChat::class)->group(function () {
+        Route::get('/state', [CommunityChatController::class, 'state'])->name('state');
+        Route::post('/presence', [CommunityChatController::class, 'presence'])->name('presence');
+        Route::post('/identity', [CommunityChatController::class, 'identity'])->name('identity');
+        Route::post('/messages', [CommunityChatController::class, 'store'])->name('messages.store');
+    });
+Route::get('/profile-photos/{user}/{filename}', [ProfilePhotoController::class, 'show'])
+    ->whereNumber('user')->where('filename', '[A-Za-z0-9]{40}\\.(jpg|png|webp)')->name('profile-photos.show');
+Route::middleware('guest')->group(function () {
+    Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->middleware('throttle:10,1')->name('auth.google.redirect');
+    Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->middleware('throttle:10,1')->name('auth.google.callback');
+    Route::get('/auth/google/complete', [GoogleAuthController::class, 'completeForm'])->name('auth.google.complete');
+    Route::post('/auth/google/complete', [GoogleAuthController::class, 'completeRegistration'])->middleware('throttle:5,1')->name('auth.google.store');
+    Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
+    Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
+});
+Route::get('/forgot-password', [AuthController::class, 'forgot'])->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'emailReset'])->middleware('throttle:3,1')->name('password.email');
+Route::get('/reset-password/{token}', [AuthController::class, 'resetForm'])->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'reset'])->middleware('throttle:5,1')->name('password.update');
+Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+Route::middleware('auth')->group(function () {
+    Route::get('/messages', [DirectMessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/updates', [DirectMessageController::class, 'inboxUpdates'])->name('messages.inbox-updates');
+    Route::get('/messages/attachments/{attachment}', [DirectMessageController::class, 'attachment'])->whereNumber('attachment')->name('messages.attachments.show');
+    Route::get('/messages/to/{recipient}', [DirectMessageController::class, 'compose'])->whereNumber('recipient')->name('messages.compose');
+    Route::post('/messages/to/{recipient}', [DirectMessageController::class, 'send'])->whereNumber('recipient')->middleware('throttle:30,1')->name('messages.send');
+    Route::get('/messages/{conversation}/updates', [DirectMessageController::class, 'updates'])->whereNumber('conversation')->name('messages.updates');
+    Route::get('/messages/{conversation}', [DirectMessageController::class, 'show'])->whereNumber('conversation')->name('messages.show');
+    Route::post('/messages/{conversation}', [DirectMessageController::class, 'store'])->whereNumber('conversation')->middleware('throttle:30,1')->name('messages.store');
+    Route::get('/request-review', [PublicController::class, 'prepareReview'])->name('reviews.prepare');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
+    Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
+    Route::get('/projects/{project}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
+    Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
+    Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+    Route::post('/projects/{project}/documents', [ProjectController::class, 'upload'])->name('projects.upload');
+    Route::get('/documents/{document}', [ProjectController::class, 'download'])->name('documents.download');
+    Route::post('/projects/{project}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::post('/projects/{project}/volunteer', [ReviewController::class, 'volunteer'])->name('reviews.volunteer');
+    Route::get('/reviews/{review}', [ReviewController::class, 'show'])->name('reviews.show');
+    Route::get('/reviews/{review}/output', [ReviewController::class, 'downloadOutput'])->name('reviews.output');
+    Route::post('/reviews/{review}/respond', [ReviewController::class, 'respond'])->name('reviews.respond');
+    Route::post('/reviews/{review}/feedback', [ReviewController::class, 'feedback'])->name('reviews.feedback');
+    Route::post('/reviews/{review}/complete', [ReviewController::class, 'complete'])->name('reviews.complete');
+    Route::post('/reviews/{review}/rating', [ReviewController::class, 'rate'])->name('reviews.rate');
+    Route::post('/feedback/{feedback}/addressed', [ReviewController::class, 'addressed'])->name('feedback.addressed');
+    Route::post('/reports', [ReportController::class, 'store'])->middleware('throttle:5,1')->name('reports.store');
+    Route::get('/account', [AccountController::class, 'dashboard'])->name('account.dashboard');
+    Route::get('/account/projects', [AccountController::class, 'projects'])->name('account.projects');
+    Route::get('/account/projects/{project}/reviews', [AccountController::class, 'projectReviews'])->name('account.projects.reviews');
+    Route::get('/account/projects/{project}', [ProjectController::class, 'show'])->name('account.projects.show');
+    Route::get('/account/reviews', [AccountController::class, 'dashboard'])->defaults('section', 'reviews')->name('account.reviews');
+    Route::get('/account/profile', [AccountController::class, 'profile'])->name('account.profile');
+    Route::put('/account/profile', [AccountController::class, 'updateProfile'])->name('account.profile.update');
+    Route::put('/account/profile/password', [AccountController::class, 'updatePassword'])
+        ->middleware('throttle:5,1')->name('account.profile.password');
+    Route::get('/account/evaluator-verification', [EvaluatorVerificationController::class, 'show'])->name('account.evaluator-verification.show');
+    Route::post('/account/evaluator-verification', [EvaluatorVerificationController::class, 'store'])->middleware('throttle:5,1')->name('account.evaluator-verification.store');
+    Route::get('/account/evaluator-evidence/{evidence}', [EvaluatorVerificationController::class, 'download'])->name('account.evaluator-evidence.download');
+    Route::post('/account/bookmarks/{tutorial}', [AccountController::class, 'bookmark'])->name('account.bookmarks.toggle');
+    Route::get('/account/notifications/state', [AccountController::class, 'notificationState'])->name('account.notifications.state');
+    Route::post('/account/notifications/read-all', [AccountController::class, 'notificationReadAll'])->name('account.notifications.readall');
+    Route::post('/account/notifications/{activity}', [AccountController::class, 'notificationRead'])->name('account.notifications.read');
+    Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
+        Route::get('/', [AdminController::class, 'dashboard'])->name('index');
+        Route::get('/evaluators/{user}', [AdminController::class, 'showEvaluatorVerification'])->name('evaluators.show');
+        Route::post('/evaluators/{user}', [AdminController::class, 'moderateEvaluator'])->name('evaluators.moderate');
+        Route::post('/projects/{project}', [AdminController::class, 'moderateProject'])->name('projects.moderate');
+        Route::get('/reports/{report}', [AdminController::class, 'showReport'])->name('reports.show');
+        Route::post('/reports/{report}', [AdminController::class, 'moderate'])->name('reports.moderate');
+        Route::post('/users/{user}', [AdminController::class, 'toggleUser'])->name('users.toggle');
+        Route::post('/invitations', [AdminController::class, 'invite'])->name('invitations.store');
+        Route::post('/tutorials', [AdminController::class, 'storeTutorial'])->name('tutorials.store');
+        Route::put('/tutorials/{tutorial}', [AdminController::class, 'updateTutorial'])->name('tutorials.update');
+        Route::delete('/tutorials/{tutorial}', [AdminController::class, 'destroyTutorial'])->name('tutorials.destroy');
+    });
+});
+Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');

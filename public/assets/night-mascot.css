@@ -1,0 +1,9 @@
+/* The night palette preserves the original cloud shapes and every animation. */
+:root[data-theme=dark] .analista-mascot [fill="#7DB9E8"],
+:root[data-theme=dark] .community-mascot [fill="#7DB9E8"],
+:root[data-theme=dark] .mascot-brand [fill="#7DB9E8"]{fill:#F4DFAC}
+:root[data-theme=dark] .analista-mascot .mascot-eyes,
+:root[data-theme=dark] .community-mascot [fill="#FFF"],
+:root[data-theme=dark] .mascot-brand [fill="#FFF"]{fill:#293248}
+:root[data-theme=dark] .analista-mascot .mascot-laptop-back rect,
+:root[data-theme=dark] .analista-mascot .mascot-laptop-front rect{fill:#94A8C5;stroke:none}

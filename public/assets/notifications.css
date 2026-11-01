@@ -1,0 +1,70 @@
+/* Notifications mirror the community conversation, anchored to the right. */
+.notifications-dialog{position:fixed;inset:0;width:100%;max-width:none;height:100dvh;max-height:none;margin:0;padding:24px;border:0;background:transparent;color:var(--text);overflow:hidden}
+.notifications-dialog[open]{display:flex;align-items:center;justify-content:flex-end}
+.notifications-dialog::backdrop{background:color-mix(in srgb,var(--bg) 84%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.notifications-content{display:flex;flex-direction:column;width:100%;max-width:640px;max-height:calc(100dvh - 48px);min-width:0;min-height:0;padding-right:clamp(24px,9vw,128px);overflow-wrap:anywhere}
+.notifications-close{position:absolute;top:22px;right:22px;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:transparent;color:var(--muted);font:28px/1 var(--font-sans)}
+.notifications-close .icon{width:22px;height:22px}
+.notifications-close:hover{background:var(--hover);color:var(--text)}
+.notifications-heading{flex-shrink:0;margin-bottom:16px;min-width:0}
+.notifications-heading h2{margin:0;font:400 22px/1.4 var(--font-sans);letter-spacing:0;color:var(--text)}
+.notifications-heading p{margin-top:7px;font:400 13px/1.7 var(--font-sans);color:var(--muted)}
+.notifications-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;flex-shrink:0;gap:6px 12px;margin-bottom:10px;min-width:0}
+.notifications-toolbar [data-notifications-unread]{font:400 13px/1.6 var(--font-sans);color:var(--muted)}
+.notifications-toolbar button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;max-width:100%;padding:8px 0;border:0;background:transparent;color:var(--text);font:500 13px/1.6 var(--font-sans);text-align:left;text-decoration:underline;text-underline-offset:4px;white-space:normal;overflow-wrap:anywhere}
+.notifications-toolbar button:disabled{color:var(--muted);cursor:default;text-decoration:none}
+.notifications-history{height:min(500px,62dvh);min-width:0;min-height:0;padding:4px 8px 4px 0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--muted) transparent}
+.notifications-section-title{margin:20px 0 8px;font:600 14px/1.6 var(--font-sans);letter-spacing:0;color:var(--text)}
+.notifications-section-title:first-child{margin-top:0}
+.notification-item{display:grid;grid-template-columns:48px minmax(0,1fr);align-items:start;gap:12px;min-width:0;padding:12px;margin-bottom:4px;border:0;border-radius:12px;overflow-wrap:anywhere}
+.notification-item:hover,.notification-item.notification-is-unread{background:var(--hover)}
+.notification-avatar{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:48px;height:48px;overflow:hidden;border:1px solid var(--border);border-radius:50%;background:var(--bg);color:var(--text);font:600 14px/1 var(--font-sans)}
+.notification-avatar img{display:block;width:100%;height:100%;border-radius:inherit;object-fit:cover}
+.notification-avatar-system .icon{width:22px;height:22px;color:var(--muted)}
+.notification-item-content,.notification-conversation-content{min-width:0}
+.notification-sender{display:block;margin-bottom:2px;font:600 14px/1.55 var(--font-sans);color:var(--text);overflow-wrap:anywhere}
+.notification-item-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;font:600 15px/1.55 var(--font-sans);color:var(--text)}
+.notification-item-heading :is(h3,h4,strong){min-width:0;margin:0;font:inherit;letter-spacing:0;color:inherit}
+.notification-item-heading h4{font:500 14px/1.55 var(--font-sans)}
+.notification-unread-dot{display:block;flex-shrink:0;width:6px;height:6px;border-radius:50%;background:var(--text)}
+.notification-body{margin-top:4px;font:400 14px/1.55 var(--font-sans);white-space:pre-wrap;color:var(--muted);overflow-wrap:anywhere}
+.notification-meta{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 12px;margin-top:6px;font:400 12px/1.6 var(--font-sans);color:var(--muted)}
+.notification-actions{display:flex;align-items:center;flex-wrap:wrap;gap:4px 16px;margin-top:0;min-width:0}
+.notification-open,.notification-read,.notifications-retry,.notifications-more{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;max-width:100%;padding:8px 0;border:0;background:transparent;color:var(--text);font:500 13px/1.6 var(--font-sans);text-align:left;white-space:normal;overflow-wrap:anywhere}
+.notification-open .icon,.notification-read .icon,.notifications-more .icon{width:15px;height:15px}
+.notification-open:hover,.notification-read:hover,.notifications-retry:hover,.notifications-more:hover{background:transparent;color:var(--text);text-decoration:underline;text-underline-offset:4px}
+.notification-read:disabled,.notifications-more:disabled{color:var(--muted);cursor:default;text-decoration:none}
+.notifications-retry{text-decoration:underline;text-underline-offset:4px}
+.notifications-empty{margin:20px 0;font:400 14px/1.8 var(--font-sans);color:var(--muted);overflow-wrap:anywhere}
+.notifications-status{flex-shrink:0;margin-top:8px;font:400 13px/1.7 var(--font-sans);color:var(--muted);overflow-wrap:anywhere}
+.notifications-status:empty{display:none}
+.notifications-more{align-self:flex-start;margin-top:8px}
+.notifications-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;flex-shrink:0;gap:4px 16px;margin-top:10px;min-width:0}
+.notifications-footer a{display:inline-flex;align-items:center;gap:6px;min-height:44px;max-width:100%;padding:8px 0;font:400 13px/1.6 var(--font-sans);color:var(--text);overflow-wrap:anywhere}
+.notifications-footer a .icon{width:15px;height:15px}
+.notifications-footer a:hover{color:var(--text);text-decoration:underline;text-underline-offset:4px}
+.notification-conversation{display:grid;grid-template-columns:48px minmax(0,1fr);align-items:start;gap:12px;min-width:0;padding:12px;margin-bottom:4px;border:0;border-radius:12px;color:var(--text);overflow-wrap:anywhere}
+.notification-conversation :is(h3,strong),.notification-conversation-title{display:block;margin:0;font:600 15px/1.55 var(--font-sans);letter-spacing:0;color:var(--text)}
+.notification-conversation p,.notification-conversation-participants{margin-top:6px;font:400 13px/1.65 var(--font-sans);color:var(--muted)}
+.notification-conversation .notification-conversation-title{margin-top:3px;font:500 14px/1.55 var(--font-sans);color:var(--text)}
+.notification-conversation .notification-sender{margin-bottom:3px;font:600 14px/1.55 var(--font-sans);color:var(--text)}
+.notification-conversation-meta{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 12px;margin-top:7px;min-width:0}
+.notification-conversation-status{font:400 13px/1.6 var(--font-sans);color:var(--muted)}
+.notification-conversation time{font:400 12px/1.6 var(--font-sans);color:var(--muted)}
+.notification-conversation:hover{background:var(--hover);color:var(--text)}
+.notification-conversation:hover :is(h3,strong),.notification-conversation:hover .notification-conversation-title{text-decoration:underline;text-underline-offset:4px}
+@media(max-width:760px){
+    .notifications-dialog{padding:22px}
+    .notifications-content{max-width:560px;max-height:calc(100dvh - 44px);padding-right:0}
+    .notifications-close{top:14px;right:14px}
+    .notifications-heading{padding-right:44px}
+    .notifications-history{padding-right:4px}
+}
+@media(max-height:500px){
+    .notifications-heading{margin-bottom:8px}
+    .notifications-heading p{margin-top:3px}
+    .notifications-toolbar{margin-bottom:4px}
+    .notifications-history{height:38dvh;min-height:0}
+    .notifications-status{margin-top:4px}
+    .notifications-footer{margin-top:4px}
+}

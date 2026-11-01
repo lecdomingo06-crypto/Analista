@@ -1,0 +1,90 @@
+[data-project-form] [aria-invalid="true"]{border-color:var(--text);outline:1px solid var(--text);outline-offset:1px}
+[data-project-form] .project-field-error{color:var(--text);font-weight:500}
+[data-project-form] [data-project-submit-status]:empty{display:none}
+[data-project-form] button:disabled{cursor:wait;opacity:.65}
+[data-project-form] .project-pdf-access{min-width:0;margin:0;padding:0;border:0}
+[data-project-form] .project-pdf-access legend{margin-bottom:8px;padding:0;font:600 15px/1.5 var(--font-sans);color:var(--text)}
+[data-project-form] .project-pdf-access-help{font:400 14px/1.7 var(--font-sans);color:var(--muted)}
+[data-project-form] .project-pdf-access-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px;margin:6px 0;min-width:0}
+[data-project-form] .project-pdf-access-option{display:flex;align-items:flex-start;gap:10px;min-width:0;min-height:44px;padding:16px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);cursor:pointer}
+[data-project-form] .project-pdf-access-option:has(input:checked){border-color:var(--text);background:var(--surface)}
+[data-project-form] .project-pdf-access-option:has(input:focus-visible){outline:2px solid var(--text);outline-offset:3px}
+[data-project-form] .project-pdf-access-option input{flex-shrink:0;width:17px;height:17px;margin:3px 0 0;accent-color:var(--text)}
+[data-project-form] .project-pdf-access-option>span{display:block;min-width:0;overflow-wrap:anywhere}
+[data-project-form] .project-pdf-access-option strong{display:block;font:600 15px/1.5 var(--font-sans);color:var(--text)}
+[data-project-form] .project-pdf-access-option>span>span{display:block;margin-top:5px;font:400 14px/1.65 var(--font-sans);color:var(--muted)}
+[data-project-form] .project-pdf-access-option:has(input[aria-invalid="true"]){border-color:var(--text)}
+
+/* Create and edit share the community directories' sky and compact surfaces. */
+.project-form-page{
+    --project-form-control-border:#d8e0e8;--project-form-control-hover:#bcc8d3;
+    --text:var(--project-heading);--muted:var(--project-copy);--soft:var(--project-copy);--border:var(--project-border)
+}
+:root[data-theme=dark] .project-form-page{--project-form-control-border:var(--night-control-border,#7184a3);--project-form-control-hover:var(--night-control-hover,#8ea3c2)}
+.project-form-page .main-content{max-width:1344px}
+.project-form-page .project-form-back{margin-bottom:28px;color:var(--project-heading)}
+.project-form-page .project-form-back:hover{text-decoration:underline;text-underline-offset:4px}
+.project-form-page .project-form-header{display:flex;flex-direction:column;align-items:center;gap:14px;margin:32px 0 56px;text-align:center}
+.project-form-page .project-form-header h1{margin:0;font:500 40px/1.2 var(--font-sans);letter-spacing:-.7px;color:var(--project-heading)}
+.project-form-page .project-form-header h1 em{font:italic 400 1em/1.2 var(--font-serif)}
+.project-form-page .project-form-header .intro,.project-form-page .project-form-header>p{max-width:640px;margin:0;font:400 17px/1.65 var(--font-sans);color:var(--project-copy)}
+.project-form-page .project-form-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+.project-form-page .project-form-card{min-width:0;margin:0;padding:24px;border:1px solid var(--project-border);border-radius:20px;background:var(--project-surface);box-shadow:var(--project-shadow);overflow-wrap:anywhere}
+.project-form-page form[data-project-form]{display:flex;flex-direction:column;gap:22px}
+.project-form-page .project-form-section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:8px 0 0;padding-top:24px;border-top:1px solid var(--project-border);font:600 20px/1.4 var(--font-sans);letter-spacing:-.2px;color:var(--project-heading)}
+.project-form-page .project-form-card>.project-form-section-heading:first-of-type{margin-top:0;padding-top:0;border-top:0}
+.project-form-page .project-form-section-heading h2{margin:0;font:600 20px/1.4 var(--font-sans);letter-spacing:-.2px;color:var(--project-heading)}
+.project-form-page .project-form-section-heading>.icon{width:20px;height:20px;color:var(--project-copy)}
+.project-form-page [data-project-form] .field{min-width:0;font:500 15px/1.5 var(--font-sans);color:var(--project-heading)}
+.project-form-page [data-project-form] .field>label{font-size:15px;font-weight:600;line-height:1.5}
+.project-form-page [data-project-form] :is(input:not([type=checkbox]):not([type=radio]),select,textarea){width:100%;min-width:0;min-height:44px;padding:11px 12px;border:1px solid var(--project-form-control-border);border-radius:8px;background:var(--project-surface);color:var(--project-heading);font:400 16px/1.5 var(--font-sans)}
+.project-form-page [data-project-form] textarea{line-height:1.7;resize:vertical}
+.project-form-page [data-project-form] input[type=file]{max-width:100%;overflow:hidden;font-size:14px;text-overflow:ellipsis;white-space:nowrap}
+.project-form-page [data-project-form] input[type=file]::file-selector-button{padding:7px 10px;border-radius:5px;background:var(--project-badge);color:var(--project-heading)}
+.project-form-page [data-project-form] :is(input,select,textarea):focus{outline:2px solid var(--project-heading);outline-offset:2px}
+.project-form-page [data-project-form] :is(input,textarea)::placeholder{color:var(--project-copy);opacity:1}
+.project-form-page [data-project-form] .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;min-width:0}
+.project-form-page [data-project-form] .hint{font:400 14px/1.7 var(--font-sans);color:var(--project-copy);overflow-wrap:anywhere}
+.project-form-page [data-project-form] .project-field-error{font-weight:600;color:var(--project-heading)}
+.project-form-page [data-project-form] .project-pdf-access{gap:8px}
+.project-form-page [data-project-form] .project-pdf-access legend{font-size:15px;font-weight:600;color:var(--project-heading)}
+.project-form-page [data-project-form] .project-pdf-access-help{color:var(--project-copy)}
+.project-form-page [data-project-form] .project-pdf-access-option{background:var(--project-surface);border-color:var(--project-form-control-border);box-shadow:none}
+.project-form-page [data-project-form] .project-pdf-access-option:has(input:checked){background:var(--project-badge);border-color:var(--project-heading)}
+.project-form-page [data-project-form] .project-summary-sharing>label{display:flex;align-items:flex-start;gap:10px;min-height:44px;padding:10px 0;cursor:pointer}
+.project-form-page .project-review-limit select{max-width:240px}
+.project-form-page [data-project-form] .project-summary-sharing input[type=checkbox]{flex-shrink:0;width:17px;height:17px;margin:3px 0 0;accent-color:var(--project-heading)}
+.project-form-page .project-form-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:2px;padding-top:24px;border-top:1px solid var(--project-border)}
+.project-form-page .project-form-actions .btn{min-height:44px;max-width:100%;padding:10px 14px;border:1px solid var(--project-form-control-border);border-radius:8px;background:var(--project-surface);color:var(--project-heading);font:700 15px/1.5 var(--font-sans);gap:7px;white-space:normal;text-align:center}
+.project-form-page .project-form-actions .btn .icon{width:17px;height:17px}
+.project-form-page .project-form-actions .btn:hover{background:var(--project-badge);border-color:var(--project-form-control-hover);color:var(--project-heading);opacity:1}
+.project-form-page .project-form-actions .btn-primary{background:var(--project-blue-light);border-color:var(--project-blue-light);color:var(--project-blue-text)}
+.project-form-page .project-form-actions .btn-primary:hover{background:var(--project-blue-light-hover);border-color:var(--project-blue-light-hover);color:var(--project-blue-text)}
+.project-form-page .project-form-actions .btn-ghost{border-color:transparent;background:transparent;text-decoration:underline;text-underline-offset:4px}
+.project-form-page .project-form-actions .btn-ghost:hover{background:transparent;border-color:transparent}
+.project-form-page .project-form-aside{display:grid;gap:20px;min-width:0}
+.project-form-page .project-form-guidance h2{margin:0;font:600 20px/1.4 var(--font-sans);letter-spacing:-.2px;color:var(--project-heading)}
+.project-form-page .project-form-guidance>p{margin-top:12px;font:400 16px/1.75 var(--font-sans);color:var(--project-copy)}
+.project-form-page .project-form-tip{margin-top:20px;padding-top:20px;border-top:1px solid var(--project-border);font:400 15px/1.7 var(--font-sans);color:var(--project-copy)}
+.project-form-page .project-form-tip strong,.project-form-page .project-form-tip h3{display:block;margin:0 0 5px;font:600 15px/1.5 var(--font-sans);color:var(--project-heading)}
+.project-form-page .project-form-tip p{font:400 15px/1.7 var(--font-sans);color:var(--project-copy)}
+.project-form-page .project-form-note-icon{display:inline-grid;place-items:center;width:42px;height:42px;margin-bottom:16px;border-radius:13px;background:var(--project-pink);color:var(--project-pink-text)}
+.project-form-page .project-form-note-icon .icon{width:22px;height:22px}
+.project-form-page [data-project-form] :is(input,select,textarea)[aria-invalid="true"]{border-color:var(--project-heading);outline:1px solid var(--project-heading);outline-offset:1px}
+.project-form-page [data-project-form] .project-pdf-access-option:has(input[aria-invalid="true"]){border-color:var(--project-heading)}
+@media(max-width:1100px){
+    .project-form-page .project-form-layout{grid-template-columns:minmax(0,1fr)}
+    .project-form-page .project-form-aside{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));align-items:start}
+}
+@media(max-width:760px){
+    .project-form-page .project-form-back{margin-bottom:24px}
+    .project-form-page .project-form-header{margin:24px 0 42px;gap:12px}
+    .project-form-page .project-form-header h1{font-size:32px}
+    .project-form-page .project-form-header .intro,.project-form-page .project-form-header>p{font-size:16px}
+    .project-form-page .project-form-aside{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:600px){
+    .project-form-page .project-form-card{padding:20px;border-radius:18px}
+    .project-form-page [data-project-form] .form-grid{grid-template-columns:minmax(0,1fr)}
+    .project-form-page .project-form-actions{align-items:stretch}
+}

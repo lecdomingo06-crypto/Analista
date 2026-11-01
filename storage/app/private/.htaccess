@@ -1,0 +1,9 @@
+# Private evidence, theses, and backups must never be served directly by Apache.
+# Laravel serves authorized downloads through controller routes.
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>

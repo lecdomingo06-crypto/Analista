@@ -1,0 +1,88 @@
+/* One quiet review board on the shared project sky. */
+.account-reviews-page{
+    --review-control-border:#d8e0e8;--review-control-hover:#bcc8d3;--review-toolbar-surface:#f6fafe;
+    --text:var(--project-heading);--muted:var(--project-copy);--soft:var(--project-copy);--border:var(--project-border)
+}
+:root[data-theme=dark] .account-reviews-page{--review-control-border:var(--night-control-border,#7184a3);--review-control-hover:var(--night-control-hover,#8ea3c2);--review-toolbar-surface:#1b2b45}
+.account-reviews-page .main-content{max-width:1100px}
+.account-reviews-page .account-reviews-header{display:flex;flex-direction:column;align-items:center;gap:14px;margin:24px 0 40px;text-align:center}
+.account-reviews-page .account-reviews-header h1{margin:0;font:500 40px/1.2 var(--font-sans);letter-spacing:-.7px;color:var(--project-heading)}
+.account-reviews-page .account-reviews-header h1 em{font:italic 400 1em/1.2 var(--font-serif)}
+.account-reviews-page .account-reviews-header>p{max-width:640px;margin:0;font:400 17px/1.65 var(--font-sans);color:var(--project-copy)}
+.account-reviews-page .account-reviews-tabs.tabs{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;margin:0 0 28px;padding:0;border:0}
+.account-reviews-page .account-reviews-tabs .tab{display:inline-flex;align-items:center;justify-content:center;min-height:44px;max-width:100%;margin:0;padding:10px 14px;border:0;border-radius:8px;color:var(--project-copy);font:500 15px/1.5 var(--font-sans);text-align:center;overflow-wrap:anywhere}
+.account-reviews-page .account-reviews-tabs .tab.active,.account-reviews-page .account-reviews-tabs .tab:hover{background:var(--project-badge);color:var(--project-heading)}
+.account-reviews-page .account-reviews-tabs .tab.active{font-weight:600}
+.account-reviews-page .account-reviews-tabs .tab:focus-visible{outline:2px solid var(--project-heading);outline-offset:3px}
+.account-reviews-page .account-reviews-board{min-width:0;padding:0;overflow:hidden;border:1px solid var(--project-border);border-radius:20px;background:var(--project-surface);box-shadow:var(--project-shadow)}
+.account-reviews-page .account-reviews-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;padding:22px 24px;background:var(--review-toolbar-surface)}
+.account-reviews-page .account-reviews-stats{display:flex;align-items:center;flex-wrap:wrap;gap:12px 24px;min-width:0;margin:0}
+.account-reviews-page .account-review-stat{display:flex;align-items:baseline;gap:7px;min-width:0;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+.account-reviews-page .account-review-stat-count{font:600 20px/1.5 var(--font-sans);color:var(--project-heading)}
+.account-reviews-page .account-review-stat-label{font:400 14px/1.5 var(--font-sans);color:var(--project-copy);overflow-wrap:anywhere}
+.account-reviews-page .account-reviews-filter{display:flex;align-items:center;flex-wrap:wrap;gap:8px;max-width:100%;min-width:0;margin:0}
+.account-reviews-page .account-reviews-filter>label{color:var(--project-copy);font:500 14px/1.5 var(--font-sans)}
+.account-reviews-page .account-reviews-filter select{width:160px;min-width:0;min-height:44px;max-width:100%;padding:10px 28px 10px 12px;border:1px solid var(--review-control-border);border-radius:8px;background:var(--project-surface);color:var(--project-heading);font:400 14px/1.5 var(--font-sans)}
+.account-reviews-page .main-content .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;max-width:100%;padding:10px 14px;border:1px solid var(--review-control-border);border-radius:8px;background:var(--project-surface);color:var(--project-heading);font:600 15px/1.5 var(--font-sans);text-align:center;white-space:normal}
+.account-reviews-page .main-content .btn .icon{width:17px;height:17px;flex-shrink:0}
+.account-reviews-page .main-content .btn:hover{border-color:var(--review-control-hover);background:var(--project-badge);color:var(--project-heading);opacity:1}
+.account-reviews-page .main-content .btn-primary{border-color:var(--project-blue-light);background:var(--project-blue-light);color:var(--project-blue-text);font-weight:700}
+.account-reviews-page .main-content .btn-primary:hover{border-color:var(--project-blue-light-hover);background:var(--project-blue-light-hover);color:var(--project-blue-text)}
+.account-reviews-page .main-content :is(.btn,select):focus-visible{outline:2px solid var(--project-heading);outline-offset:3px}
+.account-reviews-page .account-reviews-notice{margin:0;padding:20px 24px;border:0;border-bottom:1px solid var(--project-border);border-radius:0;background:transparent;box-shadow:none;color:var(--project-copy)}
+.account-reviews-page .account-reviews-notice strong,.account-reviews-page .account-reviews-notice h2{display:block;margin:0 0 7px;color:var(--project-heading);font:600 16px/1.5 var(--font-sans)}
+.account-reviews-page .account-reviews-notice p{max-width:700px;margin:0 0 14px;color:var(--project-copy);font:400 14px/1.7 var(--font-sans)}
+.account-reviews-page .account-reviews-notice p:last-child{margin-bottom:0}
+.account-reviews-page .account-reviews-section{min-width:0;margin:0;padding:0}
+.account-reviews-page .account-reviews-section-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 16px;min-width:0;margin:0;padding:22px 24px 12px;border:0}
+.account-reviews-page .account-reviews-section-heading h2{margin:0;color:var(--project-heading);font:600 18px/1.5 var(--font-sans);letter-spacing:-.15px}
+.account-reviews-page .account-reviews-section-heading>span{color:var(--project-copy);font:400 14px/1.5 var(--font-sans)}
+.account-reviews-page .account-reviews-grid{display:block;min-width:0;margin:0;padding:0}
+.account-reviews-page .account-review-card{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:20px 32px;min-width:0;margin:0;padding:20px 24px 24px;border:0;border-radius:0;background:transparent;box-shadow:none;overflow-wrap:anywhere}
+.account-reviews-page .account-review-card+.account-review-card{border-top:1px solid var(--project-border)}
+.account-reviews-page .account-review-main{display:flex;flex-direction:column;align-items:flex-start;gap:16px;min-width:0}
+.account-reviews-page .account-review-title{max-width:100%;min-width:0;margin:0;color:var(--project-heading);font:600 20px/1.45 var(--font-sans);letter-spacing:-.15px;overflow-wrap:anywhere}
+.account-reviews-page .account-review-person{display:flex;align-items:center;gap:10px;min-width:0;max-width:100%;color:var(--project-copy);font:400 15px/1.5 var(--font-sans)}
+.account-reviews-page .account-review-person>.avatar+span{min-width:0;overflow-wrap:anywhere}
+.account-reviews-page .account-review-person>.avatar{width:40px;height:40px;flex-shrink:0;border-color:var(--project-border);background:var(--project-badge);color:var(--project-heading);font:400 14px/1 var(--font-sans)}
+.account-reviews-page .account-review-person>div{min-width:0}
+.account-reviews-page .account-review-person-copy{display:flex;flex-direction:column;gap:2px;min-width:0}
+.account-reviews-page .account-review-person-role{font:400 13px/1.5 var(--font-sans);color:var(--project-copy)}
+.account-reviews-page .account-review-person-name{color:var(--project-heading);font:600 15px/1.5 var(--font-sans);overflow-wrap:anywhere}
+.account-reviews-page .account-review-meta{display:flex;align-items:flex-start;gap:7px;margin:0;color:var(--project-copy);font:400 14px/1.6 var(--font-sans)}
+.account-reviews-page .account-review-meta>span{min-width:0}
+.account-reviews-page .account-review-meta .icon{width:16px;height:16px;flex-shrink:0;margin-top:3px}
+.account-reviews-page .account-review-meta time{color:var(--project-heading);font-weight:500}
+.account-reviews-page .account-review-side{display:flex;flex-direction:column;align-items:flex-end;gap:12px;min-width:0}
+.account-reviews-page .account-review-side .btn{white-space:nowrap}
+.account-reviews-page .account-review-card .status{display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:5px 12px;border:1px solid transparent;border-radius:999px;background:linear-gradient(145deg,var(--project-tech-top),var(--project-tech-bg));box-shadow:var(--project-capsule-shadow);color:var(--project-tech-text);font:600 13px/1.5 var(--font-sans)}
+.account-reviews-page .account-review-card .status>span{flex-shrink:0}
+.account-reviews-page .account-review-card .status-accepted{background:linear-gradient(145deg,var(--project-category-top),var(--project-category-bg));color:var(--project-category-text)}
+.account-reviews-page .account-review-card .status-completed{background:linear-gradient(145deg,var(--project-status-top),var(--project-status-bg));color:var(--project-status-text)}
+.account-reviews-page .account-review-card .status-declined{background:var(--project-pink);color:var(--project-pink-text)}
+.account-reviews-page .account-review-unavailable{display:inline-flex;align-items:center;gap:5px;max-width:100%;padding:4px 8px;border-radius:6px;background:var(--project-badge);color:var(--project-copy);font:400 12px/1.5 var(--font-sans)}
+.account-reviews-page .account-review-unavailable .icon{width:14px;height:14px;flex-shrink:0}
+.account-reviews-page .empty{min-width:0;margin:0;padding:32px 24px;border:0;border-radius:0;background:transparent;box-shadow:none}
+.account-reviews-page .empty>.icon{color:var(--project-copy)}
+.account-reviews-page .empty h3{margin:0 0 8px;color:var(--project-heading);font:600 18px/1.5 var(--font-sans)}
+.account-reviews-page .empty p{max-width:520px;margin:0 auto 16px;color:var(--project-copy);font:400 15px/1.7 var(--font-sans)}
+.account-reviews-page .pagination{flex-wrap:wrap;gap:14px;margin-top:24px;color:var(--project-copy)}
+.account-reviews-page .pagination>.small{font:400 14px/1.6 var(--font-sans)}
+@media(max-width:760px){
+    .account-reviews-page .account-reviews-header{gap:12px;margin:16px 0 32px}
+    .account-reviews-page .account-reviews-header h1{font-size:32px}
+    .account-reviews-page .account-reviews-header>p{font-size:16px}
+    .account-reviews-page .account-review-card{gap:20px}
+}
+@media(max-width:600px){
+    .account-reviews-page .account-reviews-toolbar{align-items:flex-start;flex-direction:column;gap:18px;padding:20px}
+    .account-reviews-page .account-reviews-stats{gap:10px 18px}
+    .account-reviews-page .account-reviews-filter{width:100%}
+    .account-reviews-page .account-reviews-filter select{flex:1 1 100px;width:auto}
+    .account-reviews-page .account-reviews-filter>label{flex:0 0 100%}
+    .account-reviews-page .account-reviews-section-heading{padding:16px 20px}
+    .account-reviews-page .account-review-card{grid-template-columns:minmax(0,1fr);gap:18px;padding:20px}
+    .account-reviews-page .account-review-side{flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+    .account-reviews-page .account-reviews-notice{padding:20px}
+    .account-reviews-page .empty{padding:28px 20px}
+}

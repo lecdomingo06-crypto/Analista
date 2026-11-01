@@ -1,0 +1,106 @@
+/* Daytime keeps the existing sky. This scene appears only with the dark theme. */
+.night-sky{display:none}
+:root[data-theme=dark]{
+    --bg:#111b2f;--surface:#17233b;--text:#edf3ff;--muted:#b9c7dd;--soft:#a9bbd5;
+    --border:#34445f;--hover:#21314d;--solid:var(--night-action);--on-solid:var(--night-action-text);
+    --night-panel:#17233b;--night-panel-border:#34445f;--night-heading:#edf3ff;
+    --night-copy:#c0cde2;--night-detail:#d0dbed;
+    --night-action:#b9d5f5;--night-action-hover:#cde2ff;--night-action-text:#12223a;
+    --night-control-border:#7184a3;--night-control-hover:#8ea3c2;
+    color-scheme:dark
+}
+:root[data-theme=dark] .app-shell{position:relative;isolation:isolate;background:transparent}
+:root[data-theme=dark] .night-sky{
+    display:block;position:fixed;inset:0 0 0 var(--sidebar);z-index:-1;overflow:hidden;pointer-events:none;
+    background:radial-gradient(ellipse at 86% 7%,#4c3c772b,transparent 42%),radial-gradient(ellipse at 5% 78%,#244b6526,transparent 38%),linear-gradient(180deg,#111c35 0%,#0c1529 52%,#10192c 100%)
+}
+:root[data-theme=dark] :is(.home-sky,.evaluators-sky,.projects-sky,.learning-sky,.guidelines-sky,.registration-sky,.home-cta-cloud){display:none}
+.night-sky-galaxy{
+    position:absolute;width:min(820px,85vw);height:340px;right:-16%;top:4%;transform:rotate(-28deg);
+    border-radius:50%;opacity:.8;
+    background:radial-gradient(ellipse at 50% 50%,#c4b5ee1f 0%,#8e73c522 14%,#634d9a1f 29%,#30466e14 45%,transparent 66%)
+}
+.night-sky-stars{position:absolute;inset:0 auto 0 0;display:flex;width:200%;height:100%}
+.night-sky-star-field{display:block;flex:0 0 50%;width:50%;height:100%;min-width:0}
+:root[data-theme=dark] .night-sky-stars{animation:night-stars-drift 140s linear infinite;will-change:transform}
+:root[data-theme=dark] .night-sky-galaxy{animation:night-galaxy-glide 90s ease-in-out infinite alternate;will-change:transform}
+.night-sky-star{fill:#e0eaff}
+.night-sky-star:nth-child(3n){fill:#c5c0ed}
+.night-sky-star.night-sky-star-sparkle{fill:#dce7ff}
+.night-sky-planet{position:absolute;height:auto;opacity:.32;animation:night-planet-float 24s ease-in-out infinite alternate}
+:root[data-theme=dark] .night-sky-planet{will-change:transform}
+.night-sky-planet-ringed{width:172px;top:15%;right:2.2%}
+.night-sky-planet-distant{width:68px;top:73%;left:3%;opacity:.3;animation-name:night-distant-planet-float;animation-duration:30s;animation-delay:-12s}
+@keyframes night-stars-drift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+@keyframes night-galaxy-glide{from{transform:translate3d(0,0,0) rotate(-28deg)}to{transform:translate3d(-60px,16px,0) rotate(-28deg)}}
+@keyframes night-planet-float{from{transform:translate3d(0,0,0)}to{transform:translate3d(-28px,-10px,0)}}
+@keyframes night-distant-planet-float{from{transform:translate3d(0,0,0)}to{transform:translate3d(18px,-7px,0)}}
+
+/* The same navy surfaces carry through directories, learning, auth, and account pages. */
+:root[data-theme=dark] .home-page{--home-copy:var(--night-copy)}
+:root[data-theme=dark] .home-content{
+    --home-card-surface:var(--night-panel);--home-card-border:var(--night-panel-border);
+    --home-card-heading:var(--night-heading);--home-card-copy:var(--night-copy);--home-card-detail:var(--night-detail);
+    --home-card-accent:#a6caff;--home-card-accent-soft:#263650;--home-card-badge:#493149;--home-card-badge-text:#ffc0db
+}
+:root[data-theme=dark] .home-hero{--muted:var(--night-copy);--soft:#a7bad4;--border:var(--night-panel-border)}
+:root[data-theme=dark] .home-intro-badge{background:#1b2a43;border-color:#3d5272;color:var(--night-copy)}
+:root[data-theme=dark] .home-intro-links .btn:not(.btn-primary){background:var(--night-panel);border-color:var(--night-control-border);color:var(--night-heading)}
+:root[data-theme=dark] .home-intro-links .btn:not(.btn-primary):hover{background:#22324e}
+:root[data-theme=dark] .home-give-back{background:linear-gradient(145deg,#1b2943,#20253f);border:1px solid var(--night-panel-border)}
+:root[data-theme=dark] .home-cta-actions .btn:not(.btn-primary){background:var(--night-panel);border-color:var(--night-control-border);color:var(--night-heading)}
+:root[data-theme=dark] .home-cta-actions .btn:not(.btn-primary):hover{background:#22324e}
+:root[data-theme=dark] .home-cta-actions .btn-primary{background:var(--solid);border-color:var(--solid);color:var(--on-solid)}
+:root[data-theme=dark] .home-cta-actions .btn-primary:hover{background:var(--night-action-hover);border-color:var(--night-action-hover);color:var(--on-solid)}
+:root[data-theme=dark] :is(.evaluators-page,.evaluator-card){
+    --evaluator-surface:var(--night-panel);--evaluator-border:var(--night-panel-border);--evaluator-heading:var(--night-heading);
+    --evaluator-copy:var(--night-copy);--evaluator-detail:var(--night-detail);--evaluator-badge:#24334d;
+    --evaluator-secondary-border:var(--night-control-border);--evaluator-secondary-hover-border:var(--night-control-hover);
+    --evaluator-action:var(--night-action);--evaluator-action-hover:var(--night-action-hover);--evaluator-action-text:var(--night-action-text)
+}
+:root[data-theme=dark] .evaluators-search-row{--evaluator-action:#8bb7e8;--evaluator-action-hover:#a4c7ef}
+:root[data-theme=dark] .projects-page{
+    --project-surface:var(--night-panel);--project-border:var(--night-panel-border);--project-heading:var(--night-heading);
+    --project-copy:var(--night-copy);--project-detail:var(--night-detail);--project-badge:#24334d;
+    --project-blue:#8bb7e8;--project-blue-hover:#a4c7ef;--project-blue-light:var(--night-action);--project-blue-light-hover:var(--night-action-hover);--project-blue-text:var(--night-action-text);
+    --project-pink:#493149;--project-pink-hover:#573b55;--project-pink-text:#ffc0db
+}
+:root[data-theme=dark] .projects-page .thesis-project-link{border-color:#b282a0}
+:root[data-theme=dark] .projects-page .thesis-project-link:hover{border-color:#d49abb}
+:root[data-theme=dark] .tutorials-page{
+    --learning-card-surface:var(--night-panel);--learning-card-border:var(--night-panel-border);--learning-card-heading:var(--night-heading);
+    --learning-card-copy:var(--night-copy);--learning-card-detail:var(--night-detail);--learning-card-badge:#493149;--learning-card-badge-text:#ffc0db
+}
+:root[data-theme=dark] .guidelines-page{
+    --guideline-surface:var(--night-panel);--guideline-border:var(--night-panel-border);--guideline-heading:var(--night-heading);--guideline-copy:var(--night-copy)
+}
+:root[data-theme=dark] .registration-page{
+    --registration-surface:var(--night-panel);--registration-border:#4c607d;--registration-heading:var(--night-heading);--registration-copy:var(--night-copy);
+    --registration-selected:#263d59;--registration-selected-border:#81a7d1;
+    --registration-action:var(--night-action);--registration-action-hover:var(--night-action-hover);--registration-action-text:var(--night-action-text)
+}
+/* Controls need clearer boundaries than decorative card dividers. */
+:root[data-theme=dark] :is(.panel,.card,.messages-shell){background:var(--night-panel)}
+:root[data-theme=dark] .main-content :is(input,select,textarea),
+:root[data-theme=dark] :is(.evaluators-search,.projects-search),
+:root[data-theme=dark] .registration-role:not(:has(input:checked)){border-color:var(--night-control-border)}
+:root[data-theme=dark] .main-content :is(input,select,textarea):focus{border-color:var(--night-action)}
+:root[data-theme=dark] .main-content .btn:not(.btn-primary):not(.btn-ghost):not(.projects-search-button):not(.projects-create-button){border-color:var(--night-control-border)}
+:root[data-theme=dark] .main-content .btn:not(.btn-primary):not(.btn-ghost):not(.projects-search-button):not(.projects-create-button):hover{border-color:var(--night-control-hover)}
+:root[data-theme=dark] .btn-primary:hover{--solid:var(--night-action-hover);opacity:1}
+:root[data-theme=dark] :is(.evaluator-rating-summary .icon.is-rated,.public-review-rating .icon.is-filled){color:#f3bc50}
+:root[data-theme=dark] :is(.sidebar,.mobile-header){background:#10192c;border-color:#2c3c56}
+:root[data-theme=dark] .sidebar-guest-panel{background:linear-gradient(145deg,#17233b,#111b2f);border-color:var(--night-panel-border)}
+:root[data-theme=dark] .site-footer{color:var(--night-copy)}
+:root[data-theme=dark] ::selection{background:#b9d5fa;color:#12223a}
+
+@media(max-width:760px){
+    :root[data-theme=dark] .night-sky{left:0}
+    .night-sky-planet-ringed{width:112px;right:-26px;top:13%;opacity:.3}
+    .night-sky-planet-distant{width:46px;left:-10px;top:78%;opacity:.25}
+    .night-sky-galaxy{width:520px;height:260px;right:-62%;top:3%;opacity:.65}
+}
+@media(prefers-reduced-motion:reduce){
+    :root[data-theme=dark] :is(.night-sky-stars,.night-sky-galaxy,.night-sky-planet){animation:none;will-change:auto}
+    .night-sky-stars{transform:none}
+}

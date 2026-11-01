@@ -1,0 +1,152 @@
+/* The shared sky surrounds a viewport-sized inbox; only chat panes scroll. */
+body.messages-page{display:flex;flex-direction:column;height:100dvh;overflow:hidden}
+.messages-page .mobile-header{flex-shrink:0}
+.messages-page .app-shell{display:flex;flex:1;min-height:0;min-width:0}
+.messages-page .main-content{display:flex;flex:1;flex-direction:column;width:100%;max-width:1344px;min-height:0;margin:0 auto;padding:24px 32px 0}
+.messages-page .messages-heading{flex-shrink:0;margin:auto 0 16px}
+.messages-page .messages-shell{flex:1;min-height:0;height:auto;max-height:780px;margin:0 0 auto}
+.messages-page .app-shell .site-footer{flex-shrink:0;margin-top:0;padding:16px 0}
+/* Use the same card, type, action, and capsule palette as the directories. */
+.messages-page{--message-panel:var(--evaluator-surface);--message-thread:#f8fafc;--message-text:var(--evaluator-heading);--message-copy:var(--evaluator-copy);--message-meta:#62626a;--message-border:var(--evaluator-border);--message-control:#d8e0e8;--message-control-hover:#bcc8d3;--message-received:var(--evaluator-surface);--message-sent:var(--evaluator-action);--message-on-sent:var(--evaluator-action-text);--message-selected:var(--evaluator-badge);--message-hover:var(--evaluator-badge);--message-action:var(--evaluator-action);--message-action-hover:var(--evaluator-action-hover);--message-focus:var(--evaluator-heading);--message-capsule-top:#f0f4f9;--message-capsule-bg:#dfe7f1;--message-capsule-text:#40556e;--message-capsule-shadow:inset 2px 2px 4px #ffffffd9,inset -2px -3px 5px #31485f1a,0 3px 6px #22374c14}
+:root[data-theme=dark] .messages-page{--message-thread:var(--bg);--message-meta:var(--night-copy);--message-control:var(--night-control-border);--message-control-hover:var(--night-control-hover);--message-received:var(--evaluator-badge);--message-capsule-top:#354a62;--message-capsule-bg:#293a4e;--message-capsule-text:#d7e4f3;--message-capsule-shadow:inset 1px 1px 3px #ffffff14,inset -2px -3px 5px #0005,0 3px 6px #0003}
+.messages-page .messages-shell{border-color:var(--message-border);border-radius:20px;background:var(--message-panel);box-shadow:var(--evaluator-shadow);color:var(--message-text)}
+.messages-page .chat-sidebar{border-color:var(--message-border);background:var(--message-panel)}
+.messages-page .chat-list-heading{padding:20px 18px 14px}
+.messages-page .chat-list-heading h2{font-size:22px;font-weight:600;color:var(--message-text)}
+.messages-page .main-content .icon-button{width:44px;height:44px;min-height:44px;flex-shrink:0;border-color:var(--message-control);border-radius:8px;background:var(--message-panel);color:var(--message-text)}
+.messages-page .main-content .icon-button .icon{width:18px;height:18px}
+.messages-page .main-content .icon-button:hover{border-color:var(--message-control-hover);background:var(--message-hover);color:var(--message-text)}
+.messages-page .chat-search{gap:8px;margin:0 14px 14px;padding:0 0 0 11px;border-color:var(--message-control);border-radius:8px;background:var(--message-panel);color:var(--message-copy)}
+.messages-page .chat-search>.icon{width:17px;height:17px}
+.messages-page .chat-search input:not([type=checkbox]){min-height:44px;height:44px;padding:9px 0;border:0;background:transparent;box-shadow:none;font-size:16px;line-height:1.5;color:var(--message-text)}
+.messages-page .chat-search .icon-button{border:0;border-radius:0 7px 7px 0;background:transparent}
+.messages-page .chat-search:focus-within{outline:2px solid var(--message-focus);outline-offset:2px}
+.messages-page .chat-search input:focus{outline:0}
+:root[data-theme=dark] .messages-page .chat-search input{border:0}
+.messages-page .chat-search input::placeholder,.messages-page .chat-composer textarea::placeholder{color:var(--message-meta);opacity:1}
+.messages-page .chat-list{padding:0 10px 14px;overscroll-behavior:contain;scrollbar-width:thin}
+.messages-page .chat-person{display:grid;grid-template-columns:44px minmax(0,1fr);gap:0 10px;padding:14px 10px;border-radius:10px;color:var(--message-text)}
+.messages-page .chat-person:hover,.messages-page .chat-person.active{background:var(--message-selected);color:var(--message-text)}
+.messages-page .chat-person>.avatar{grid-column:1;grid-row:1/3;align-self:center;width:44px;height:44px;background:var(--message-selected);border-color:var(--message-border);color:var(--message-text);font-size:15px}
+.messages-page .chat-person-copy{grid-column:2;grid-row:1;gap:4px}
+.messages-page .chat-person-copy strong{font-size:15px;line-height:1.45;font-weight:600;color:var(--message-text)}
+.messages-page .chat-person-copy>span{font-size:14px;line-height:1.5;color:var(--message-copy)}
+.messages-page .chat-person.has-unread .chat-person-copy strong,.messages-page .chat-person.has-unread .chat-person-copy>span{font-weight:650;color:var(--message-text)}
+.messages-page .chat-person-meta{grid-column:2;grid-row:2;display:flex;flex-direction:row;justify-content:space-between;align-items:center;gap:8px;min-width:0;margin-top:6px;font-size:12px;line-height:1.5;color:var(--message-meta)}
+.messages-page .chat-person-meta time{display:block;min-width:0;overflow-wrap:anywhere}
+.messages-page .chat-unread{flex-shrink:0;min-width:22px;height:22px;padding:0 6px;background:var(--message-sent);color:var(--message-on-sent);font-size:12px;font-weight:700}
+.messages-page .chat-draft{grid-column:2;justify-self:start;margin-top:6px;padding:3px 7px;border:0;border-radius:6px;background:var(--message-selected);color:var(--message-copy);font-size:12px;font-weight:600}
+.messages-page .chat-list-empty p,.messages-page .chat-unavailable p{font-size:15px;line-height:1.7;color:var(--message-copy)}
+.messages-page .chat-list-empty .text-link,.messages-page .chat-history-nav a{min-height:44px;font-size:14px;color:var(--message-text)}
+.messages-page .chat-list-pagination .pagination{margin:0}
+.messages-page .chat-list-pagination .btn{min-height:44px;font-size:13px}
+.messages-page .chat-list-pagination .small{font-size:13px;color:var(--message-meta)}
+.messages-page .chat-panel{background:var(--message-thread)}
+.messages-page .chat-header{gap:12px;padding:16px 20px;border-color:var(--message-border);background:var(--message-panel)}
+.messages-page .chat-header>.avatar{width:44px;height:44px;flex-shrink:0;background:var(--message-selected);border-color:var(--message-border);color:var(--message-text);font-size:15px}
+.messages-page .chat-header h2{font-size:17px;line-height:1.45;font-weight:600;color:var(--message-text);overflow-wrap:anywhere}
+.messages-page .chat-header .hint{display:block;margin-top:3px;font-size:13px;line-height:1.5;color:var(--message-copy)}
+.messages-page .chat-thread{gap:18px;padding:24px;background:var(--message-thread);scrollbar-width:thin}
+.messages-page .chat-introduction h3{font-size:20px;font-weight:600;color:var(--message-text)}
+.messages-page .chat-introduction>.small{font-size:15px;line-height:1.7;color:var(--message-copy)}
+.messages-page .chat-introduction .hint{font-size:13px;line-height:1.65;color:var(--message-meta)}
+.messages-page .chat-message{max-width:min(85%,630px)}
+.messages-page .chat-message:has(>.chat-message-content){display:flex;align-items:flex-start;gap:8px}
+.messages-page .chat-message.is-own{flex-direction:row-reverse}
+.messages-page .chat-message-avatar{flex-shrink:0;width:32px;height:32px;margin-top:4px;border-color:var(--message-border);background:var(--message-selected);color:var(--message-text);font-size:12px}
+.messages-page .chat-message-content{flex:1;min-width:0}
+.messages-page .chat-bubble{padding:12px 16px;border:1px solid var(--message-border);background:var(--message-received);color:var(--message-text);font-size:16px;line-height:1.65}
+.messages-page .is-own .chat-bubble{border-color:var(--message-sent);background:var(--message-sent);color:var(--message-on-sent)}
+.messages-page .chat-message-meta{gap:8px;margin-top:6px;font-size:12px;line-height:1.5;color:var(--message-meta)}
+.messages-page .chat-live-status,.messages-page .chat-no-js{font-size:13px;line-height:1.6;color:var(--message-copy)}
+.messages-page .chat-composer{flex-shrink:0;grid-template-columns:minmax(0,1fr);gap:8px;padding:14px 20px 12px;border-top:1px solid var(--message-border);background:var(--message-panel)}
+.messages-page .chat-composer-controls{display:grid;grid-template-columns:minmax(0,1fr) 44px;align-items:end;gap:10px;min-width:0}
+.messages-page .chat-attach-control{grid-column:1/-1;min-width:0}
+.messages-page .chat-attach-control input[type=file]{width:100%;min-height:44px;max-width:100%;padding:7px;border:1px solid var(--message-control);border-radius:8px;background:var(--message-panel);color:var(--message-text);font-size:14px}
+.messages-page .chat-attach-button{display:none}
+.messages-page .has-attachment-picker .chat-composer-controls{grid-template-columns:44px minmax(0,1fr) 44px}
+.messages-page .has-attachment-picker .chat-attach-control{position:relative;grid-column:auto;width:44px;height:46px}
+.messages-page .has-attachment-picker .chat-attach-control input[type=file]{position:absolute;width:1px;min-height:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.messages-page .has-attachment-picker .chat-attach-button{display:flex;align-items:center;justify-content:center;width:44px;height:46px;margin:0;border:1px solid var(--message-control);border-radius:8px;background:var(--message-panel);color:var(--message-text);cursor:pointer}
+.messages-page .chat-attach-button .icon{width:21px;height:21px}
+.messages-page .chat-attach-button:hover{border-color:var(--message-control-hover);background:var(--message-hover)}
+.messages-page .chat-attach-control:focus-within .chat-attach-button{outline:2px solid var(--message-focus);outline-offset:2px}
+.messages-page .chat-attach-control:has(input:disabled) .chat-attach-button{opacity:.5;cursor:default}
+.messages-page .chat-composer>.hint{font-size:12px;line-height:1.5;color:var(--message-meta)}
+.messages-page .chat-composer textarea{min-height:46px;padding:10px 14px;border-color:var(--message-control);border-radius:8px;background:var(--message-panel);color:var(--message-text);font-size:16px;line-height:1.5}
+.messages-page .chat-send{width:44px;height:46px;border:1px solid var(--message-action);border-radius:8px;background:var(--message-action);color:var(--message-on-sent)}
+.messages-page .chat-send .icon{width:20px;height:20px}
+.messages-page .chat-send:hover{border-color:var(--message-action-hover);background:var(--message-action-hover);color:var(--message-on-sent)}
+.messages-page .chat-live-status.is-error{color:var(--message-text);font-weight:600}
+.messages-page .chat-attachment-preview[hidden]{display:none}
+.messages-page .chat-attachment-preview{min-width:0;padding:10px 12px;border:1px solid var(--message-control);border-radius:10px;background:var(--message-thread)}
+.messages-page .chat-attachment-preview-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--message-copy);font-size:12px;line-height:1.5}
+.messages-page .chat-attachment-clear{min-height:32px;padding:4px;border:0;border-radius:4px;background:transparent;color:var(--message-text);font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer}
+.messages-page .chat-attachment-selected-list{display:grid;gap:6px;max-height:126px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.messages-page .chat-selected-file{display:flex;align-items:center;gap:10px;min-width:0;padding:5px 0}
+.messages-page .chat-selected-file>img{flex-shrink:0;width:40px;height:40px;object-fit:cover;border-radius:6px;background:var(--message-panel)}
+.messages-page .chat-selected-file>.icon{flex-shrink:0;width:28px;height:28px;color:var(--message-copy)}
+.messages-page .chat-attachment-copy{display:flex;flex:1;flex-direction:column;gap:2px;min-width:0}
+.messages-page .chat-attachment-copy strong{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;line-height:1.5;font-weight:600;color:var(--message-text)}
+.messages-page .chat-attachment-copy>span{font-size:12px;line-height:1.5;color:var(--message-copy)}
+.messages-page .chat-attachment-remove{flex-shrink:0;display:flex;align-items:center;justify-content:center;width:36px;min-height:36px;padding:0;border:1px solid var(--message-control);border-radius:7px;background:var(--message-panel);color:var(--message-text);font-size:22px;line-height:1;cursor:pointer}
+.messages-page :is(.chat-attachment-remove,.chat-attachment-clear):hover{background:var(--message-hover)}
+.messages-page :is(.chat-attachment-remove,.chat-attachment-clear):disabled{opacity:.5;cursor:default}
+.messages-page .chat-message:has(.chat-attachments){width:min(85%,360px)}
+.messages-page .chat-attachments{display:grid;gap:8px;min-width:0}
+.messages-page .chat-bubble+.chat-attachments{margin-top:8px}
+.messages-page .chat-attachment{min-width:0;overflow:hidden;border:1px solid var(--message-border);border-radius:12px;background:var(--message-received)}
+.messages-page .is-own .chat-attachment{border-color:var(--message-sent);background:var(--message-sent)}
+.messages-page .chat-attachment-image{display:flex;align-items:center;justify-content:center;min-height:96px;background:var(--message-panel);color:var(--message-text);font-size:14px;text-decoration:none}
+.messages-page .chat-attachment-image img{display:block;width:100%;height:180px;object-fit:contain}
+.messages-page .chat-attachment-download{display:flex;align-items:center;gap:10px;min-width:0;min-height:64px;padding:10px 12px;color:var(--message-text);text-decoration:none}
+.messages-page .chat-attachment-download>.icon{flex-shrink:0;width:20px;height:20px}
+.messages-page .chat-attachment-download>.icon:last-child{width:17px;height:17px}
+.messages-page .chat-attachment-download:hover{background:var(--message-hover);color:var(--message-text)}
+.messages-page .is-own .chat-attachment-download,.messages-page .is-own .chat-attachment-copy strong{color:var(--message-on-sent)}
+.messages-page .is-own .chat-attachment-download .chat-attachment-copy>span{color:var(--message-on-sent);opacity:.85}
+.messages-page .chat-unavailable{border-color:var(--message-border);background:var(--message-panel)}
+.messages-page .chat-welcome h2{font-size:26px;color:var(--message-text)}
+.messages-page .chat-welcome p{font-size:16px;line-height:1.7;color:var(--message-copy)}
+.messages-page .chat-welcome-icon{background:var(--message-panel);border-color:var(--message-border);color:var(--message-text)}
+.messages-page .chat-welcome .btn-primary{min-height:44px;border-color:var(--message-action);border-radius:8px;background:var(--message-action);color:var(--message-on-sent);font-size:15px;font-weight:700}
+.messages-page .chat-welcome .btn-primary:hover{border-color:var(--message-action-hover);background:var(--message-action-hover);color:var(--message-on-sent);opacity:1}
+.messages-page .chat-message:has(.chat-review-card){width:min(100%,480px);max-width:min(94%,480px)}
+.messages-page .chat-review-card{padding:20px;border:1px solid var(--message-border);border-radius:18px;background:var(--message-panel);color:var(--message-text);overflow-wrap:anywhere;box-shadow:var(--evaluator-shadow)}
+.messages-page .chat-review-label{display:inline-flex;max-width:100%;margin-bottom:12px;padding:5px 12px;border:1px solid transparent;border-radius:999px;background:linear-gradient(145deg,var(--message-capsule-top),var(--message-capsule-bg));box-shadow:var(--message-capsule-shadow);color:var(--message-capsule-text);font-size:13px;line-height:1.5;font-weight:600;text-transform:none;letter-spacing:0}
+.messages-page .chat-review-card h3{margin:0 0 12px;font-size:17px;font-weight:600;line-height:1.5;color:var(--message-text)}
+.messages-page .chat-review-description{font-size:15px;line-height:1.7;color:var(--message-copy)}
+.messages-page .chat-review-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 16px;margin:18px 0 0;padding-top:16px;border-top:1px solid var(--message-border)}
+.messages-page .chat-review-details div{min-width:0}
+.messages-page .chat-review-details dt{margin-bottom:4px;font-size:13px;line-height:1.5;color:var(--message-copy)}
+.messages-page .chat-review-details dd{margin:0;font-size:14px;line-height:1.6;font-weight:500;color:var(--message-text)}
+.messages-page .chat-review-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid var(--message-border)}
+.messages-page .chat-review-actions a{display:inline-flex;align-items:center;justify-content:center;gap:5px;max-width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--message-control);border-radius:8px;background:var(--message-panel);color:var(--message-text);font-size:14px;line-height:1.5;font-weight:700;text-decoration:none}
+.messages-page .chat-review-actions a:first-child{border-color:var(--message-sent);background:var(--message-sent);color:var(--message-on-sent)}
+.messages-page .chat-review-actions a:hover{border-color:var(--message-control-hover);background:var(--message-hover);color:var(--message-text)}
+.messages-page .chat-review-actions a:first-child:hover{border-color:var(--message-action);background:var(--message-action);color:var(--message-on-sent)}
+.messages-page .chat-review-card.is-unavailable{background:var(--message-panel)}
+.messages-page .main-content :is(.chat-person,.chat-review-actions a,.icon-button,.chat-send,.chat-attachment-image,.chat-attachment-download,.chat-attachment-remove,.chat-attachment-clear,textarea):focus-visible{outline:2px solid var(--message-focus);outline-offset:2px}
+@media(max-width:1100px){.messages-page .main-content{padding:24px 20px 0}}
+@media(max-width:1000px){
+    .messages-page .messages-shell{grid-template-columns:minmax(0,1fr)}
+    .messages-page .messages-shell .chat-panel{display:none}
+    .messages-page .messages-shell.has-conversation .chat-sidebar{display:none}
+    .messages-page .messages-shell.has-conversation .chat-panel{display:flex}
+    .messages-page .chat-sidebar{border-right:0}
+    .messages-page .chat-back{display:inline-flex}
+}
+@media(max-width:760px){
+    .messages-page .main-content{padding:22px 14px 0}
+    .messages-page .app-shell .site-footer{padding:12px 0}
+    .messages-page .chat-header{gap:8px;padding:12px}
+    .messages-page .chat-header h2{font-size:16px}
+    .messages-page .chat-header>.avatar{width:36px;height:36px;font-size:13px}
+    .messages-page .chat-thread{padding:20px 14px}
+    .messages-page .chat-message{max-width:94%}
+    .messages-page .chat-message:has(.chat-attachments){width:min(94%,360px)}
+    .messages-page .chat-message:has(.chat-review-card){max-width:100%}
+    .messages-page .chat-review-card{padding:16px}
+    .messages-page .chat-composer{padding:12px}
+}
+@media(max-height:600px){.messages-page .main-content{padding-top:12px}.messages-page .app-shell .site-footer{padding-block:8px}}

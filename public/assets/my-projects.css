@@ -1,0 +1,142 @@
+/* The private project list shares the public directories' sky and card palette. */
+.my-projects-page{
+    --my-project-control-border:#d8e0e8;--my-project-control-hover:#bcc8d3;
+    --text:var(--project-heading);--muted:var(--project-copy);--soft:var(--project-copy);--border:var(--project-border)
+}
+:root[data-theme=dark] .my-projects-page{--my-project-control-border:var(--night-control-border,#7184a3);--my-project-control-hover:var(--night-control-hover,#8ea3c2)}
+.my-projects-page .main-content{max-width:1344px}
+.my-projects-page .my-projects-back{margin-bottom:28px;color:var(--project-heading)}
+.my-projects-page .my-projects-back:hover{text-decoration:underline;text-underline-offset:4px}
+.my-projects-page .my-projects-header{display:flex;flex-direction:column;align-items:center;gap:14px;margin:32px 0 56px;text-align:center}
+.my-projects-page .my-projects-header h1{margin:0;font:500 40px/1.2 var(--font-sans);letter-spacing:-.7px;color:var(--project-heading)}
+.my-projects-page .my-projects-header h1 em{font:italic 400 1em/1.2 var(--font-serif)}
+.my-projects-page .my-projects-header>p{max-width:640px;margin:0;font:400 17px/1.65 var(--font-sans);color:var(--project-copy)}
+.my-projects-page .my-projects-tabs.tabs{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 28px;padding:0;border:0}
+.my-projects-page .my-projects-tabs .tab{display:inline-flex;align-items:center;justify-content:center;min-height:44px;max-width:100%;margin:0;padding:10px 14px;border:0;border-radius:8px;color:var(--project-copy);font:500 15px/1.5 var(--font-sans);text-align:center}
+.my-projects-page .my-projects-tabs .tab.active,.my-projects-page .my-projects-tabs .tab:hover{background:var(--project-badge);color:var(--project-heading)}
+.my-projects-page .my-projects-tabs .tab.active{font-weight:600}
+.my-projects-page .my-projects-filters{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px 8px;margin:0;padding:0;border:0;background:transparent;box-shadow:none}
+.my-projects-page .my-projects-search-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;flex:0 1 600px;min-width:0}
+.my-projects-page .my-projects-search{display:flex;align-items:center;gap:8px;min-width:0;padding:0 12px;border:1px solid var(--my-project-control-border);border-radius:8px;background:var(--project-surface);color:var(--project-copy)}
+.my-projects-page .my-projects-search>.icon{position:static;width:18px;height:18px;flex-shrink:0}
+.my-projects-page .my-projects-search input{width:100%;min-width:0;min-height:44px;padding:9px 0;border:0;border-radius:0;background:transparent;color:var(--project-heading);font:400 16px/1.5 var(--font-sans)}
+.my-projects-page .my-projects-search input::placeholder{color:var(--project-copy);opacity:1}
+.my-projects-page .my-projects-search:focus-within{outline:2px solid var(--project-heading);outline-offset:2px}
+.my-projects-page .my-projects-search input:focus{outline:0}
+.my-projects-page .my-projects-status{flex:0 1 170px;min-width:0}
+.my-projects-page .my-projects-status select{width:100%;min-width:0;min-height:44px;padding:10px 28px 10px 12px;border:1px solid var(--my-project-control-border);border-radius:8px;background:var(--project-surface);color:var(--project-heading);font:400 14px/1.5 var(--font-sans)}
+.my-projects-page .my-projects-filter-clear{display:flex;align-items:center;justify-content:center;flex-basis:100%;min-width:0;min-height:44px;padding:9px 0;color:var(--project-heading);font:400 14px/1.5 var(--font-sans)}
+.my-projects-page .my-projects-filter-clear a{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:9px 0;color:var(--project-heading);font:400 14px/1.5 var(--font-sans)}
+.my-projects-page .my-projects-filter-clear:hover,.my-projects-page .my-projects-filter-clear a:hover{text-decoration:underline;text-underline-offset:4px}
+.my-projects-page .my-projects-results{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 20px;margin:24px 0 16px;font:400 14px/1.6 var(--font-sans);color:var(--project-copy)}
+.my-projects-page .my-projects-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:20px;align-items:start}
+.my-projects-page .my-project-card.panel.stack{min-width:0;margin:0;padding:24px;border:1px solid var(--project-border);border-radius:20px;background:var(--project-surface);box-shadow:var(--project-shadow);gap:18px;overflow-wrap:anywhere}
+.my-projects-page .my-project-meta.actions{gap:9px;flex-wrap:wrap}
+.my-projects-page .my-project-card .status{display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:5px 12px;border:1px solid transparent;border-radius:999px;background:linear-gradient(145deg,var(--project-tech-top),var(--project-tech-bg));box-shadow:var(--project-capsule-shadow);color:var(--project-tech-text);font:600 13px/1.5 var(--font-sans)}
+.my-projects-page .my-project-card .status-draft .icon{width:13px;height:13px}
+.my-projects-page .my-project-card :is(.status-approved,.status-completed,.status-accepted){background:linear-gradient(145deg,var(--project-status-top),var(--project-status-bg));color:var(--project-status-text)}
+.my-projects-page .my-project-card :is(.status-pending,.status-under_review){background:linear-gradient(145deg,var(--project-category-top),var(--project-category-bg));color:var(--project-category-text)}
+.my-projects-page .my-project-card :is(.status-needs_changes,.status-rejected,.status-declined){background:var(--project-pink);color:var(--project-pink-text)}
+.my-projects-page .my-project-role.badge{display:inline-flex;align-items:center;max-width:100%;padding:5px 12px;border:1px solid transparent;border-radius:999px;background:linear-gradient(145deg,var(--project-category-top),var(--project-category-bg));box-shadow:var(--project-capsule-shadow);color:var(--project-category-text);font:600 13px/1.5 var(--font-sans)}
+.my-projects-page .my-project-documents.hint{display:inline-flex;align-items:center;gap:6px;font:400 13px/1.6 var(--font-sans);color:var(--project-copy)}
+.my-projects-page .my-project-documents .icon{width:16px;height:16px}
+.my-projects-page .my-project-heading{min-width:0}
+.my-projects-page .my-project-heading h3{margin:0;font:600 22px/1.4 var(--font-sans);letter-spacing:-.2px;color:var(--project-heading);overflow-wrap:anywhere}
+.my-projects-page .my-project-heading h3 a{color:inherit}
+.my-projects-page .my-project-heading h3 a:hover{text-decoration:underline;text-underline-offset:4px}
+.my-projects-page .my-project-heading>p{margin-top:8px;font:400 15px/1.65 var(--font-sans);color:var(--project-copy)}
+.my-projects-page .my-project-heading>.hint{margin-top:6px;font-size:14px}
+.my-projects-page .my-project-note{font:400 15px/1.75 var(--font-sans);color:var(--project-copy)}
+.my-projects-page .my-project-note strong{font-weight:600;color:var(--project-heading)}
+.my-projects-page .my-project-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+.my-projects-page .my-project-card-compact.panel.stack{position:relative;display:flex;flex-direction:column;gap:16px;border-radius:18px}
+.my-projects-page .my-project-card-has-delete .my-project-heading h3,.my-projects-page .my-project-card-has-delete .my-project-draft{padding-right:44px}
+.my-projects-page .my-project-card-compact .my-project-meta{gap:8px}
+.my-projects-page .my-project-category{display:inline-flex;align-items:center;max-width:100%;padding:5px 12px;border:1px solid transparent;border-radius:999px;background:linear-gradient(145deg,var(--project-category-top),var(--project-category-bg));box-shadow:var(--project-capsule-shadow);color:var(--project-category-text);font:600 13px/1.5 var(--font-sans)}
+.my-projects-page .my-project-card-compact .my-project-heading h3{font:600 20px/1.45 var(--font-sans);letter-spacing:-.15px}
+.my-projects-page .my-project-card-compact .my-project-heading h3 a{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere}
+.my-projects-page .my-project-card-compact .my-project-heading>p{margin:8px 0 0;font:400 15px/1.5 var(--font-sans);overflow-wrap:anywhere}
+.my-projects-page .my-project-summary{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;margin:0;overflow:hidden;overflow-wrap:anywhere;color:var(--project-copy);font:400 16px/1.65 var(--font-sans)}
+.my-projects-page .my-project-stats{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px 12px;color:var(--project-copy);font:400 13px/1.6 var(--font-sans)}
+.my-projects-page .my-project-stats>span{display:inline-flex;align-items:center;gap:5px;min-width:0}
+.my-projects-page .my-project-stats .icon{width:15px;height:15px;flex-shrink:0}
+.my-projects-page .my-project-card-compact .my-project-actions{gap:8px;align-items:flex-start}
+.my-projects-page .my-project-card-compact .my-project-actions>.btn,.my-projects-page .my-project-review-menu{flex:1 1 110px;min-width:0;max-width:100%}
+.my-projects-page .my-project-review-menu>summary.btn{display:flex;justify-content:center;width:100%;list-style:none;cursor:pointer}
+.my-projects-page .my-project-review-menu>summary::-webkit-details-marker{display:none}
+.my-projects-page .my-project-review-menu[open]>summary{background:var(--project-badge);color:var(--project-heading)}
+.my-projects-page .my-project-review-menu[open]{flex-basis:100%}
+.my-projects-page .my-project-review-toggle-icon{transform:rotate(90deg)}
+.my-projects-page .my-project-review-options{display:grid;gap:6px;min-width:0;max-width:100%;margin:8px 0 0;padding:8px;border:1px solid var(--project-border);border-radius:12px;background:var(--project-surface);list-style:none}
+.my-projects-page .my-project-review-options a{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:4px 8px;min-width:0;min-height:44px;padding:10px 8px;border-radius:8px;color:var(--project-heading);font:600 14px/1.5 var(--font-sans);overflow-wrap:anywhere}
+.my-projects-page .my-project-review-options a>strong,.my-projects-page .my-project-review-options a>span{grid-column:1;min-width:0}
+.my-projects-page .my-project-review-options a>.icon{grid-column:2;grid-row:1/3;align-self:center;width:17px;height:17px}
+.my-projects-page .my-project-review-options a:hover{background:var(--project-badge)}
+.my-projects-page .my-project-review-options .hint,.my-projects-page .my-project-review-option-meta{color:var(--project-copy);font:400 13px/1.5 var(--font-sans)}
+.my-projects-page .my-project-review-options .status{padding:3px 8px;font-size:12px}
+.my-projects-page .my-project-review-menu>summary:focus-visible,.my-projects-page .my-project-review-options a:focus-visible{outline:2px solid var(--project-heading);outline-offset:3px}
+.my-projects-page .main-content .btn{min-height:44px;max-width:100%;padding:10px 14px;border:1px solid var(--my-project-control-border);border-radius:8px;background:var(--project-surface);color:var(--project-heading);font:700 15px/1.5 var(--font-sans);gap:7px;white-space:normal;text-align:center}
+.my-projects-page .main-content .btn .icon{width:17px;height:17px}
+.my-projects-page .main-content .btn:hover{background:var(--project-badge);border-color:var(--my-project-control-hover);color:var(--project-heading);opacity:1}
+.my-projects-page .main-content .btn-primary,.my-projects-page .main-content .my-projects-create-button{background:var(--project-blue-light);border-color:var(--project-blue-light);color:var(--project-blue-text)}
+.my-projects-page .main-content .btn-primary:hover,.my-projects-page .main-content .my-projects-create-button:hover{background:var(--project-blue-light-hover);border-color:var(--project-blue-light-hover);color:var(--project-blue-text)}
+.my-projects-page .main-content .my-projects-search-button{background:var(--project-blue);border-color:var(--project-blue);color:var(--project-blue-text)}
+.my-projects-page .main-content .my-projects-search-button:hover{background:var(--project-blue-hover);border-color:var(--project-blue-hover);color:var(--project-blue-text)}
+.my-projects-page .main-content .my-project-card-compact .my-project-actions .btn{padding:10px 8px;gap:5px;font-size:14px;white-space:nowrap}
+.my-projects-page .main-content .btn[aria-disabled=true],.my-projects-page .main-content .btn[aria-disabled=true]:hover{border-color:var(--project-border);background:var(--project-badge);color:var(--project-copy);cursor:default;opacity:1}
+.my-projects-page .project-review-list{margin:2px 0 0;padding-top:0;border-color:var(--project-border)}
+.my-projects-page .project-review-row{align-items:flex-start;flex-wrap:wrap;gap:16px;padding:20px 0;border-color:var(--project-border)}
+.my-projects-page .project-review-row>div:first-child{flex:1 1 260px;min-width:0}
+.my-projects-page .project-review-person{margin:0;font:600 16px/1.5 var(--font-sans);color:var(--project-heading)}
+.my-projects-page .project-review-row .hint{margin-top:5px;font:400 14px/1.65 var(--font-sans);color:var(--project-copy)}
+.my-projects-page .project-review-summary{max-width:760px;margin-top:12px;font:400 16px/1.75 var(--font-sans);color:var(--project-copy);overflow-wrap:anywhere}
+.my-projects-page .project-review-row>.actions{min-width:0;max-width:100%;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.my-projects-page .project-review-empty{gap:8px 18px;padding-top:18px;border-color:var(--project-border)}
+.my-projects-page .project-review-empty .hint{font:400 14px/1.65 var(--font-sans);color:var(--project-copy)}
+.my-projects-page .project-review-empty .text-button{min-height:44px;padding:9px 0;font:500 14px/1.5 var(--font-sans);color:var(--project-heading)}
+.my-projects-page .project-delete{margin-top:2px;padding-top:14px;border-top:1px solid var(--project-border)}
+.my-projects-page .project-delete>summary{display:inline-flex;align-items:center;min-height:44px;padding:10px 0;font:400 14px/1.5 var(--font-sans);color:var(--project-copy);cursor:pointer;list-style:none}
+.my-projects-page .project-delete>summary::-webkit-details-marker{display:none}
+.my-projects-page .project-delete>summary:hover{color:var(--project-heading);text-decoration:underline;text-underline-offset:4px}
+.my-projects-page .project-delete>.fields{width:100%;max-width:540px;min-width:0;margin-top:12px;padding:20px;border:1px solid var(--project-border);border-radius:12px;background:var(--project-surface);gap:16px}
+.my-projects-page .project-delete p{font:400 14px/1.75 var(--font-sans);color:var(--project-copy)}
+.my-projects-page .project-delete strong{color:var(--project-heading);font-weight:600}
+.my-projects-page .project-delete .field{min-width:0;font:500 15px/1.5 var(--font-sans);color:var(--project-heading)}
+.my-projects-page .project-delete .field>label{font-weight:600}
+.my-projects-page .project-delete input{width:100%;min-width:0;min-height:44px;padding:10px 12px;border:1px solid var(--my-project-control-border);border-radius:8px;background:var(--project-surface);color:var(--project-heading);font:400 16px/1.5 var(--font-sans)}
+.my-projects-page .project-delete input::placeholder{color:var(--project-copy);opacity:1}
+.my-projects-page .project-delete .hint{font:400 14px/1.7 var(--font-sans);color:var(--project-copy)}
+.my-projects-page .project-delete .btn-danger{align-self:flex-start;background:var(--project-pink);border-color:var(--project-pink);color:var(--project-pink-text)}
+.my-projects-page .project-delete .btn-danger:hover{background:var(--project-pink-hover);border-color:var(--project-pink-hover);color:var(--project-pink-text)}
+.my-projects-page .my-project-card-compact .project-delete{margin:0;padding:0;border:0}
+.my-projects-page .my-project-card-compact .project-delete:not([open]){position:absolute;top:18px;right:18px}
+.my-projects-page .my-project-card-compact .project-delete>summary{display:flex;align-items:center;justify-content:center;width:44px;height:44px;min-height:44px;padding:0;border:1px solid var(--project-border);border-radius:10px;background:var(--project-surface);color:var(--project-copy);text-decoration:none}
+.my-projects-page .my-project-card-compact .project-delete>summary .icon{width:18px;height:18px}
+.my-projects-page .my-project-card-compact .project-delete[open]>summary{position:absolute;top:18px;right:18px}
+.my-projects-page .my-project-card-compact .project-delete>summary:hover,.my-projects-page .my-project-card-compact .project-delete[open]>summary{border-color:var(--project-pink);background:var(--project-pink);color:var(--project-pink-text);text-decoration:none}
+.my-projects-page .my-project-card-compact .project-delete>summary:focus-visible{outline:2px solid var(--project-heading);outline-offset:3px}
+.my-projects-page .my-project-card-compact .project-delete>.fields{margin-top:4px;padding:16px}
+.my-projects-page .empty{padding:40px 24px;border:1px solid var(--project-border);border-radius:20px;background:var(--project-surface);box-shadow:var(--project-shadow)}
+.my-projects-page .empty h3{font:600 20px/1.4 var(--font-sans);color:var(--project-heading)}
+.my-projects-page .empty p{max-width:520px;font:400 16px/1.75 var(--font-sans);color:var(--project-copy)}
+.my-projects-page .pagination{margin-top:28px;gap:14px;flex-wrap:wrap}
+.my-projects-page .pagination>.small{font:400 14px/1.6 var(--font-sans);color:var(--project-copy)}
+@media(max-width:900px){
+    .my-projects-page .my-projects-search-row{flex-basis:100%}
+    .my-projects-page .my-projects-status{flex:1 1 170px}
+}
+@media(max-width:760px){
+    .my-projects-page .my-projects-back{margin-bottom:24px}
+    .my-projects-page .my-projects-header{margin:24px 0 42px;gap:12px}
+    .my-projects-page .my-projects-header h1{font-size:32px}
+    .my-projects-page .my-projects-header>p{font-size:16px}
+}
+@media(max-width:600px){
+    .my-projects-page .my-project-card.panel.stack{padding:20px;border-radius:18px}
+    .my-projects-page .my-project-card-compact .project-delete:not([open]),.my-projects-page .my-project-card-compact .project-delete[open]>summary{top:14px;right:14px}
+    .my-projects-page .my-projects-results{align-items:flex-start}
+    .my-projects-page .project-review-row{flex-direction:column;align-items:stretch}
+    .my-projects-page .project-review-row>div:first-child{flex-basis:auto}
+    .my-projects-page .project-review-row>.actions{justify-content:flex-start}
+    .my-projects-page .project-delete>.fields{padding:16px}
+}

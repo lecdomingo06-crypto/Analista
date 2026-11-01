@@ -1,0 +1,2 @@
+@php($pendingCount = in_array($key, ['evaluators', 'projects', 'reports'], true) ? (int) ($stats['pending_'.$key] ?? 0) : 0)
+<a href="{{ route('admin.index', ['section' => $key]) }}" class="{{ $linkClass }} {{ $section === $key ? 'active' : '' }}" @if($section === $key) aria-current="page" @endif><x-icon :name="$item['icon']" /><span class="admin-nav-label">{{ $item['label'] }}</span>@if($pendingCount)<span class="badge">{{ $pendingCount }}</span>@endif</a>

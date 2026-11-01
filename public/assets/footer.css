@@ -1,0 +1,46 @@
+/* Keep breathing room on workspace pages without a footer. */
+.app-shell .main-content.workspace-content{padding-bottom:64px}
+.messages-page .app-shell .main-content.workspace-content{padding-bottom:max(24px,env(safe-area-inset-bottom))}
+/* Keep the shared footer consistent after page-specific styles. */
+.app-shell .site-footer{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px 24px;
+    border:0;
+    padding:32px 0;
+    font:400 13px/1.5 var(--font-sans);
+    color:var(--learning-card-copy,var(--muted));
+}
+.site-footer-copyright{white-space:nowrap}
+.site-footer nav{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px 20px;
+    margin-left:auto;
+}
+.site-footer nav a{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    white-space:nowrap;
+    color:inherit;
+}
+.site-footer nav a:hover{
+    color:var(--text);
+    text-decoration:underline;
+    text-underline-offset:4px;
+}
+.site-footer nav .icon{width:13px;height:13px}
+@media(max-width:760px){
+    .app-shell .main-content.workspace-content{padding-bottom:40px}
+    .messages-page .app-shell .main-content.workspace-content{padding-bottom:max(14px,env(safe-area-inset-bottom))}
+    .app-shell .site-footer{gap:12px 20px;padding:24px 0;font-size:12px}
+    .site-footer nav{column-gap:14px}
+}
+@media(max-height:600px){
+    .messages-page .app-shell .main-content.workspace-content{padding-bottom:max(12px,env(safe-area-inset-bottom))}
+}

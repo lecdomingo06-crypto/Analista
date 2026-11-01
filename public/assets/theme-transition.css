@@ -1,0 +1,17 @@
+/* Fade two page snapshots instead of animating every themed element. */
+:root[data-theme-transition]::view-transition,
+:root[data-theme-transition]::view-transition-group(root),
+:root[data-theme-transition]::view-transition-image-pair(root),
+:root[data-theme-transition]::view-transition-old(root),
+:root[data-theme-transition]::view-transition-new(root){pointer-events:none}
+:root[data-theme-transition]::view-transition-group(root),
+:root[data-theme-transition]::view-transition-old(root),
+:root[data-theme-transition]::view-transition-new(root){
+    animation-duration:450ms;
+    animation-timing-function:cubic-bezier(.4,0,.2,1);
+}
+@media(prefers-reduced-motion:reduce){
+    :root[data-theme-transition]::view-transition-group(root),
+    :root[data-theme-transition]::view-transition-old(root),
+    :root[data-theme-transition]::view-transition-new(root){animation:none}
+}
