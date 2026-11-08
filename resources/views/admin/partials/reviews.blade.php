@@ -1,9 +1,16 @@
-<header class="admin-section-heading"><h2>Review monitoring</h2><p>Follow evaluator progress and agreed completion dates. Overdue indicators start the day after the agreed date; assignments and review workflows stay unchanged.</p></header>
-<div class="admin-review-summary" aria-label="Totals across all reviews">
-    <a href="{{ route('admin.index', ['section' => 'reviews', 'status' => 'ongoing']) }}"><strong>{{ $stats['ongoing_reviews'] }}</strong> Ongoing</a>
-    <a href="{{ route('admin.index', ['section' => 'reviews', 'status' => 'completed']) }}"><strong>{{ $stats['completed_reviews'] }}</strong> Completed</a>
-    <a href="{{ route('admin.index', ['section' => 'reviews', 'status' => 'overdue']) }}"><strong>{{ $stats['overdue_reviews'] }}</strong> Overdue</a>
-</div>
+<header class="admin-section-heading"><h2>Review monitoring</h2></header>
+<nav class="admin-review-summary" aria-label="Review totals and status filters">
+    @foreach([
+        'ongoing' => ['label' => 'Ongoing', 'count' => $stats['ongoing_reviews'], 'icon' => 'inbox'],
+        'completed' => ['label' => 'Completed', 'count' => $stats['completed_reviews'], 'icon' => 'check'],
+        'overdue' => ['label' => 'Overdue', 'count' => $stats['overdue_reviews'], 'icon' => 'clock'],
+    ] as $status => $metric)
+        <a class="admin-review-stat admin-review-stat-{{ $status }}" href="{{ route('admin.index', ['section' => 'reviews', 'status' => $status]) }}" @if($filters['status'] === $status) aria-current="true" @endif>
+            <span class="admin-review-stat-icon" aria-hidden="true"><x-icon :name="$metric['icon']" /></span>
+            <span class="admin-review-stat-copy"><span class="admin-review-stat-label">{{ $metric['label'] }}</span><strong class="admin-review-stat-value">{{ $metric['count'] }}</strong></span>
+        </a>
+    @endforeach
+</nav>
 @include('admin.partials.filters')
 @if($reviews->count())
     <div class="panel admin-review-monitoring">
@@ -18,11 +25,11 @@
                     $daysOverdue = $review->daysOverdue();
                 @endphp
                 <tr data-review-id="{{ $review->id }}">
-                    <th scope="row" data-label="Project"><strong>{{ $review->project?->title ?? 'Project unavailable' }}</strong><p class="hint">@if($review->document)PDF version {{ $review->document->version }} · @endif Review #{{ $review->id }}</p></th>
-                    <td data-label="Evaluator">{{ $review->evaluator?->name ?? 'Evaluator unavailable' }}</td>
+                    <th scope="row" data-label="Project"><strong class="admin-review-project-title">{{ $review->project?->title ?? 'Project unavailable' }}</strong></th>
+                    <td data-label="Evaluator"><span class="admin-review-evaluator-name">{{ $review->evaluator?->name ?? 'Evaluator unavailable' }}</span></td>
                     <td data-label="Status"><span class="status status-{{ $monitorStatus }}"><span></span>{{ $monitorLabels[$monitorStatus] ?? Str::headline($monitorStatus) }}</span></td>
                     <td data-label="Agreed completion">@if($review->agreed_date)<time datetime="{{ $review->agreed_date->toDateString() }}">{{ $review->agreed_date->format('M j, Y') }}</time>@else<span class="hint">Not agreed</span>@endif @if($daysOverdue)<p class="admin-review-overdue">{{ $daysOverdue }} {{ Str::plural('day', $daysOverdue) }} overdue</p>@endif</td>
-                    <td data-label="Action"><a class="btn btn-primary btn-small" href="{{ route('reviews.show', $review) }}" aria-label="View review #{{ $review->id }} for {{ $review->project?->title ?? 'this project' }}">View review <x-icon name="arrow-up-right"/></a></td>
+                    <td data-label="Action"><a class="btn btn-primary btn-small admin-review-open" href="{{ route('reviews.show', $review) }}" aria-label="View {{ $review->evaluator?->name ?? 'the evaluator' }}'s review for {{ $review->project?->title ?? 'this project' }}">View review <x-icon name="arrow-up-right"/></a></td>
                 </tr>
             @endforeach
             </tbody>

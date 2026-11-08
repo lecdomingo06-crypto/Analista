@@ -1,0 +1,43 @@
+/* Review monitoring keeps the shared admin layout and native table semantics. */
+.admin-page .admin-section-reviews .admin-review-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;min-width:0;margin:0}
+.admin-page .admin-section-reviews .admin-review-summary>.admin-review-stat{display:grid;grid-template-columns:42px minmax(0,1fr);align-items:center;gap:12px;min-width:0;min-height:94px;margin:0;padding:18px;border:1px solid var(--project-border);border-radius:14px;background:var(--project-surface);box-shadow:var(--project-shadow);color:var(--project-heading);text-decoration:none}
+.admin-page .admin-section-reviews .admin-review-stat-icon{display:grid;place-items:center;flex-shrink:0;width:42px;height:42px;border-radius:12px;background:linear-gradient(145deg,var(--project-category-top),var(--project-category-bg));color:var(--project-category-text)}
+.admin-page .admin-section-reviews .admin-review-stat-icon>.icon{width:21px;height:21px}
+.admin-page .admin-section-reviews .admin-review-stat-completed .admin-review-stat-icon{background:linear-gradient(145deg,var(--project-status-top),var(--project-status-bg));color:var(--project-status-text)}
+.admin-page .admin-section-reviews .admin-review-stat-overdue .admin-review-stat-icon{background:var(--admin-warm-bg);color:var(--admin-warm-text)}
+.admin-page .admin-section-reviews .admin-review-stat-copy{display:flex;flex-direction:column;gap:4px;min-width:0}
+.admin-page .admin-section-reviews .admin-review-stat-copy>.admin-review-stat-label{order:2;min-width:0;color:var(--project-copy);font:400 14px/1.5 var(--font-sans);overflow-wrap:anywhere}
+.admin-page .admin-section-reviews .admin-review-stat-copy>.admin-review-stat-value{order:1;max-width:100%;color:var(--project-heading);font:600 28px/1.15 var(--font-sans);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.admin-page .admin-section-reviews .admin-review-summary>.admin-review-stat:hover{border-color:var(--admin-control-hover);color:var(--project-heading);text-decoration:none}
+.admin-page .admin-section-reviews .admin-review-summary>.admin-review-stat[aria-current=true]{border-color:var(--admin-selected-border);background:color-mix(in srgb,var(--project-blue-light) 13%,var(--project-surface));box-shadow:inset 0 0 0 1px var(--admin-selected-border);color:var(--project-heading);text-decoration:none}
+.admin-page .admin-section-reviews .admin-review-stat:focus-visible{outline:2px solid var(--project-heading);outline-offset:4px}
+.admin-page .admin-section-reviews .admin-review-monitoring{min-width:0}
+.admin-page .admin-section-reviews .admin-review-table{font:400 15px/1.7 var(--font-sans)}
+.admin-page .admin-section-reviews .admin-review-table :is(th,td){padding-block:18px;vertical-align:middle}
+.admin-page .admin-section-reviews .admin-review-table thead th{padding-top:0;padding-bottom:16px;font:600 14px/1.6 var(--font-sans)}
+.admin-page .admin-section-reviews .admin-review-table tr>:first-child{width:36%}
+.admin-page .admin-section-reviews .admin-review-table tr>:nth-child(2){width:18%}
+.admin-page .admin-section-reviews .admin-review-table tr>:nth-child(3){width:15%}
+.admin-page .admin-section-reviews .admin-review-table tr>:nth-child(4){width:17%}
+.admin-page .admin-section-reviews .admin-review-table tr>:last-child{width:14%;min-width:144px}
+.admin-page .admin-section-reviews .admin-review-project-title{display:block;color:var(--project-heading);font:600 16px/1.7 var(--font-sans);overflow-wrap:anywhere}
+.admin-page .admin-section-reviews .admin-review-evaluator-name{display:block;color:var(--project-heading);font:500 15px/1.7 var(--font-sans);overflow-wrap:anywhere}
+.admin-page .admin-section-reviews .admin-review-table time{color:var(--project-heading);font:400 15px/1.7 var(--font-sans);font-variant-numeric:tabular-nums}
+.admin-page .admin-section-reviews .admin-review-table .status{max-width:100%;line-height:1.5}
+.admin-page .admin-section-reviews .admin-review-open{min-height:44px;white-space:nowrap}
+@media(max-width:1100px){
+    .admin-page .admin-section-reviews .admin-review-table tbody tr>[data-label]{width:100%;min-width:0;padding:0;text-align:left}
+    .admin-page .admin-section-reviews .admin-review-table tbody tr{gap:14px 24px}
+    .admin-page .admin-section-reviews .admin-review-table tbody tr>[data-label]::before{font-size:13px}
+    .admin-page .admin-section-reviews .admin-review-table tbody tr:last-child>:is(th,td){padding-bottom:0}
+}
+@media(max-width:600px){
+    .admin-page .admin-section-reviews .admin-review-summary{gap:9px}
+    .admin-page .admin-section-reviews .admin-review-summary>.admin-review-stat{grid-template-columns:minmax(0,1fr);gap:10px;min-height:0;padding:12px 10px}
+    .admin-page .admin-section-reviews .admin-review-stat-icon{width:28px;height:28px;border-radius:8px}
+    .admin-page .admin-section-reviews .admin-review-stat-icon>.icon{width:16px;height:16px}
+    .admin-page .admin-section-reviews .admin-review-stat-copy{gap:4px}
+    .admin-page .admin-section-reviews .admin-review-stat-copy>.admin-review-stat-label{font-size:13px;line-height:1.5}
+    .admin-page .admin-section-reviews .admin-review-stat-copy>.admin-review-stat-value{font-size:24px}
+    .admin-page .admin-section-reviews .admin-review-table tbody tr{gap:14px}
+}

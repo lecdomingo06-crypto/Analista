@@ -31,7 +31,7 @@
 .evaluators-results-heading{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin:24px 0 16px;color:var(--evaluator-copy)}
 .evaluators-results-heading h2{font:400 14px/1.5 var(--font-sans);letter-spacing:0;color:inherit}
 .evaluators-results-heading>span{font:400 13px/1.5 var(--font-sans)}
-.evaluators-page .evaluators-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:20px;align-items:start}
+.evaluators-page .evaluators-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:20px;align-items:stretch;grid-auto-rows:1fr}
 .evaluators-page .evaluators-search-row>.btn{font-weight:700}
 .evaluators-page .evaluators-search-row>.btn{background:var(--evaluator-action);border-color:var(--evaluator-action);color:var(--evaluator-action-text)}
 .evaluators-page .evaluators-search-row>.btn:hover{background:var(--evaluator-action-hover);border-color:var(--evaluator-action-hover);color:var(--evaluator-action-text);opacity:1}

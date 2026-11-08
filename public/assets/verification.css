@@ -108,11 +108,13 @@
 .verification-page .verification-attestation>span{min-width:0}
 .verification-page .verification-attestation input{margin-top:4px}
 .verification-page .verification-form [aria-invalid=true]{border-color:var(--project-pink-text)}
-.verification-page .verification-pending>.icon,.verification-page .verification-sidebar .panel>.icon{
+.verification-page .verification-pending-heading{display:flex;align-items:center;gap:12px;min-width:0}
+.verification-page .verification-pending-heading>.icon,.verification-page .verification-sidebar .panel>.icon{
     display:block;width:42px;height:42px;padding:10px;border-radius:13px;background:linear-gradient(145deg,var(--project-category-top),var(--project-category-bg));
     box-shadow:var(--project-capsule-shadow);color:var(--project-category-text)
 }
-.verification-page .verification-pending h2{font-size:24px}
+.verification-page .verification-pending-heading>.icon{flex-shrink:0}
+.verification-page .verification-pending h2{min-width:0;font-size:24px}
 .verification-page .verification-sidebar .panel>.icon{margin-bottom:16px}
 .verification-page .verification-sidebar .panel :is(h2,h3){margin:0 0 12px;font-size:20px;line-height:1.45}
 .verification-page .verification-sidebar .panel>p{margin:0 0 14px;font-size:14px;line-height:1.75}
@@ -125,9 +127,12 @@
 .verification-page #submission-history>.section-heading{gap:12px;min-width:0;margin:0 0 16px;flex-wrap:wrap}
 .verification-page #submission-history>.section-heading h2{font-size:20px}
 .verification-page #submission-history>.verification-history{margin-bottom:16px}
-.verification-page .verification-history>summary{min-height:44px;align-items:center;gap:12px;color:var(--project-heading);font:600 15px/1.6 var(--font-sans);cursor:pointer}
+.verification-page .verification-layout .panel.verification-history{padding:0;border-radius:2px;overflow:hidden}
+.verification-page .verification-history>summary{min-height:44px;padding:18px 24px;align-items:center;gap:12px;color:var(--project-heading);font:600 15px/1.6 var(--font-sans);cursor:pointer}
 .verification-page .verification-history>summary>span:first-child{min-width:0;overflow-wrap:anywhere}
-.verification-page .verification-history>.stack{margin-top:20px;padding-top:20px;border-top:1px solid var(--project-border)}
+.verification-page .verification-history-content{min-width:0;border-top:1px solid var(--project-border)}
+.verification-page .verification-history-content>.evaluator-application-resume{border:0;box-shadow:none}
+.verification-page .verification-history-content>.verification-note{margin:0 24px 24px}
 .verification-page .verification-history .text-link{flex-wrap:wrap}
 .verification-page .verification-profile-summary{gap:18px 20px}
 .verification-page .verification-profile-summary>div{min-width:0}
@@ -152,4 +157,6 @@
     .verification-page #application-status>.btn,.verification-page .verification-form>.btn{width:100%}
     .verification-page .verification-pending h2{font-size:22px}
     .verification-page .verification-note,.verification-page .verification-prompt{padding:14px}
+    .verification-page .verification-history>summary{padding:16px 20px;flex-wrap:wrap}
+    .verification-page .verification-history-content>.verification-note{margin:0 20px 20px}
 }

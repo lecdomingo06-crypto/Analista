@@ -2,12 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use App\Models\DirectConversation;
+use App\Models\User;
 use Database\Seeders\AdditionalEvaluatorSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use LogicException;
 use Tests\TestCase;
 
@@ -15,8 +16,16 @@ class AdditionalEvaluatorSeederTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Storage::fake('local');
+    }
+
     public function test_explicit_seeding_creates_three_regular_approved_accounts_with_unique_working_logins(): void
     {
+        User::factory()->admin()->create();
         $existing = User::factory()->evaluator()->create(['name' => 'Existing volunteer']);
         $original = $existing->refresh()->getAttributes();
         $seeder = new AdditionalEvaluatorSeeder;
@@ -26,7 +35,7 @@ class AdditionalEvaluatorSeederTest extends TestCase
         $this->assertCount(3, $credentials);
         $this->assertCount(3, array_unique(array_column($credentials, 'password')));
         $this->assertSame($original, $existing->fresh()->getAttributes());
-        $this->assertDatabaseCount('evaluator_verifications', 0);
+        $this->assertDatabaseCount('evaluator_verifications', 3);
         $this->assertDatabaseCount('ratings', 0);
         $this->assertDatabaseCount('projects', 0);
         $this->get(route('evaluators.index'))->assertOk()
@@ -53,6 +62,7 @@ class AdditionalEvaluatorSeederTest extends TestCase
 
     public function test_legacy_conversion_preserves_ids_photos_messages_and_other_accounts(): void
     {
+        User::factory()->admin()->create();
         $existing = User::factory()->create();
         $original = $existing->refresh()->getAttributes();
         $legacy = $this->legacyEvaluator('adrian.mendoza', 'Adrian Mendoza');
@@ -88,8 +98,8 @@ class AdditionalEvaluatorSeederTest extends TestCase
         $this->assertSame($converted->id, $message->fresh()->recipient_id);
         $this->assertTrue($conversation->fresh()->includesUser($converted));
         $this->assertSame($original, $existing->fresh()->getAttributes());
-        $this->assertDatabaseCount('users', 4);
-        $this->assertDatabaseCount('evaluator_verifications', 0);
+        $this->assertDatabaseCount('users', 5);
+        $this->assertDatabaseCount('evaluator_verifications', 3);
         $this->assertSame(0, User::where('email', 'like', '%@evaluators.analista.test')->count());
         $this->assertCount(3, $seeder->credentials());
 
@@ -100,6 +110,7 @@ class AdditionalEvaluatorSeederTest extends TestCase
 
     public function test_rerunning_does_not_duplicate_reset_passwords_or_reverse_moderation(): void
     {
+        User::factory()->admin()->create();
         $seeder = new AdditionalEvaluatorSeeder;
         $seeder->run();
         $credential = $seeder->credentials()[0];
@@ -108,7 +119,7 @@ class AdditionalEvaluatorSeederTest extends TestCase
         $original = $evaluator->refresh()->getAttributes();
         $seeder->run();
 
-        $this->assertDatabaseCount('users', 3);
+        $this->assertDatabaseCount('users', 4);
         $this->assertSame($original, $evaluator->fresh()->getAttributes());
         $this->assertSame([], $seeder->credentials());
         $this->assertTrue(Hash::check($credential['password'], $evaluator->fresh()->password));
@@ -116,6 +127,7 @@ class AdditionalEvaluatorSeederTest extends TestCase
 
     public function test_destination_collision_rolls_back_all_conversions_and_exposes_no_credentials(): void
     {
+        User::factory()->admin()->create();
         $first = $this->legacyEvaluator('adrian.mendoza', 'Adrian Mendoza');
         $second = $this->legacyEvaluator('camille.villareal', 'Camille Villareal');
         $collision = User::factory()->create(['email' => 'camille.villareal@analista.test']);
@@ -133,12 +145,13 @@ class AdditionalEvaluatorSeederTest extends TestCase
         $this->assertSame($originals[1], $second->fresh()->getAttributes());
         $this->assertSame($originals[2], $collision->fresh()->getAttributes());
         $this->assertSame([], $seeder->credentials());
-        $this->assertDatabaseCount('users', 3);
+        $this->assertDatabaseCount('users', 4);
         $this->assertDatabaseMissing('users', ['email' => 'adrian.mendoza@analista.test']);
     }
 
     public function test_legacy_email_alone_cannot_authorize_overwriting_an_unrelated_account(): void
     {
+        User::factory()->admin()->create();
         $existing = User::factory()->create(['email' => 'adrian.mendoza@evaluators.analista.test']);
         $original = $existing->refresh()->getAttributes();
         $seeder = new AdditionalEvaluatorSeeder;
@@ -152,11 +165,12 @@ class AdditionalEvaluatorSeederTest extends TestCase
 
         $this->assertSame($original, $existing->fresh()->getAttributes());
         $this->assertSame([], $seeder->credentials());
-        $this->assertDatabaseCount('users', 1);
+        $this->assertDatabaseCount('users', 2);
     }
 
     public function test_changed_legacy_profile_cannot_be_overwritten(): void
     {
+        User::factory()->admin()->create();
         $existing = $this->legacyEvaluator('adrian.mendoza', 'Adrian Mendoza');
         $existing->update(['bio' => 'This person replaced the original seeded biography.']);
         $original = $existing->refresh()->getAttributes();
@@ -169,11 +183,12 @@ class AdditionalEvaluatorSeederTest extends TestCase
         }
 
         $this->assertSame($original, $existing->fresh()->getAttributes());
-        $this->assertDatabaseCount('users', 1);
+        $this->assertDatabaseCount('users', 2);
     }
 
     public function test_regular_email_owned_by_another_role_is_not_promoted(): void
     {
+        User::factory()->admin()->create();
         $existing = User::factory()->create(['email' => 'adrian.mendoza@analista.test']);
         $original = $existing->refresh()->getAttributes();
 
@@ -185,7 +200,7 @@ class AdditionalEvaluatorSeederTest extends TestCase
         }
 
         $this->assertSame($original, $existing->fresh()->getAttributes());
-        $this->assertDatabaseCount('users', 1);
+        $this->assertDatabaseCount('users', 2);
     }
 
     public function test_production_seeding_is_refused_before_creating_any_users(): void

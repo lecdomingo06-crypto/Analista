@@ -1,4 +1,4 @@
-<header class="admin-section-heading"><h2>Community reports</h2><p>Open a report to inspect the content and record your decision. Reporter identities stay private to administrators.</p></header>
+<header class="admin-section-heading"><h2>Community reports</h2></header>
 @include('admin.partials.filters')
 @if($reports->count())
     <div class="panel admin-reports-list">

@@ -55,7 +55,7 @@
     @if($isOwner)
         <details class="project-delete">
             <summary class="my-project-delete-toggle" aria-label="Delete project: {{ $project->title }}" title="Delete project"><x-icon name="trash"/></summary>
-            <form method="POST" action="{{ route('projects.destroy', $project) }}" class="fields">
+            <form method="POST" action="{{ route('projects.destroy', $project) }}" class="fields" data-confirm="Are you sure you want to delete this project? Its thesis files, review requests, and feedback will also be removed. This cannot be undone." data-confirm-title="Delete project?" data-confirm-label="Delete project" data-confirm-subject="{{ $project->title }}">
                 @csrf @method('DELETE')
                 <p class="small">Delete <strong>{{ $project->title }}</strong>? This also removes its thesis files, review requests, and feedback. This cannot be undone.</p>
                 <div class="field"><label for="delete-project-{{ $project->id }}">Type DELETE to confirm</label><input id="delete-project-{{ $project->id }}" name="delete_confirmation" required pattern="DELETE" autocomplete="off" placeholder="DELETE" aria-describedby="delete-help-{{ $project->id }}"><span class="hint" id="delete-help-{{ $project->id }}">Only the project owner can delete this project.</span></div>

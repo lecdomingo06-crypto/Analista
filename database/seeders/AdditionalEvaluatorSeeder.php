@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use LogicException;
+use Throwable;
 
 class AdditionalEvaluatorSeeder extends Seeder
 {
@@ -29,6 +30,10 @@ class AdditionalEvaluatorSeeder extends Seeder
 
         if (! app()->environment(['local', 'testing'])) {
             throw new LogicException('Additional evaluator accounts may only be seeded in local or testing environments.');
+        }
+
+        if (! User::where('role', 'admin')->where('is_suspended', false)->exists()) {
+            throw new LogicException('Create an active administrator before seeding approved evaluator applications.');
         }
 
         $profiles = [
@@ -58,63 +63,71 @@ class AdditionalEvaluatorSeeder extends Seeder
             ],
         ];
 
-        $credentials = DB::transaction(function () use ($profiles) {
-            $credentials = [];
+        $applications = new AdditionalEvaluatorApplicationsSeeder;
+        try {
+            $credentials = DB::transaction(function () use ($profiles, $applications) {
+                $credentials = [];
 
-            foreach ($profiles as $profile) {
-                $legacyEmail = str_replace('@analista.test', '@evaluators.analista.test', $profile['email']);
-                $legacy = User::where('email', $legacyEmail)->lockForUpdate()->first();
-                $current = User::where('email', $profile['email'])->lockForUpdate()->first();
+                foreach ($profiles as $profile) {
+                    $legacyEmail = str_replace('@analista.test', '@evaluators.analista.test', $profile['email']);
+                    $legacy = User::where('email', $legacyEmail)->lockForUpdate()->first();
+                    $current = User::where('email', $profile['email'])->lockForUpdate()->first();
 
-                if ($legacy && $current) {
-                    throw new LogicException('Cannot convert '.$legacyEmail.': the destination login already belongs to another account.');
-                }
-
-                // Existing regular accounts keep their credentials and moderation decisions.
-                if ($current) {
-                    if ($current->role !== 'evaluator') {
-                        throw new LogicException('Cannot create evaluator: '.$profile['email'].' already belongs to another account.');
+                    if ($legacy && $current) {
+                        throw new LogicException('Cannot convert '.$legacyEmail.': the destination login already belongs to another account.');
                     }
 
-                    continue;
+                    // Existing regular accounts keep their credentials and moderation decisions.
+                    if ($current) {
+                        if ($current->role !== 'evaluator') {
+                            throw new LogicException('Cannot create evaluator: '.$profile['email'].' already belongs to another account.');
+                        }
+
+                        continue;
+                    }
+
+                    // Only the exact legacy seed markers authorize conversion of an existing row.
+                    if ($legacy && ($legacy->role !== 'evaluator'
+                        || $legacy->bio !== self::LEGACY_BIO
+                        || $legacy->moderation_note !== self::LEGACY_MODERATION_NOTE)) {
+                        throw new LogicException('Cannot convert '.$legacyEmail.': this is no longer an untouched legacy evaluator seed.');
+                    }
+
+                    do {
+                        $password = Str::random(24);
+                    } while (in_array($password, array_column($credentials, 'password'), true));
+
+                    $attributes = $profile + [
+                        'password' => $password,
+                        'email_verified_at' => null,
+                        'remember_token' => Str::random(60),
+                        'role' => 'evaluator',
+                        'evaluator_status' => 'approved',
+                        'is_suspended' => false,
+                        'accepting_requests' => true,
+                        'capacity' => 3,
+                        'review_modes' => ['online'],
+                        'experience_years' => 0,
+                        'moderation_note' => 'Approved directly at the project owner\'s request.',
+                    ];
+
+                    if ($legacy) {
+                        $legacy->update($attributes);
+                    } else {
+                        User::create($attributes);
+                    }
+
+                    $credentials[] = ['name' => $profile['name'], 'email' => $profile['email'], 'password' => $password];
                 }
 
-                // Only the exact legacy seed markers authorize conversion of an existing row.
-                if ($legacy && ($legacy->role !== 'evaluator'
-                    || $legacy->bio !== self::LEGACY_BIO
-                    || $legacy->moderation_note !== self::LEGACY_MODERATION_NOTE)) {
-                    throw new LogicException('Cannot convert '.$legacyEmail.': this is no longer an untouched legacy evaluator seed.');
-                }
+                $applications->run();
 
-                do {
-                    $password = Str::random(24);
-                } while (in_array($password, array_column($credentials, 'password'), true));
-
-                $attributes = $profile + [
-                    'password' => $password,
-                    'email_verified_at' => null,
-                    'remember_token' => Str::random(60),
-                    'role' => 'evaluator',
-                    'evaluator_status' => 'approved',
-                    'is_suspended' => false,
-                    'accepting_requests' => true,
-                    'capacity' => 3,
-                    'review_modes' => ['online'],
-                    'experience_years' => 0,
-                    'moderation_note' => 'Approved directly at the project owner\'s request.',
-                ];
-
-                if ($legacy) {
-                    $legacy->update($attributes);
-                } else {
-                    User::create($attributes);
-                }
-
-                $credentials[] = ['name' => $profile['name'], 'email' => $profile['email'], 'password' => $password];
-            }
-
-            return $credentials;
-        });
+                return $credentials;
+            });
+        } catch (Throwable $exception) {
+            $applications->cleanupCreatedFiles();
+            throw $exception;
+        }
 
         // Keep plaintext only in memory, after the entire transaction succeeds.
         $this->createdCredentials = $credentials;

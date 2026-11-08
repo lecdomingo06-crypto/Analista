@@ -20,5 +20,5 @@
         <label class="small"><input type="checkbox" name="is_published" value="1" @checked($failedForm ? old('is_published', false) : ($tutorial?->is_published ?? false))> {{ $tutorial ? 'Published' : 'Publish now' }}</label>
         <label class="small"><input type="checkbox" name="featured" value="1" @checked($failedForm ? old('featured', false) : ($tutorial?->featured ?? false))> Feature this video</label>
     </div>
-    <div><button class="btn btn-primary {{ $tutorial ? 'btn-small' : '' }}" type="submit">{{ $tutorial ? 'Save video' : 'Add video' }} @unless($tutorial)<x-icon name="plus" />@endunless</button></div>
+    <div class="actions"><button class="btn btn-primary {{ $tutorial ? 'btn-small' : '' }}" type="submit">{{ $tutorial ? 'Save video' : 'Add video' }} @unless($tutorial)<x-icon name="plus" />@endunless</button>@if($tutorial)<button class="btn btn-small" type="button" data-tutorial-editor-close>Cancel</button>@endif</div>
 </form>

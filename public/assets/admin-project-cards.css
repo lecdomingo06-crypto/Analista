@@ -1,0 +1,71 @@
+/* Keep the moderation directory compact while retaining the existing page width. */
+.admin-page .admin-project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    align-items: stretch;
+    gap: 20px;
+    min-width: 0;
+}
+
+.admin-page .main-content article.panel.stack.admin-project-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+    padding: 20px;
+}
+
+.admin-page .main-content .admin-project-card h3.admin-project-title {
+    margin: 0;
+    color: var(--project-heading);
+    font: 600 18px/1.5 var(--font-sans);
+    overflow-wrap: anywhere;
+}
+
+.admin-page .admin-project-badges,
+.admin-page .admin-project-technologies.tags {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.admin-page .main-content .admin-project-card-description {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0;
+    color: var(--project-copy);
+    font: 400 15px/1.6 var(--font-sans);
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.admin-page .admin-project-badges > *,
+.admin-page .admin-project-technologies > * {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.admin-page .admin-project-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 8px;
+    min-width: 0;
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--project-border);
+}
+
+.admin-page .admin-project-card-actions > .btn {
+    flex: 1 1 120px;
+    justify-content: center;
+    min-width: 0;
+    min-height: 44px;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}

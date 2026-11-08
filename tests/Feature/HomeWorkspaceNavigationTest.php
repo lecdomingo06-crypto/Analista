@@ -138,7 +138,8 @@ class HomeWorkspaceNavigationTest extends TestCase
         $this->assertSame((string) $user->id, $xpath->query('//body')->item(0)->getAttribute('data-auth-user-id'));
         $this->assertSame(route('session.status'), $xpath->query('//body')->item(0)->getAttribute('data-session-status-url'));
         foreach ($this->workspaceUrls() as $url) {
-            $this->assertSame(1, $xpath->query('//aside[@id="sidebar"]/nav//a[@href="'.$url.'"]')->length);
+            $expected = $url === route('account.projects') && $user->role !== 'student' ? 0 : 1;
+            $this->assertSame($expected, $xpath->query('//aside[@id="sidebar"]/nav//a[@href="'.$url.'"]')->length);
         }
         $this->assertSame(0, $xpath->query('//aside[@id="sidebar"]/nav//a[@href="'.route('account.dashboard').'"]')->length);
         $this->assertSame($user->role === 'evaluator' ? 1 : 0, $xpath->query('//aside[@id="sidebar"]/nav//a[@href="'.route('account.reviews').'"]')->length);

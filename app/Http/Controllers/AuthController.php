@@ -30,12 +30,23 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $this->normalizeEmail($request);
-        $credentials = $request->validate(['email' => 'required|email', 'password' => 'required|string']);
-        $key = 'login:'.Str::lower($credentials['email']).'|'.$request->ip();
+        $data = $request->validate(['email' => 'required|string|max:255', 'password' => 'required|string']);
+        $usernameLogin = ! str_contains($data['email'], '@');
+        $accountEmail = $usernameLogin
+            ? User::where('role', 'admin')->where('username', $data['email'])->value('email')
+            : $data['email'];
+        $credentials = ['password' => $data['password']];
+        if ($usernameLogin) {
+            $credentials['role'] = 'admin';
+            $credentials[$accountEmail === null ? 'username' : 'email'] = $accountEmail ?? $data['email'];
+        } else {
+            $credentials['email'] = $data['email'];
+        }
+        $key = 'login:'.Str::lower($accountEmail ?? $data['email']).'|'.$request->ip();
         if (RateLimiter::tooManyAttempts($key, 5)) throw ValidationException::withMessages(['email' => 'Please try again in '.RateLimiter::availableIn($key).' seconds.']);
         if (!Auth::attempt($credentials, $request->boolean('remember'))) {
             RateLimiter::hit($key, 60);
-            throw ValidationException::withMessages(['email' => 'The email or password is incorrect.']);
+            throw ValidationException::withMessages(['email' => 'The email, admin username, or password is incorrect.']);
         }
         if (Auth::user()->is_suspended) {
             GoogleIdentity::forget($request);

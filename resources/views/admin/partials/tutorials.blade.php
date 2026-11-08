@@ -27,18 +27,25 @@
             <p class="hint admin-video-creator">{{ $tutorial->is_video ? $tutorial->video_creator : 'Text guide · add a YouTube link to convert it to a video' }}</p>
         </div>
         @if($tutorial->is_published)<div class="admin-video-watch"><a class="btn btn-primary btn-small" href="{{ route('tutorials.show', $tutorial->slug) }}">{{ $tutorial->is_video ? 'Watch video' : 'View guide' }} <x-icon name="arrow-up-right" /></a></div>@endif
-        <details class="admin-video-edit" @if((string) old('_tutorial_form') === (string) $tutorial->id) open @endif>
-            <summary><x-icon name="edit" />{{ $tutorial->is_video ? 'Edit video' : 'Convert to video' }}</summary>
-            @include('admin.partials.tutorial-form', ['tutorial' => $tutorial])
-        </details>
-        <details class="admin-video-delete">
-            <summary><x-icon name="trash" />Delete tutorial</summary>
-            <form method="POST" action="{{ route('admin.tutorials.destroy', $tutorial) }}" class="stack">
+        <div class="admin-video-actions">
+            <button class="btn btn-small" type="button" data-tutorial-edit="tutorial-editor-{{ $tutorial->id }}" aria-haspopup="dialog" aria-controls="tutorial-editor-{{ $tutorial->id }}"><x-icon name="edit" />{{ $tutorial->is_video ? 'Edit video' : 'Convert to video' }}</button>
+            <form method="POST" action="{{ route('admin.tutorials.destroy', $tutorial) }}" data-confirm="Are you sure you want to delete this tutorial? It will be permanently removed from the learning library." data-confirm-title="Delete tutorial?" data-confirm-label="Delete tutorial" data-confirm-subject="{{ $tutorial->title }}">
                 @csrf @method('DELETE')
-                <p class="small">Permanently remove “{{ $tutorial->title }}” from the learning library?</p>
-                <div><button class="btn btn-danger btn-small" type="submit">Delete permanently</button></div>
+                <button class="btn btn-danger btn-small" type="submit"><x-icon name="trash" />Delete tutorial</button>
             </form>
-        </details>
+        </div>
+        <dialog class="admin-tutorial-editor" id="tutorial-editor-{{ $tutorial->id }}" data-tutorial-editor aria-labelledby="tutorial-editor-title-{{ $tutorial->id }}" @if((string) old('_tutorial_form') === (string) $tutorial->id && $errors->any()) data-editor-reopen @endif>
+            <header class="admin-tutorial-editor-heading">
+                <div><h2 id="tutorial-editor-title-{{ $tutorial->id }}">{{ $tutorial->is_video ? 'Edit video' : 'Convert to video' }}</h2><p class="hint">{{ $tutorial->title }}</p></div>
+                <button class="btn btn-small" type="button" data-tutorial-editor-close aria-label="Close video editor"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg></button>
+            </header>
+            <div class="admin-tutorial-editor-body">
+                @if((string) old('_tutorial_form') === (string) $tutorial->id && $errors->any())
+                    <div class="alert" role="alert"><strong>Please check the following:</strong><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>
+                @endif
+                @include('admin.partials.tutorial-form', ['tutorial' => $tutorial])
+            </div>
+        </dialog>
     </article>
 @endforeach
 </div>
@@ -46,3 +53,6 @@
     <x-empty title="The library is ready for your first video." text="Add a useful YouTube tutorial to help students take their next step." />
 @endif
 <x-pagination :paginator="$tutorials" />
+@push('scripts')
+<script src="{{ asset('assets/admin-tutorials.js') }}?v={{ filemtime(public_path('assets/admin-tutorials.js')) }}" defer></script>
+@endpush

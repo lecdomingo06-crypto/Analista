@@ -113,7 +113,6 @@
   window.addEventListener('pagehide', () => {
     if (themeTransition) applyTheme(themePreference);
   });
-  document.querySelectorAll('[data-confirm]').forEach(form => form.addEventListener('submit', e => { if (!confirm(form.dataset.confirm)) e.preventDefault(); }));
   document.querySelectorAll('[data-file-input]').forEach(input => input.addEventListener('change', () => { const label = document.querySelector(`[data-file-label="${input.id}"]`); if (label && input.files[0]) label.textContent = input.files[0].name; }));
   document.querySelectorAll('[data-project-select]').forEach(select => select.addEventListener('change', () => { document.querySelectorAll('[data-project-versions]').forEach(group => { const selected = group.dataset.projectVersions === select.value; group.hidden = !selected; group.querySelectorAll('select').forEach(input => { input.disabled = !selected; }); }); }));
   document.querySelectorAll('[data-choose-project]').forEach(form => form.addEventListener('submit', e => { e.preventDefault(); const destination = form.querySelector('select')?.value; if (destination) window.location.assign(destination + '#request-review'); }));

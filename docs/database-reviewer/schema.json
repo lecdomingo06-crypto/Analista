@@ -1,0 +1,3096 @@
+{
+  "database": "analista",
+  "date": "2026-11-08",
+  "tables": {
+    "activities": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "user_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "title",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "url",
+          "type": "varchar(2048)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "read_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "review_event_key",
+          "type": "varchar(150)",
+          "nullable": "YES",
+          "column_key": "UNI",
+          "extra": ""
+        },
+        {
+          "name": "actor_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "YES",
+          "column_key": "MUL",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "activities_actor_id_foreign",
+          "column_name": "actor_id",
+          "target_table": "users",
+          "target_column": "id"
+        },
+        {
+          "constraint_name": "activities_user_id_foreign",
+          "column_name": "user_id",
+          "target_table": "users",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "activities_actor_id_foreign",
+          "non_unique": 1,
+          "column_name": "actor_id",
+          "position": 1
+        },
+        {
+          "name": "activities_review_event_key_unique",
+          "non_unique": 0,
+          "column_name": "review_event_key",
+          "position": 1
+        },
+        {
+          "name": "activities_user_id_read_at_index",
+          "non_unique": 1,
+          "column_name": "user_id",
+          "position": 1
+        },
+        {
+          "name": "activities_user_id_read_at_index",
+          "non_unique": 1,
+          "column_name": "read_at",
+          "position": 2
+        },
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        }
+      ]
+    },
+    "admin_actions": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "actor_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "YES",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "action",
+          "type": "varchar(64)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "target_type",
+          "type": "varchar(32)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "target_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "before_values",
+          "type": "longtext",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "after_values",
+          "type": "longtext",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "metadata",
+          "type": "longtext",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "reason",
+          "type": "text",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "admin_actions_actor_id_foreign",
+          "column_name": "actor_id",
+          "target_table": "users",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "admin_actions_action_created_at_index",
+          "non_unique": 1,
+          "column_name": "action",
+          "position": 1
+        },
+        {
+          "name": "admin_actions_action_created_at_index",
+          "non_unique": 1,
+          "column_name": "created_at",
+          "position": 2
+        },
+        {
+          "name": "admin_actions_actor_id_created_at_index",
+          "non_unique": 1,
+          "column_name": "actor_id",
+          "position": 1
+        },
+        {
+          "name": "admin_actions_actor_id_created_at_index",
+          "non_unique": 1,
+          "column_name": "created_at",
+          "position": 2
+        },
+        {
+          "name": "admin_actions_created_at_id_index",
+          "non_unique": 1,
+          "column_name": "created_at",
+          "position": 1
+        },
+        {
+          "name": "admin_actions_created_at_id_index",
+          "non_unique": 1,
+          "column_name": "id",
+          "position": 2
+        },
+        {
+          "name": "admin_actions_target_type_target_id_index",
+          "non_unique": 1,
+          "column_name": "target_type",
+          "position": 1
+        },
+        {
+          "name": "admin_actions_target_type_target_id_index",
+          "non_unique": 1,
+          "column_name": "target_id",
+          "position": 2
+        },
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        }
+      ]
+    },
+    "cache": {
+      "columns": [
+        {
+          "name": "key",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": ""
+        },
+        {
+          "name": "value",
+          "type": "mediumtext",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "expiration",
+          "type": "int(11)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "name": "cache_expiration_index",
+          "non_unique": 1,
+          "column_name": "expiration",
+          "position": 1
+        },
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "key",
+          "position": 1
+        }
+      ]
+    },
+    "cache_locks": {
+      "columns": [
+        {
+          "name": "key",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": ""
+        },
+        {
+          "name": "owner",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "expiration",
+          "type": "int(11)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "name": "cache_locks_expiration_index",
+          "non_unique": 1,
+          "column_name": "expiration",
+          "position": 1
+        },
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "key",
+          "position": 1
+        }
+      ]
+    },
+    "community_chat_messages": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "user_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "YES",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "author_key",
+          "type": "varchar(80)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "author_name",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "is_guest",
+          "type": "tinyint(1)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "community_chat_messages_user_id_foreign",
+          "column_name": "user_id",
+          "target_table": "users",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "community_chat_messages_author_key_index",
+          "non_unique": 1,
+          "column_name": "author_key",
+          "position": 1
+        },
+        {
+          "name": "community_chat_messages_user_id_foreign",
+          "non_unique": 1,
+          "column_name": "user_id",
+          "position": 1
+        },
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        }
+      ]
+    },
+    "community_chat_presences": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "viewer_key",
+          "type": "varchar(80)",
+          "nullable": "NO",
+          "column_key": "UNI",
+          "extra": ""
+        },
+        {
+          "name": "user_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "YES",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "guest_name",
+          "type": "varchar(255)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "last_seen_at",
+          "type": "timestamp",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": "on update current_timestamp()"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "community_chat_presences_user_id_foreign",
+          "column_name": "user_id",
+          "target_table": "users",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "community_chat_presences_last_seen_at_index",
+          "non_unique": 1,
+          "column_name": "last_seen_at",
+          "position": 1
+        },
+        {
+          "name": "community_chat_presences_user_id_foreign",
+          "non_unique": 1,
+          "column_name": "user_id",
+          "position": 1
+        },
+        {
+          "name": "community_chat_presences_viewer_key_unique",
+          "non_unique": 0,
+          "column_name": "viewer_key",
+          "position": 1
+        },
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        }
+      ]
+    },
+    "direct_conversations": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "lower_user_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "higher_user_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "last_message_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "direct_conversations_lower_user_id_foreign",
+          "column_name": "lower_user_id",
+          "target_table": "users",
+          "target_column": "id"
+        },
+        {
+          "constraint_name": "direct_conversations_higher_user_id_foreign",
+          "column_name": "higher_user_id",
+          "target_table": "users",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "direct_conversations_higher_user_id_foreign",
+          "non_unique": 1,
+          "column_name": "higher_user_id",
+          "position": 1
+        },
+        {
+          "name": "direct_conversations_lower_user_id_higher_user_id_unique",
+          "non_unique": 0,
+          "column_name": "lower_user_id",
+          "position": 1
+        },
+        {
+          "name": "direct_conversations_lower_user_id_higher_user_id_unique",
+          "non_unique": 0,
+          "column_name": "higher_user_id",
+          "position": 2
+        },
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        }
+      ]
+    },
+    "direct_messages": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "direct_conversation_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "sender_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "recipient_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "read_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "kind",
+          "type": "varchar(30)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "review_request_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "YES",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "review_event",
+          "type": "varchar(30)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "review_event_key",
+          "type": "varchar(150)",
+          "nullable": "YES",
+          "column_key": "UNI",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "direct_messages_direct_conversation_id_foreign",
+          "column_name": "direct_conversation_id",
+          "target_table": "direct_conversations",
+          "target_column": "id"
+        },
+        {
+          "constraint_name": "direct_messages_review_request_id_foreign",
+          "column_name": "review_request_id",
+          "target_table": "review_requests",
+          "target_column": "id"
+        },
+        {
+          "constraint_name": "direct_messages_recipient_id_foreign",
+          "column_name": "recipient_id",
+          "target_table": "users",
+          "target_column": "id"
+        },
+        {
+          "constraint_name": "direct_messages_sender_id_foreign",
+          "column_name": "sender_id",
+          "target_table": "users",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "direct_messages_direct_conversation_id_id_index",
+          "non_unique": 1,
+          "column_name": "direct_conversation_id",
+          "position": 1
+        },
+        {
+          "name": "direct_messages_direct_conversation_id_id_index",
+          "non_unique": 1,
+          "column_name": "id",
+          "position": 2
+        },
+        {
+          "name": "direct_messages_recipient_id_read_at_id_index",
+          "non_unique": 1,
+          "column_name": "recipient_id",
+          "position": 1
+        },
+        {
+          "name": "direct_messages_recipient_id_read_at_id_index",
+          "non_unique": 1,
+          "column_name": "read_at",
+          "position": 2
+        },
+        {
+          "name": "direct_messages_recipient_id_read_at_id_index",
+          "non_unique": 1,
+          "column_name": "id",
+          "position": 3
+        },
+        {
+          "name": "direct_messages_review_event_key_unique",
+          "non_unique": 0,
+          "column_name": "review_event_key",
+          "position": 1
+        },
+        {
+          "name": "direct_messages_review_request_id_foreign",
+          "non_unique": 1,
+          "column_name": "review_request_id",
+          "position": 1
+        },
+        {
+          "name": "direct_messages_sender_id_foreign",
+          "non_unique": 1,
+          "column_name": "sender_id",
+          "position": 1
+        },
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        }
+      ]
+    },
+    "direct_message_attachments": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "direct_message_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "name",
+          "type": "varchar(180)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "path",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "UNI",
+          "extra": ""
+        },
+        {
+          "name": "size",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "mime_type",
+          "type": "varchar(127)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "direct_message_attachments_direct_message_id_foreign",
+          "column_name": "direct_message_id",
+          "target_table": "direct_messages",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "direct_message_attachments_direct_message_id_foreign",
+          "non_unique": 1,
+          "column_name": "direct_message_id",
+          "position": 1
+        },
+        {
+          "name": "direct_message_attachments_path_unique",
+          "non_unique": 0,
+          "column_name": "path",
+          "position": 1
+        },
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        }
+      ]
+    },
+    "document_versions": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "project_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "user_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "original_name",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "path",
+          "type": "varchar(1024)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "mime_type",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "size",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "version",
+          "type": "int(10) unsigned",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "document_versions_user_id_foreign",
+          "column_name": "user_id",
+          "target_table": "users",
+          "target_column": "id"
+        },
+        {
+          "constraint_name": "document_versions_project_id_foreign",
+          "column_name": "project_id",
+          "target_table": "projects",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "document_versions_project_id_version_unique",
+          "non_unique": 0,
+          "column_name": "project_id",
+          "position": 1
+        },
+        {
+          "name": "document_versions_project_id_version_unique",
+          "non_unique": 0,
+          "column_name": "version",
+          "position": 2
+        },
+        {
+          "name": "document_versions_user_id_foreign",
+          "non_unique": 1,
+          "column_name": "user_id",
+          "position": 1
+        },
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        }
+      ]
+    },
+    "evaluator_evidence": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "evaluator_verification_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "path",
+          "type": "varchar(1024)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "original_name",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "mime_type",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "size",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "evaluator_evidence_evaluator_verification_id_foreign",
+          "column_name": "evaluator_verification_id",
+          "target_table": "evaluator_verifications",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "evaluator_evidence_evaluator_verification_id_foreign",
+          "non_unique": 1,
+          "column_name": "evaluator_verification_id",
+          "position": 1
+        },
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        }
+      ]
+    },
+    "evaluator_verifications": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "user_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "profile_snapshot",
+          "type": "longtext",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "profile_fingerprint",
+          "type": "char(64)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "background_type",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "organization",
+          "type": "varchar(255)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "background_summary",
+          "type": "text",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "evidence_type",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "evidence_url",
+          "type": "varchar(500)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "evidence_explanation",
+          "type": "text",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "reference_name",
+          "type": "varchar(255)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "reference_email",
+          "type": "varchar(255)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "reference_relationship",
+          "type": "varchar(300)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "work_sample_url",
+          "type": "varchar(500)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "work_sample_explanation",
+          "type": "text",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "sample_review",
+          "type": "text",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "attestation",
+          "type": "tinyint(1)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "status",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "reviewer_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "YES",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "reviewed_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "review_notes",
+          "type": "text",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "checks",
+          "type": "longtext",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "evaluator_verifications_user_id_foreign",
+          "column_name": "user_id",
+          "target_table": "users",
+          "target_column": "id"
+        },
+        {
+          "constraint_name": "evaluator_verifications_reviewer_id_foreign",
+          "column_name": "reviewer_id",
+          "target_table": "users",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "evaluator_verifications_reviewer_id_foreign",
+          "non_unique": 1,
+          "column_name": "reviewer_id",
+          "position": 1
+        },
+        {
+          "name": "evaluator_verifications_status_index",
+          "non_unique": 1,
+          "column_name": "status",
+          "position": 1
+        },
+        {
+          "name": "evaluator_verifications_user_id_created_at_index",
+          "non_unique": 1,
+          "column_name": "user_id",
+          "position": 1
+        },
+        {
+          "name": "evaluator_verifications_user_id_created_at_index",
+          "non_unique": 1,
+          "column_name": "created_at",
+          "position": 2
+        },
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        }
+      ]
+    },
+    "failed_jobs": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "uuid",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "UNI",
+          "extra": ""
+        },
+        {
+          "name": "connection",
+          "type": "text",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "queue",
+          "type": "text",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "payload",
+          "type": "longtext",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "exception",
+          "type": "longtext",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "failed_at",
+          "type": "timestamp",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "name": "failed_jobs_uuid_unique",
+          "non_unique": 0,
+          "column_name": "uuid",
+          "position": 1
+        },
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        }
+      ]
+    },
+    "feedback": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "review_request_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "user_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "section",
+          "type": "varchar(255)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "page",
+          "type": "int(10) unsigned",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "type",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "priority",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "addressed",
+          "type": "tinyint(1)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "feedback_user_id_foreign",
+          "column_name": "user_id",
+          "target_table": "users",
+          "target_column": "id"
+        },
+        {
+          "constraint_name": "feedback_review_request_id_foreign",
+          "column_name": "review_request_id",
+          "target_table": "review_requests",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "feedback_review_request_id_foreign",
+          "non_unique": 1,
+          "column_name": "review_request_id",
+          "position": 1
+        },
+        {
+          "name": "feedback_user_id_foreign",
+          "non_unique": 1,
+          "column_name": "user_id",
+          "position": 1
+        },
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        }
+      ]
+    },
+    "invitations": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "email",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "token_hash",
+          "type": "varchar(64)",
+          "nullable": "NO",
+          "column_key": "UNI",
+          "extra": ""
+        },
+        {
+          "name": "invited_by",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "expires_at",
+          "type": "timestamp",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": "on update current_timestamp()"
+        },
+        {
+          "name": "accepted_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "invitations_invited_by_foreign",
+          "column_name": "invited_by",
+          "target_table": "users",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "invitations_email_index",
+          "non_unique": 1,
+          "column_name": "email",
+          "position": 1
+        },
+        {
+          "name": "invitations_invited_by_foreign",
+          "non_unique": 1,
+          "column_name": "invited_by",
+          "position": 1
+        },
+        {
+          "name": "invitations_token_hash_unique",
+          "non_unique": 0,
+          "column_name": "token_hash",
+          "position": 1
+        },
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        }
+      ]
+    },
+    "jobs": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "queue",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "payload",
+          "type": "longtext",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "attempts",
+          "type": "tinyint(3) unsigned",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "reserved_at",
+          "type": "int(10) unsigned",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "available_at",
+          "type": "int(10) unsigned",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "int(10) unsigned",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "name": "jobs_queue_index",
+          "non_unique": 1,
+          "column_name": "queue",
+          "position": 1
+        },
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        }
+      ]
+    },
+    "job_batches": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": ""
+        },
+        {
+          "name": "name",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "total_jobs",
+          "type": "int(11)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "pending_jobs",
+          "type": "int(11)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "failed_jobs",
+          "type": "int(11)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "failed_job_ids",
+          "type": "longtext",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "options",
+          "type": "mediumtext",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "cancelled_at",
+          "type": "int(11)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "int(11)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "finished_at",
+          "type": "int(11)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        }
+      ]
+    },
+    "migrations": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "int(10) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "migration",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "batch",
+          "type": "int(11)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        }
+      ]
+    },
+    "password_reset_tokens": {
+      "columns": [
+        {
+          "name": "email",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": ""
+        },
+        {
+          "name": "token",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "email",
+          "position": 1
+        }
+      ]
+    },
+    "projects": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "user_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "title",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "summary",
+          "type": "text",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "school",
+          "type": "varchar(255)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "course",
+          "type": "varchar(255)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "category",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "technologies",
+          "type": "longtext",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "feedback_needed",
+          "type": "text",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "status",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "moderation_note",
+          "type": "text",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "deadline",
+          "type": "date",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "is_public",
+          "type": "tinyint(1)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "pdf_access",
+          "type": "varchar(24)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "review_mode",
+          "type": "varchar(24)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "reviewer_limit",
+          "type": "tinyint(3) unsigned",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "projects_user_id_foreign",
+          "column_name": "user_id",
+          "target_table": "users",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        },
+        {
+          "name": "projects_category_index",
+          "non_unique": 1,
+          "column_name": "category",
+          "position": 1
+        },
+        {
+          "name": "projects_status_index",
+          "non_unique": 1,
+          "column_name": "status",
+          "position": 1
+        },
+        {
+          "name": "projects_status_is_public_index",
+          "non_unique": 1,
+          "column_name": "status",
+          "position": 1
+        },
+        {
+          "name": "projects_status_is_public_index",
+          "non_unique": 1,
+          "column_name": "is_public",
+          "position": 2
+        },
+        {
+          "name": "projects_user_id_foreign",
+          "non_unique": 1,
+          "column_name": "user_id",
+          "position": 1
+        }
+      ]
+    },
+    "project_user": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "project_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "user_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "project_user_user_id_foreign",
+          "column_name": "user_id",
+          "target_table": "users",
+          "target_column": "id"
+        },
+        {
+          "constraint_name": "project_user_project_id_foreign",
+          "column_name": "project_id",
+          "target_table": "projects",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        },
+        {
+          "name": "project_user_project_id_user_id_unique",
+          "non_unique": 0,
+          "column_name": "project_id",
+          "position": 1
+        },
+        {
+          "name": "project_user_project_id_user_id_unique",
+          "non_unique": 0,
+          "column_name": "user_id",
+          "position": 2
+        },
+        {
+          "name": "project_user_user_id_foreign",
+          "non_unique": 1,
+          "column_name": "user_id",
+          "position": 1
+        }
+      ]
+    },
+    "ratings": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "review_request_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "user_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "evaluator_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "rating",
+          "type": "tinyint(3) unsigned",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "comment",
+          "type": "text",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "ratings_review_request_id_foreign",
+          "column_name": "review_request_id",
+          "target_table": "review_requests",
+          "target_column": "id"
+        },
+        {
+          "constraint_name": "ratings_evaluator_id_foreign",
+          "column_name": "evaluator_id",
+          "target_table": "users",
+          "target_column": "id"
+        },
+        {
+          "constraint_name": "ratings_user_id_foreign",
+          "column_name": "user_id",
+          "target_table": "users",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        },
+        {
+          "name": "ratings_evaluator_id_foreign",
+          "non_unique": 1,
+          "column_name": "evaluator_id",
+          "position": 1
+        },
+        {
+          "name": "ratings_review_request_id_user_id_unique",
+          "non_unique": 0,
+          "column_name": "review_request_id",
+          "position": 1
+        },
+        {
+          "name": "ratings_review_request_id_user_id_unique",
+          "non_unique": 0,
+          "column_name": "user_id",
+          "position": 2
+        },
+        {
+          "name": "ratings_user_id_foreign",
+          "non_unique": 1,
+          "column_name": "user_id",
+          "position": 1
+        }
+      ]
+    },
+    "reports": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "user_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "reportable_type",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "reportable_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "reason",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "details",
+          "type": "text",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "status",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "admin_note",
+          "type": "text",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "action",
+          "type": "varchar(255)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "resolved_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "reports_user_id_foreign",
+          "column_name": "user_id",
+          "target_table": "users",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        },
+        {
+          "name": "reports_reportable_type_reportable_id_index",
+          "non_unique": 1,
+          "column_name": "reportable_type",
+          "position": 1
+        },
+        {
+          "name": "reports_reportable_type_reportable_id_index",
+          "non_unique": 1,
+          "column_name": "reportable_id",
+          "position": 2
+        },
+        {
+          "name": "reports_status_index",
+          "non_unique": 1,
+          "column_name": "status",
+          "position": 1
+        },
+        {
+          "name": "reports_user_id_foreign",
+          "non_unique": 1,
+          "column_name": "user_id",
+          "position": 1
+        }
+      ]
+    },
+    "review_requests": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "project_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "evaluator_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "document_version_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "requested_by",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "status",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "message",
+          "type": "text",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "preferred_date",
+          "type": "date",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "agreed_date",
+          "type": "date",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "accepted_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "completed_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "final_summary",
+          "type": "text",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "output_path",
+          "type": "varchar(1024)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "output_original_name",
+          "type": "varchar(255)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "output_size",
+          "type": "bigint(20) unsigned",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "review_requests_evaluator_id_foreign",
+          "column_name": "evaluator_id",
+          "target_table": "users",
+          "target_column": "id"
+        },
+        {
+          "constraint_name": "review_requests_requested_by_foreign",
+          "column_name": "requested_by",
+          "target_table": "users",
+          "target_column": "id"
+        },
+        {
+          "constraint_name": "review_requests_document_version_id_foreign",
+          "column_name": "document_version_id",
+          "target_table": "document_versions",
+          "target_column": "id"
+        },
+        {
+          "constraint_name": "review_requests_project_id_foreign",
+          "column_name": "project_id",
+          "target_table": "projects",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        },
+        {
+          "name": "review_requests_document_version_id_foreign",
+          "non_unique": 1,
+          "column_name": "document_version_id",
+          "position": 1
+        },
+        {
+          "name": "review_requests_evaluator_id_status_index",
+          "non_unique": 1,
+          "column_name": "evaluator_id",
+          "position": 1
+        },
+        {
+          "name": "review_requests_evaluator_id_status_index",
+          "non_unique": 1,
+          "column_name": "status",
+          "position": 2
+        },
+        {
+          "name": "review_requests_project_id_foreign",
+          "non_unique": 1,
+          "column_name": "project_id",
+          "position": 1
+        },
+        {
+          "name": "review_requests_requested_by_foreign",
+          "non_unique": 1,
+          "column_name": "requested_by",
+          "position": 1
+        },
+        {
+          "name": "review_requests_status_index",
+          "non_unique": 1,
+          "column_name": "status",
+          "position": 1
+        }
+      ]
+    },
+    "sensitive_file_accesses": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "actor_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "YES",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "actor_role",
+          "type": "varchar(16)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "file_type",
+          "type": "varchar(32)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "file_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "project_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "YES",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "verification_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "version",
+          "type": "int(10) unsigned",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "sensitive_file_accesses_actor_id_foreign",
+          "column_name": "actor_id",
+          "target_table": "users",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        },
+        {
+          "name": "sensitive_file_accesses_actor_id_created_at_index",
+          "non_unique": 1,
+          "column_name": "actor_id",
+          "position": 1
+        },
+        {
+          "name": "sensitive_file_accesses_actor_id_created_at_index",
+          "non_unique": 1,
+          "column_name": "created_at",
+          "position": 2
+        },
+        {
+          "name": "sensitive_file_accesses_created_at_id_index",
+          "non_unique": 1,
+          "column_name": "created_at",
+          "position": 1
+        },
+        {
+          "name": "sensitive_file_accesses_created_at_id_index",
+          "non_unique": 1,
+          "column_name": "id",
+          "position": 2
+        },
+        {
+          "name": "sensitive_file_accesses_file_type_created_at_index",
+          "non_unique": 1,
+          "column_name": "file_type",
+          "position": 1
+        },
+        {
+          "name": "sensitive_file_accesses_file_type_created_at_index",
+          "non_unique": 1,
+          "column_name": "created_at",
+          "position": 2
+        },
+        {
+          "name": "sensitive_file_accesses_file_type_file_id_index",
+          "non_unique": 1,
+          "column_name": "file_type",
+          "position": 1
+        },
+        {
+          "name": "sensitive_file_accesses_file_type_file_id_index",
+          "non_unique": 1,
+          "column_name": "file_id",
+          "position": 2
+        },
+        {
+          "name": "sensitive_file_accesses_project_id_created_at_index",
+          "non_unique": 1,
+          "column_name": "project_id",
+          "position": 1
+        },
+        {
+          "name": "sensitive_file_accesses_project_id_created_at_index",
+          "non_unique": 1,
+          "column_name": "created_at",
+          "position": 2
+        }
+      ]
+    },
+    "sessions": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": ""
+        },
+        {
+          "name": "user_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "YES",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "ip_address",
+          "type": "varchar(45)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "user_agent",
+          "type": "text",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "payload",
+          "type": "longtext",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "last_activity",
+          "type": "int(11)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        },
+        {
+          "name": "sessions_last_activity_index",
+          "non_unique": 1,
+          "column_name": "last_activity",
+          "position": 1
+        },
+        {
+          "name": "sessions_user_id_index",
+          "non_unique": 1,
+          "column_name": "user_id",
+          "position": 1
+        }
+      ]
+    },
+    "tutorials": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "user_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "YES",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "title",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "slug",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "UNI",
+          "extra": ""
+        },
+        {
+          "name": "category",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "excerpt",
+          "type": "text",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "body",
+          "type": "longtext",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "reading_minutes",
+          "type": "int(10) unsigned",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "is_published",
+          "type": "tinyint(1)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "featured",
+          "type": "tinyint(1)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "youtube_video_id",
+          "type": "varchar(11)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "video_creator",
+          "type": "varchar(120)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "tutorials_user_id_foreign",
+          "column_name": "user_id",
+          "target_table": "users",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        },
+        {
+          "name": "tutorials_category_index",
+          "non_unique": 1,
+          "column_name": "category",
+          "position": 1
+        },
+        {
+          "name": "tutorials_is_published_index",
+          "non_unique": 1,
+          "column_name": "is_published",
+          "position": 1
+        },
+        {
+          "name": "tutorials_slug_unique",
+          "non_unique": 0,
+          "column_name": "slug",
+          "position": 1
+        },
+        {
+          "name": "tutorials_user_id_foreign",
+          "non_unique": 1,
+          "column_name": "user_id",
+          "position": 1
+        }
+      ]
+    },
+    "tutorial_user": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "tutorial_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "user_id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [
+        {
+          "constraint_name": "tutorial_user_user_id_foreign",
+          "column_name": "user_id",
+          "target_table": "users",
+          "target_column": "id"
+        },
+        {
+          "constraint_name": "tutorial_user_tutorial_id_foreign",
+          "column_name": "tutorial_id",
+          "target_table": "tutorials",
+          "target_column": "id"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        },
+        {
+          "name": "tutorial_user_tutorial_id_user_id_unique",
+          "non_unique": 0,
+          "column_name": "tutorial_id",
+          "position": 1
+        },
+        {
+          "name": "tutorial_user_tutorial_id_user_id_unique",
+          "non_unique": 0,
+          "column_name": "user_id",
+          "position": 2
+        },
+        {
+          "name": "tutorial_user_user_id_foreign",
+          "non_unique": 1,
+          "column_name": "user_id",
+          "position": 1
+        }
+      ]
+    },
+    "users": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint(20) unsigned",
+          "nullable": "NO",
+          "column_key": "PRI",
+          "extra": "auto_increment"
+        },
+        {
+          "name": "name",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "email",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "UNI",
+          "extra": ""
+        },
+        {
+          "name": "email_verified_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "password",
+          "type": "varchar(255)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "remember_token",
+          "type": "varchar(100)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "role",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "is_suspended",
+          "type": "tinyint(1)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "headline",
+          "type": "varchar(255)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "city",
+          "type": "varchar(255)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "bio",
+          "type": "text",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "expertise",
+          "type": "longtext",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "skills",
+          "type": "longtext",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "experience_years",
+          "type": "int(10) unsigned",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "capacity",
+          "type": "int(10) unsigned",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "accepting_requests",
+          "type": "tinyint(1)",
+          "nullable": "NO",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "review_modes",
+          "type": "longtext",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "portfolio_url",
+          "type": "varchar(2048)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "evaluator_status",
+          "type": "varchar(255)",
+          "nullable": "NO",
+          "column_key": "MUL",
+          "extra": ""
+        },
+        {
+          "name": "moderation_note",
+          "type": "text",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "profile_photo_path",
+          "type": "varchar(255)",
+          "nullable": "YES",
+          "column_key": "",
+          "extra": ""
+        },
+        {
+          "name": "google_id",
+          "type": "varchar(255)",
+          "nullable": "YES",
+          "column_key": "UNI",
+          "extra": ""
+        },
+        {
+          "name": "username",
+          "type": "varchar(80)",
+          "nullable": "YES",
+          "column_key": "UNI",
+          "extra": ""
+        }
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "non_unique": 0,
+          "column_name": "id",
+          "position": 1
+        },
+        {
+          "name": "users_email_unique",
+          "non_unique": 0,
+          "column_name": "email",
+          "position": 1
+        },
+        {
+          "name": "users_evaluator_status_index",
+          "non_unique": 1,
+          "column_name": "evaluator_status",
+          "position": 1
+        },
+        {
+          "name": "users_google_id_unique",
+          "non_unique": 0,
+          "column_name": "google_id",
+          "position": 1
+        },
+        {
+          "name": "users_role_index",
+          "non_unique": 1,
+          "column_name": "role",
+          "position": 1
+        },
+        {
+          "name": "users_username_unique",
+          "non_unique": 0,
+          "column_name": "username",
+          "position": 1
+        }
+      ]
+    }
+  }
+}

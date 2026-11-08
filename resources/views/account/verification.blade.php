@@ -5,6 +5,7 @@
 <link rel="preload" href="{{ asset('assets/fonts/Newsreader-Italic-Latin.woff2') }}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{{ asset('assets/projects.css') }}?v={{ filemtime(public_path('assets/projects.css')) }}">
 <link rel="stylesheet" href="{{ asset('assets/verification.css') }}?v={{ filemtime(public_path('assets/verification.css')) }}">
+<link rel="stylesheet" href="{{ asset('assets/evaluator-application-resume.css') }}?v={{ filemtime(public_path('assets/evaluator-application-resume.css')) }}">
 @endpush
 @section('content')
 @php
@@ -32,8 +33,10 @@
                 <p class="small">Your professional profile has changed since this submission. Update your details and submit new evidence below so the admin can review the current information.</p>
             @elseif($underReview)
                 <div class="stack verification-pending" role="status">
-                    <x-icon name="shield-check" />
-                    <h2>Your application is under review</h2>
+                    <div class="verification-pending-heading">
+                        <x-icon name="shield-check" />
+                        <h2>Your application is under review</h2>
+                    </div>
                     <p>Your professional details, evidence, and practice review have been saved.</p>
                     <div class="verification-note"><p class="small">Estimated review time: 24–48 hours. Reviews may take longer depending on volunteer availability.</p></div>
                     <p class="small muted">Please wait for the admin's decision. You do not need to upload your proof again. Your evaluator profile stays hidden until approval.</p>
@@ -112,16 +115,9 @@
     <section class="section-block" id="submission-history"><div class="section-heading"><h2>Your submission history</h2><span class="mono small muted">PRIVATE</span></div>
         @foreach($history as $submission)
         <details class="panel verification-history" @if($loop->first && !$canSubmit) open @endif>
-            <summary><span>Application #{{ $submission->id }} · {{ $submission->created_at->format('M j, Y') }}</span>@if($submission->status === 'pending' && $submission->id !== $verification?->id)<span class="status">Replaced by a newer submission</span>@else<x-status :status="$submission->status" />@endif</summary>
-            <div class="stack">
-                @include('account.partials.verification-submitted-profile', ['submission' => $submission])
-                <div><strong class="small">Professional background</strong><p class="hint">{{ \App\Models\EvaluatorVerification::BACKGROUND_TYPES[$submission->background_type] ?? $submission->background_type }}@if($submission->organization) · {{ $submission->organization }}@endif</p><p class="preserve small">{{ $submission->background_summary }}</p></div>
-                @foreach($submission->evidence as $file)<a class="text-link small" href="{{ route('account.evaluator-evidence.download', $file) }}"><x-icon name="download" /> {{ $file->original_name }} <span class="hint">{{ number_format($file->size / 1024 / 1024, 2) }} MB</span></a>@endforeach
-                @if($submission->evidence_url)<a class="text-link small" href="{{ $submission->evidence_url }}" target="_blank" rel="noopener noreferrer">Professional evidence <x-icon name="arrow-up-right" /></a>@endif
-                @if($submission->reference_name)<p class="small">Reference: {{ $submission->reference_name }} · {{ $submission->reference_email }}<br>{{ $submission->reference_relationship }}</p>@endif
-                @if($submission->evidence_explanation)<p class="preserve small">{{ $submission->evidence_explanation }}</p>@endif
-                <div><a class="text-link small" href="{{ $submission->work_sample_url }}" target="_blank" rel="noopener noreferrer">Work sample <x-icon name="arrow-up-right" /></a><p class="preserve small">{{ $submission->work_sample_explanation }}</p></div>
-                <div><strong class="small">Practice review</strong><p class="preserve small">{{ $submission->sample_review }}</p></div>
+            <summary><span>Submitted {{ $submission->created_at->format('M j, Y') }}</span>@if($submission->status === 'pending' && $submission->id !== $verification?->id)<span class="status">Replaced by a newer submission</span>@else<x-status :status="$submission->status" />@endif</summary>
+            <div class="verification-history-content">
+                <x-evaluator-application-resume :submission="$submission" :applicant="$user" />
                 @if($submission->reviewed_at)<div class="verification-note"><p class="hint">Reviewed {{ $submission->reviewed_at->format('M j, Y, g:i a') }} by {{ $submission->reviewer?->name ?? 'Admin' }}</p><p class="preserve small">{{ $submission->review_notes }}</p></div>@endif
             </div>
         </details>

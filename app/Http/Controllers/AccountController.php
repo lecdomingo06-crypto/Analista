@@ -33,6 +33,15 @@ class AccountController extends Controller
     {
         $user = $request->user();
         $tab = (string) $request->query('tab', $request->route('section', ''));
+        if ($user->isAdmin() && ! in_array($tab, ['notifications', 'inbox', 'bookmarks'], true)) {
+            $request->session()->reflash();
+
+            return redirect()->route('admin.index', match (true) {
+                $tab === 'projects' => ['section' => 'projects'],
+                $tab === 'reviews' || $request->routeIs('account.reviews') => ['section' => 'reviews'],
+                default => [],
+            });
+        }
         if (($tab === 'reviews' || $request->routeIs('account.reviews')) && ! in_array($user->role, ['student', 'evaluator'], true)) {
             $request->session()->reflash();
 
@@ -108,9 +117,14 @@ class AccountController extends Controller
         ));
     }
 
-    public function projects(Request $request): View
+    public function projects(Request $request): View|RedirectResponse
     {
         $user = $request->user();
+        if ($user->isAdmin()) {
+            $request->session()->reflash();
+
+            return redirect()->route('admin.index', ['section' => 'projects']);
+        }
         $statuses = ['draft', 'pending', 'approved', 'completed', 'needs_changes', 'rejected', 'hidden'];
         $request->validate([
             'q' => ['nullable', 'string', 'max:200'],
@@ -180,7 +194,7 @@ class AccountController extends Controller
         ];
         foreach ([
             'headline', 'bio', 'expertise', 'skills', 'experience_years', 'review_modes', 'portfolio_url', 'apply',
-            'email', 'role', 'evaluator_status', 'is_suspended', 'user_id', 'reviewer_id', 'profile',
+            'email', 'username', 'role', 'evaluator_status', 'is_suspended', 'user_id', 'reviewer_id', 'profile',
             'password', 'current_password', 'password_confirmation', 'remember_token', 'profile_photo_path', 'google_id',
         ] as $field) {
             $rules[$field] = ['prohibited'];

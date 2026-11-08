@@ -87,6 +87,7 @@ final class AdminDashboard
         $reportSubjects = ['project' => collect(), 'user' => collect()];
         $historyReports = collect();
         $historySubjects = ['project' => collect(), 'user' => collect()];
+        $historyTargets = ['evaluator' => collect(), 'user' => collect(), 'project' => collect(), 'tutorial' => collect()];
         $query = null;
         $q = $filters['q'];
         $status = $filters['status'];
@@ -189,6 +190,15 @@ final class AdminDashboard
                     if (ctype_digit($q) && strlen($q) <= 18) {
                         $search->orWhere('id', (int) $q)->orWhere('target_id', (int) $q);
                     }
+                    foreach ([
+                        'evaluator' => [User::class, 'name'], 'user' => [User::class, 'name'],
+                        'project' => [Project::class, 'title'], 'tutorial' => [Tutorial::class, 'title'],
+                    ] as $type => [$model, $nameColumn]) {
+                        $search->orWhere(function (Builder $target) use ($type, $model, $nameColumn, $pattern) {
+                            $target->where('target_type', $type)->whereIn('target_id', $model::query()->select('id')
+                                ->whereRaw($nameColumn." LIKE ? ESCAPE '!'", [$pattern]));
+                        });
+                    }
                     $search->orWhere(function (Builder $reported) use ($pattern) {
                         $reported->where('target_type', 'report')->whereIn('target_id', Report::query()->select('id')
                             ->where(function (Builder $report) use ($pattern) {
@@ -209,6 +219,16 @@ final class AdminDashboard
                 $query->where('action', $filters['action']);
             }
             $history = $query->orderByDesc('id')->paginate(20, ['*'], 'history_page')->withQueryString();
+            foreach ([
+                'evaluator' => [User::class, 'name'], 'user' => [User::class, 'name'],
+                'project' => [Project::class, 'title'], 'tutorial' => [Tutorial::class, 'title'],
+            ] as $type => [$model, $nameColumn]) {
+                $ids = $history->where('target_type', $type)->pluck('target_id')
+                    ->merge($history->filter(fn (AdminAction $entry) => ($entry->metadata['affected_type'] ?? null) === $type)
+                        ->map(fn (AdminAction $entry) => $entry->metadata['affected_id'] ?? null))
+                    ->filter()->unique();
+                $historyTargets[$type] = $ids->isEmpty() ? collect() : $model::whereIn('id', $ids)->get(['id', $nameColumn])->keyBy('id');
+            }
             $reportIds = $history->where('target_type', 'report')->pluck('target_id')->unique();
             if ($reportIds->isNotEmpty()) {
                 $historyReports = Report::whereIn('id', $reportIds)->select(['id', 'user_id', 'reportable_type', 'reportable_id', 'reason', 'created_at'])
@@ -277,12 +297,12 @@ final class AdminDashboard
         $searchPlaceholder = match ($section) {
             'evaluators' => 'Search name, email, or headline',
             'projects' => 'Search title, school, course, or creator',
-            'reviews' => 'Search project, evaluator, or review ID',
+            'reviews' => 'Search project or evaluator',
             'reports' => 'Search report ID, reason, or reporter',
             'users' => 'Search name or email',
             'tutorials' => 'Search title, category, or creator',
             'invitations' => 'Search invited email address',
-            'history' => 'Search project, reporter, administrator, or ID',
+            'history' => 'Search person, project, tutorial, or administrator',
             'file-access' => 'Search account name or record ID',
             default => '',
         };
@@ -297,7 +317,7 @@ final class AdminDashboard
         };
 
         return compact('section', 'stats', 'filters', 'filterSelects', 'searchPlaceholder', 'resultCount',
-            'evaluators', 'projects', 'reviews', 'reports', 'reportSubjects', 'users', 'tutorials', 'invitations', 'history', 'historyReports', 'historySubjects', 'fileAccesses', 'trends', 'overviewCharts');
+            'evaluators', 'projects', 'reviews', 'reports', 'reportSubjects', 'users', 'tutorials', 'invitations', 'history', 'historyReports', 'historySubjects', 'historyTargets', 'fileAccesses', 'trends', 'overviewCharts');
     }
 
     private static function statusChart(array $counts, array $labels, array $required, bool $segments = false): array

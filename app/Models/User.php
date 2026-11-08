@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Support\ProfilePhoto;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -56,6 +57,11 @@ class User extends Authenticatable
             'capacity' => 'integer',
             'accepting_requests' => 'boolean',
         ];
+    }
+
+    protected function username(): Attribute
+    {
+        return Attribute::make(set: fn (?string $value) => $value === null ? null : Str::lower(trim($value)));
     }
 
     public function projects(): HasMany

@@ -26,8 +26,10 @@
     <link rel="stylesheet" href="{{ asset('assets/night-theme.css') }}?v={{ filemtime(public_path('assets/night-theme.css')) }}">
     <link rel="stylesheet" href="{{ asset('assets/night-mascot.css') }}?v={{ filemtime(public_path('assets/night-mascot.css')) }}">
     <link rel="stylesheet" href="{{ asset('assets/toasts.css') }}?v={{ filemtime(public_path('assets/toasts.css')) }}">
+    <link rel="stylesheet" href="{{ asset('assets/confirm-action.css') }}?v={{ filemtime(public_path('assets/confirm-action.css')) }}">
     <link rel="stylesheet" href="{{ asset('assets/theme-transition.css') }}?v={{ filemtime(public_path('assets/theme-transition.css')) }}">
     <script src="{{ asset('assets/app.js') }}?v={{ filemtime(public_path('assets/app.js')) }}" defer></script>
+    <script src="{{ asset('assets/confirm-action.js') }}?v={{ filemtime(public_path('assets/confirm-action.js')) }}" defer></script>
     <script src="{{ asset('assets/toasts.js') }}?v={{ filemtime(public_path('assets/toasts.js')) }}" defer></script>
     <script src="{{ asset('assets/community-chat.js') }}?v={{ filemtime(public_path('assets/community-chat.js')) }}" defer></script>
     @auth<script src="{{ asset('assets/notifications.js') }}?v={{ filemtime(public_path('assets/notifications.js')) }}" defer></script>@endauth
@@ -48,7 +50,7 @@
         @php($reviewsActive = request()->routeIs('account.reviews', 'reviews.*') || (request()->routeIs('account.dashboard') && request('tab') === 'reviews'))
         <div class="nav-divider"></div><p class="nav-label">YOUR WORKSPACE</p>
         @if(auth()->user()->role === 'evaluator')<a class="nav-link {{ $reviewsActive ? 'active' : '' }}" href="{{ route('account.reviews') }}" data-tour-link="workspace" @if($reviewsActive) aria-current="page" @endif><x-icon name="inbox"/>My reviews</a>@endif
-        @if(auth()->user()->role !== 'evaluator')
+        @if(auth()->user()->role === 'student')
         <a class="nav-link {{ request()->routeIs('account.projects', 'account.projects.*', 'projects.create', 'projects.edit') || ($reviewsActive && auth()->user()->role !== 'evaluator') ? 'active' : '' }}" href="{{ route('account.projects') }}" @if(auth()->user()->role !== 'evaluator') data-tour-link="workspace" @endif @if(request()->routeIs('account.projects', 'account.projects.*')) aria-current="page" @endif><x-icon name="folder"/>My projects</a>
         @endif
         <a class="nav-link {{ request()->routeIs('messages.*') ? 'active' : '' }}" href="{{ route('messages.index') }}" data-messages-nav @if(request()->routeIs('messages.*')) aria-current="page" @endif><x-icon name="message-circle"/>Messages @php($unreadMessages = auth()->user()->receivedDirectMessages()->whereNull('read_at')->count())<span class="count" data-message-unread @if(!$unreadMessages) hidden @endif>{{ $unreadMessages }}</span></a>
@@ -91,7 +93,7 @@
 <div class="app-shell">
     <x-night-sky/>
     <main id="main" @class(['main-content', 'workspace-content' => $workspacePage])>
-        @if($errors->any())<div class="alert" role="alert" tabindex="-1" @hasSection('project-validation-title') data-project-errors @endif><strong>@yield('project-validation-title', 'Please check the following:')</strong><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>@hasSection('project-validation-help')<p class="small">@yield('project-validation-help')</p>@endif</div>@endif
+        @if($errors->any() && ! $__env->hasSection('validation-toast'))<div class="alert" role="alert" tabindex="-1" @hasSection('project-validation-title') data-project-errors @endif><strong>@yield('project-validation-title', 'Please check the following:')</strong><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>@hasSection('project-validation-help')<p class="small">@yield('project-validation-help')</p>@endif</div>@endif
         @yield('content')
         @unless($workspacePage)
             <footer class="site-footer"><span class="site-footer-copyright">© {{ now()->year }} Analista.</span><nav aria-label="Footer links"><a href="{{ route('faq') }}">FAQ</a><a href="{{ route('guidelines') }}">Community &amp; privacy</a><a href="{{ route('tutorials.index') }}">Keep learning <x-icon name="arrow-up-right"/></a></nav></footer>
@@ -99,6 +101,7 @@
     </main>
 </div>
 @include('partials.toasts')
+@include('partials.confirm-action')
 @include('community-chat.partials.dialog')
 @auth @include('notifications.partials.dialog') @endauth
 @stack('scripts')

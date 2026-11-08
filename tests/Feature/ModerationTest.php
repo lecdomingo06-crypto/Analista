@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\DocumentVersion;
 use App\Models\Invitation;
 use App\Models\Project;
 use App\Models\Report;
@@ -14,7 +15,7 @@ use Tests\TestCase;
 
 class ModerationTest extends TestCase
 {
-    use RefreshDatabase, BuildsEvaluatorVerification;
+    use BuildsEvaluatorVerification, RefreshDatabase;
 
     protected function setUp(): void
     {
@@ -134,6 +135,114 @@ class ModerationTest extends TestCase
             'decision' => 'needs_changes', 'reason' => 'Please upload the thesis document and clarify the requested feedback.',
         ])->assertRedirect()->assertSessionHasNoErrors();
         $this->assertSame('needs_changes', $project->fresh()->status);
+    }
+
+    public function test_hiding_a_project_requires_a_nonblank_reason_without_changing_records(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $project = $this->project(User::factory()->create(), ['moderation_note' => 'Previous moderation note.']);
+        $original = $project->fresh()->getRawOriginal();
+
+        $this->actingAs($admin);
+        foreach ([[], ['reason' => ''], ['reason' => " \t "], ['reason' => '<p> </p>']] as $reason) {
+            $this->post(route('admin.projects.moderate', $project), ['decision' => 'hide', ...$reason])
+                ->assertRedirect()->assertSessionHasErrors('reason');
+
+            $this->assertSame($original, $project->fresh()->getRawOriginal());
+            $this->assertDatabaseCount('activities', 0);
+            $this->assertDatabaseCount('admin_actions', 0);
+        }
+    }
+
+    public function test_hiding_a_project_notifies_the_team_and_removes_only_its_public_listing(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $owner = User::factory()->create();
+        $member = User::factory()->create();
+        $project = $this->project($owner, ['title' => 'Project requiring moderation']);
+        $project->members()->attach($member);
+        $unrelated = $this->project($owner, ['title' => 'Separate legitimate public project']);
+        $reason = 'Please remove the unrelated advertising from this project.';
+
+        $this->get(route('projects.index'))->assertOk()->assertSee($project->title)->assertSee($unrelated->title);
+        $this->actingAs($admin)->post(route('admin.projects.moderate', $project), [
+            'decision' => 'hide', 'reason' => $reason,
+        ])->assertRedirect()->assertSessionHasNoErrors();
+
+        $this->assertSame('hidden', $project->fresh()->status);
+        $this->assertSame($reason, $project->fresh()->moderation_note);
+        $this->assertSame('approved', $unrelated->fresh()->status);
+        $this->assertDatabaseCount('activities', 2);
+        foreach ([$owner, $member] as $recipient) {
+            $this->assertDatabaseHas('activities', [
+                'user_id' => $recipient->id, 'title' => 'Thesis project moderation update',
+                'body' => 'Your project status is now hidden. '.$reason,
+                'url' => route('account.projects.show', $project),
+            ]);
+        }
+        $this->assertDatabaseHas('admin_actions', [
+            'actor_id' => $admin->id, 'action' => 'project.hidden',
+            'target_type' => 'project', 'target_id' => $project->id, 'reason' => $reason,
+        ]);
+        $this->get(route('projects.index'))->assertOk()->assertDontSee($project->title)->assertSee($unrelated->title);
+
+        $this->post(route('logout'));
+        $this->get(route('projects.index'))->assertOk()->assertDontSee($project->title)->assertSee($unrelated->title);
+        $this->get(route('projects.show', $project))->assertNotFound();
+        $this->actingAs($owner)->get(route('account.projects.show', $project))->assertOk()
+            ->assertViewHas('canViewPrivate', true)->assertSee($reason);
+    }
+
+    public function test_a_hidden_project_with_a_document_can_be_restored_with_a_blank_reason(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $owner = User::factory()->create();
+        $project = $this->project($owner, ['status' => 'hidden', 'moderation_note' => 'Please correct the listing.']);
+        DocumentVersion::factory()->create(['project_id' => $project->id]);
+
+        $this->actingAs($admin)->post(route('admin.projects.moderate', $project), [
+            'decision' => 'approve', 'reason' => '   ',
+        ])->assertRedirect()->assertSessionHasNoErrors();
+
+        $this->assertSame('approved', $project->fresh()->status);
+        $this->assertNull($project->fresh()->moderation_note);
+        $this->assertDatabaseHas('activities', ['user_id' => $owner->id, 'title' => 'Thesis project approved']);
+        $this->assertDatabaseHas('admin_actions', [
+            'actor_id' => $admin->id, 'action' => 'project.approved',
+            'target_type' => 'project', 'target_id' => $project->id, 'reason' => null,
+        ]);
+        $this->get(route('projects.index'))->assertOk()->assertSee($project->title);
+    }
+
+    public function test_project_validation_returns_a_popup_and_preserves_only_the_failed_forms_note(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $owner = User::factory()->create();
+        $project = $this->project($owner);
+        $other = $this->project($owner, ['title' => 'Another project in the moderation queue']);
+        $inspection = route('admin.projects.show', ['project' => $project, 'q' => 'project', 'status' => 'submitted', 'projects_page' => 1]);
+        $reason = str_repeat('a', 2001);
+
+        $response = $this->actingAs($admin)->from($inspection)->post(route('admin.projects.moderate', $project), [
+            'decision' => 'hide', 'reason' => $reason, 'moderation_project_id' => (string) $project->id,
+        ])->assertRedirect($inspection)->assertSessionHasErrors('reason')
+            ->assertSessionHasInput('reason', $reason)->assertSessionHasInput('moderation_project_id', (string) $project->id);
+        $message = session('errors')->first('reason');
+        $response = $this->followRedirects($response)->assertOk();
+
+        $document = new \DOMDocument;
+        @$document->loadHTML($response->getContent());
+        $xpath = new \DOMXPath($document);
+        $popups = $xpath->query('//div[@data-toast-type="error" and @role="alert" and not(ancestor::template)]');
+        $this->assertSame(1, $popups->length);
+        $this->assertStringContainsString($message, $popups->item(0)->textContent);
+        $this->assertSame(0, $xpath->query('//*[@id="main"]//*[contains(concat(" ", normalize-space(@class), " "), " alert ")]')->length);
+        $invalidNotes = $xpath->query('//textarea[@name="reason" and @aria-invalid="true"]');
+        $this->assertSame(1, $invalidNotes->length);
+        $this->assertSame('project-reason-'.$project->id, $invalidNotes->item(0)->getAttribute('id'));
+        $this->assertSame($reason, $invalidNotes->item(0)->textContent);
+        $this->assertNull($document->getElementById('project-reason-'.$other->id));
+        $this->assertSame(1, $xpath->query('//form[@data-project-moderation]')->length);
     }
 
     public function test_resolving_a_project_report_hides_the_correct_content_and_keeps_reporter_private(): void

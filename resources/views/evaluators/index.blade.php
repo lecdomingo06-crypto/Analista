@@ -79,3 +79,4 @@
 @push('styles')<link rel="preload" href="{{ asset('assets/fonts/Newsreader-Italic-Latin.woff2') }}" as="font" type="font/woff2" crossorigin>@endpush
 @push('styles')<link rel="stylesheet" href="{{ asset('assets/evaluator-cards.css') }}?v={{ filemtime(public_path('assets/evaluator-cards.css')) }}">@endpush
 @push('styles')<link rel="stylesheet" href="{{ asset('assets/evaluators.css') }}?v={{ filemtime(public_path('assets/evaluators.css')) }}">@endpush
+@push('scripts')<script src="{{ asset('assets/evaluator-card-topics.js') }}?v={{ filemtime(public_path('assets/evaluator-card-topics.js')) }}" defer></script>@endpush

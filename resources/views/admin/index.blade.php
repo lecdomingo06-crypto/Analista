@@ -1,10 +1,18 @@
 @extends('layouts.app')
 @section('title', 'Community administration')
 @section('body-class', 'projects-page admin-page')
+@if($section === 'projects')
+@section('validation-toast', 'true')
+@push('scripts')
+<script src="{{ asset('assets/admin-projects.js') }}?v={{ filemtime(public_path('assets/admin-projects.js')) }}" defer></script>
+@endpush
+@endif
 @push('styles')
 <link rel="preload" href="{{ asset('assets/fonts/Newsreader-Italic-Latin.woff2') }}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{{ asset('assets/projects.css') }}?v={{ filemtime(public_path('assets/projects.css')) }}">
 <link rel="stylesheet" href="{{ asset('assets/admin.css') }}?v={{ filemtime(public_path('assets/admin.css')) }}">
+@if($section === 'projects')<link rel="stylesheet" href="{{ asset('assets/admin-project-cards.css') }}?v={{ filemtime(public_path('assets/admin-project-cards.css')) }}">@endif
+@if($section === 'reviews')<link rel="stylesheet" href="{{ asset('assets/admin-review-monitoring.css') }}?v={{ filemtime(public_path('assets/admin-review-monitoring.css')) }}">@endif
 @endpush
 @section('content')
 @include('projects.partials.sky')
@@ -14,7 +22,6 @@
 <a class="projects-back page-back admin-back" href="{{ route('home') }}"><x-icon name="arrow-left"/>Back to home</a>
 <header class="projects-header admin-page-header">
     <h1>Keep good work <em>moving.</em></h1>
-    <p>Review applications, guide projects, and look after the community.</p>
 </header>
 <div class="stack admin-content admin-section-{{ $section }}">
 @if($section === 'overview')
@@ -45,7 +52,7 @@
     </section>
 
 @elseif($section === 'evaluators')
-    <header class="admin-section-heading"><h2>Evaluator applications</h2><p>Open an application to review professional evidence and make a decision.</p></header>
+    <header class="admin-section-heading"><h2>Evaluator applications</h2></header>
     @include('admin.partials.filters')
     @if($evaluators->count())
         <div class="admin-evaluator-grid">
@@ -73,25 +80,17 @@
     <x-pagination :paginator="$evaluators" />
 
 @elseif($section === 'projects')
-    <header class="admin-section-heading"><h2>Project moderation</h2><p>New submissions are automatically approved. Use these controls when a project needs moderation. Academic and technical recommendations come from the evaluator.</p></header>
+    <header class="admin-section-heading"><h2>Project moderation</h2></header>
     @include('admin.partials.filters')
-    @forelse($projects as $project)
-        @php($canApproveProject = in_array($project->status, ['pending', 'needs_changes', 'rejected', 'hidden'], true))
-        <article class="panel stack" id="project-{{ $project->id }}">
-            <div class="list-item"><div><div class="actions"><x-status :status="$project->status" /><span class="hint">{{ $project->documents_count }} PDF {{ \Illuminate\Support\Str::plural('version', $project->documents_count) }}</span><span class="badge">{{ $project->is_public ? 'Public summary requested' : 'Private project' }}</span></div><h3>{{ $project->title }}</h3><p class="muted small">{{ $project->owner->name }} · {{ $project->school }} · {{ $project->course }}</p></div><a class="btn btn-small" href="{{ route('projects.show', $project) }}">Inspect project <x-icon name="arrow-up-right" /></a></div>
-            <p class="small">{{ $project->summary }}</p><x-tags :tags="$project->technologies ?? []" />
-            <p class="small"><strong>Requested feedback:</strong> {{ $project->feedback_needed }}</p>
-            @if($project->moderation_note)<p class="small"><strong>Previous admin note:</strong> {{ $project->moderation_note }}</p>@endif
-            <form method="POST" action="{{ route('admin.projects.moderate', $project) }}" class="stack">@csrf
-                <div class="field"><label for="project-reason-{{ $project->id }}">Decision note</label><textarea id="project-reason-{{ $project->id }}" name="reason" rows="2" maxlength="2000" placeholder="Explain corrections, rejection, or why the project is being hidden."></textarea></div>
-                <div class="actions">
-                    @if($canApproveProject)<button class="btn btn-primary btn-small" name="decision" value="approve" type="submit" @disabled(! $project->documents_count)>{{ $project->status === 'pending' ? 'Approve project' : 'Restore project' }}</button>@endif
-                    <button class="btn btn-small" name="decision" value="needs_changes" type="submit">Request changes</button><button class="btn btn-small btn-danger" name="decision" value="reject" type="submit">Reject</button><button class="btn btn-small btn-ghost" name="decision" value="hide" type="submit">Hide project</button>
-                </div>
-                @if($canApproveProject && ! $project->documents_count)<span class="hint">A thesis PDF is required before this project can be {{ $project->status === 'pending' ? 'approved' : 'restored' }}.</span>@endif
-            </form>
-        </article>
-    @empty<x-empty title="No matching projects." text="Try another search or reset your filters. Saved drafts are available through the status filter." />@endforelse
+    @if($projects->count())
+        <div class="admin-project-grid">
+            @foreach($projects as $project)
+                @include('admin.partials.project-card')
+            @endforeach
+        </div>
+    @else
+        <x-empty title="No matching projects." text="Try another search or reset your filters. Saved drafts are available through the status filter." />
+    @endif
     <x-pagination :paginator="$projects" />
 
 @elseif($section === 'reports')
@@ -102,7 +101,19 @@
     @include('admin.partials.filters')
     <div class="table-wrap panel admin-users-panel"><table class="data-table" role="table"><thead><tr><th scope="col">Member</th><th scope="col">Role</th><th scope="col">Account status</th><th scope="col">Action</th></tr></thead><tbody>
     @forelse($users as $member)
-        <tr><td data-label="Member"><strong>{{ $member->name }}</strong><br><span class="hint">{{ $member->email }}</span></td><td data-label="Role">{{ ucfirst($member->role) }}@if($member->role === 'evaluator')<br><span class="hint">{{ ucfirst($member->evaluator_status) }}</span>@endif</td><td data-label="Account status"><x-status :status="$member->is_suspended ? 'suspended' : 'active'" /></td><td data-label="Action">@if($member->role !== 'admin' && ! $member->is(auth()->user()))<form method="POST" action="{{ route('admin.users.toggle', $member) }}">@csrf<input type="hidden" name="action" value="{{ $member->is_suspended ? 'reinstate' : 'suspend' }}"><button class="btn btn-small {{ $member->is_suspended ? '' : 'btn-danger' }}" type="submit">{{ $member->is_suspended ? 'Reinstate' : 'Suspend' }}</button></form>@else<span class="hint">Administrator</span>@endif</td></tr>
+        <tr>
+            <td data-label="Member"><strong>{{ $member->name }}</strong><br><span class="hint">{{ $member->email }}</span></td>
+            <td data-label="Role">{{ ucfirst($member->role) }}@if($member->role === 'evaluator')<br><span class="hint">{{ ucfirst($member->evaluator_status) }}</span>@endif</td>
+            <td data-label="Account status"><x-status :status="$member->is_suspended ? 'suspended' : 'active'" /></td>
+            <td data-label="Action">
+                @if($member->role !== 'admin' && ! $member->is(auth()->user()))
+                    <form method="POST" action="{{ route('admin.users.toggle', $member) }}" @unless($member->is_suspended) data-confirm="Are you sure you want to suspend this account? This member will be unable to sign in or use protected features until reinstated." data-confirm-title="Suspend account?" data-confirm-label="Suspend account" data-confirm-subject="{{ $member->name }}" @endunless>
+                        @csrf<input type="hidden" name="action" value="{{ $member->is_suspended ? 'reinstate' : 'suspend' }}">
+                        <button class="btn btn-small {{ $member->is_suspended ? '' : 'btn-danger' }}" type="submit">{{ $member->is_suspended ? 'Reinstate' : 'Suspend' }}</button>
+                    </form>
+                @else<span class="hint">Administrator</span>@endif
+            </td>
+        </tr>
     @empty<tr><td colspan="4">No community members yet.</td></tr>@endforelse
     </tbody></table></div>
     <x-pagination :paginator="$users" />

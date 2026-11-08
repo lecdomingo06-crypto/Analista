@@ -1,0 +1,153 @@
+/* One readable application document is shared by applicants and administrators. */
+.main-content .evaluator-application-resume{
+    --application-resume-rule:var(--admin-control-border,var(--verification-control-border,var(--project-border)));
+    min-width:0;margin:0;padding:28px 32px;border:1px solid var(--project-border);
+    border-radius:2px;background:var(--project-surface);box-shadow:var(--project-shadow);
+    color:var(--project-heading);font:400 17px/1.75 var(--font-sans);overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume p{
+    margin:0;color:var(--project-detail);font:400 17px/1.75 var(--font-sans);
+    overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume .application-resume-header{
+    min-width:0;text-align:center
+}
+.main-content .evaluator-application-resume .application-resume-name{
+    margin:0;color:var(--project-heading);font:600 30px/1.3 var(--font-sans);
+    font-variant-caps:normal;letter-spacing:-.4px;text-transform:none;overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume .application-resume-headline{
+    margin:6px 0 0;color:var(--project-detail);font:400 17px/1.65 var(--font-sans)
+}
+.main-content .evaluator-application-resume .application-resume-contact{
+    display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap;gap:4px 16px;
+    min-width:0;margin:8px 0 0;color:var(--project-detail);font:400 16px/1.65 var(--font-sans);
+    overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume .application-resume-contact>span{
+    min-width:0;overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume .application-resume-contact>a.application-resume-link{
+    display:inline;min-height:0;padding:0;font:inherit
+}
+.main-content .evaluator-application-resume .application-resume-facts{
+    display:flex;justify-content:center;flex-wrap:wrap;gap:6px 20px;min-width:0;margin:12px 0 0
+}
+.main-content .evaluator-application-resume .application-resume-facts>div{
+    display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap;gap:0 5px;
+    min-width:0;max-width:100%
+}
+.main-content .evaluator-application-resume .application-resume-facts dt{
+    color:var(--project-heading);font:600 16px/1.65 var(--font-sans)
+}
+.main-content .evaluator-application-resume .application-resume-facts dt::after{content:":"}
+.main-content .evaluator-application-resume .application-resume-facts dd{
+    margin:0;color:var(--project-detail);font:400 16px/1.65 var(--font-sans);overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume .application-resume-section{
+    min-width:0;margin:24px 0 0;padding:0;border:0
+}
+.main-content .evaluator-application-resume .application-resume-section-title{
+    margin:0 0 12px;padding:0 0 6px;border:0;border-bottom:1px solid var(--application-resume-rule);
+    color:var(--project-heading);font:600 19px/1.5 var(--font-sans);
+    letter-spacing:0;text-transform:none;overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume .application-resume-copy{
+    margin:0;color:var(--project-detail);font:400 17px/1.75 var(--font-sans);
+    white-space:pre-line;overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume .application-resume-copy+.application-resume-copy{
+    margin-top:10px
+}
+.main-content .evaluator-application-resume .application-resume-skills{
+    display:grid;gap:10px;min-width:0;margin:0
+}
+.main-content .evaluator-application-resume .application-resume-skills>div{
+    display:grid;grid-template-columns:160px minmax(0,1fr);align-items:baseline;
+    gap:4px 16px;min-width:0
+}
+.main-content .evaluator-application-resume .application-resume-skills dt{
+    color:var(--project-heading);font:600 16px/1.75 var(--font-sans)
+}
+.main-content .evaluator-application-resume .application-resume-skills dd{
+    margin:0;color:var(--project-detail);font:400 17px/1.75 var(--font-sans);overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume .application-resume-subheading{
+    margin:12px 0 6px;color:var(--project-heading);font:600 17px/1.65 var(--font-sans);
+    letter-spacing:0;overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume .application-resume-section-title+.application-resume-subheading{
+    margin-top:0
+}
+.main-content .evaluator-application-resume .application-resume-reference{
+    display:grid;gap:12px;min-width:0;margin:12px 0 0
+}
+.main-content .evaluator-application-resume .application-resume-reference>div{min-width:0}
+.main-content .evaluator-application-resume .application-resume-reference dt{
+    color:var(--project-heading);font:600 16px/1.65 var(--font-sans)
+}
+.main-content .evaluator-application-resume .application-resume-reference dd{
+    margin:2px 0 0;color:var(--project-detail);font:400 17px/1.75 var(--font-sans);overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume .application-resume-evidence{
+    min-width:0;margin:14px 0 0;padding:0;list-style:none
+}
+.main-content .evaluator-application-resume .application-resume-evidence>li{
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;
+    gap:10px 20px;min-width:0;padding:12px 0;border-bottom:1px solid var(--project-border)
+}
+.main-content .evaluator-application-resume .application-resume-evidence>li:first-child{padding-top:0}
+.main-content .evaluator-application-resume .application-resume-evidence>li:last-child{padding-bottom:0;border-bottom:0}
+.main-content .evaluator-application-resume .application-resume-file-info{flex:1 1 220px;min-width:0}
+.main-content .evaluator-application-resume .application-resume-file-info>strong{
+    display:block;color:var(--project-heading);font:600 16px/1.65 var(--font-sans);overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume .application-resume-file-info>p{
+    margin:3px 0 0;color:var(--project-copy);font:400 14px/1.7 var(--font-sans)
+}
+.main-content .evaluator-application-resume .btn{
+    max-width:100%;min-height:44px;font:600 16px/1.5 var(--font-sans);white-space:normal
+}
+.main-content .evaluator-application-resume a.application-resume-link{
+    display:inline-flex;align-items:center;gap:7px;max-width:100%;min-height:44px;
+    padding:6px 0;color:var(--project-heading);font:500 16px/1.65 var(--font-sans);
+    text-decoration:underline;text-decoration-color:var(--application-resume-rule);
+    text-underline-offset:4px;overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume a.application-resume-link:hover{text-decoration-color:currentColor}
+.main-content .evaluator-application-resume .application-resume-link>.icon{flex-shrink:0;width:16px;height:16px}
+.main-content .evaluator-application-resume .application-resume-prompt{
+    min-width:0;margin-bottom:14px;border-bottom:1px solid var(--project-border)
+}
+.main-content .evaluator-application-resume .application-resume-prompt>summary{
+    min-height:44px;padding:8px 0;color:var(--project-detail);font:500 16px/1.7 var(--font-sans);
+    cursor:pointer;overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume .application-resume-prompt>p{
+    margin:0 0 14px;color:var(--project-detail);font:400 17px/1.75 var(--font-sans);
+    white-space:pre-line;overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume .application-resume-attestation{
+    margin:20px 0 0;padding-top:14px;border-top:1px solid var(--project-border);
+    color:var(--project-copy);font:400 15px/1.75 var(--font-sans);overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume :is(.small,.hint){
+    color:var(--project-copy);font:400 15px/1.75 var(--font-sans);overflow-wrap:anywhere
+}
+.main-content .evaluator-application-resume .hint{display:block;margin-top:12px}
+.main-content .evaluator-application-resume :is(a,button,summary):focus-visible{
+    outline:2px solid var(--project-heading);outline-offset:3px
+}
+@media(max-width:760px){
+    .main-content .evaluator-application-resume{padding:26px 28px}
+}
+@media(max-width:520px){
+    .main-content .evaluator-application-resume{padding:22px 20px}
+    .main-content .evaluator-application-resume .application-resume-name{font-size:28px}
+    .main-content .evaluator-application-resume .application-resume-facts{gap:6px 16px}
+    .main-content .evaluator-application-resume .application-resume-skills>div{
+        grid-template-columns:minmax(0,1fr);gap:2px
+    }
+    .main-content .evaluator-application-resume .application-resume-evidence>li{align-items:flex-start}
+    .main-content .evaluator-application-resume .application-resume-file-info{flex-basis:100%}
+}

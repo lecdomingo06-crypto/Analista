@@ -34,9 +34,9 @@ class MyProjectsTest extends TestCase
             ->assertSee($group->title)->assertDontSee($private->title)->assertDontSee($public->title);
     }
 
-    public function test_all_roles_are_scoped_to_owned_or_group_projects_and_assigned_reviews_are_excluded(): void
+    public function test_student_and_evaluator_projects_are_scoped_to_owned_or_group_projects_and_assigned_reviews_are_excluded(): void
     {
-        foreach (['student', 'admin', 'evaluator'] as $role) {
+        foreach (['student', 'evaluator'] as $role) {
             $user = $role === 'evaluator' ? User::factory()->evaluator()->create() : User::factory()->create(['role' => $role]);
             $owned = Project::factory()->create(['user_id' => $user->id]);
             $group = Project::factory()->create();
@@ -52,6 +52,40 @@ class MyProjectsTest extends TestCase
                     ->assertDontSee('href="'.route('projects.create').'"', false);
             } else {
                 $response->assertSee('href="'.route('projects.create').'"', false);
+            }
+        }
+    }
+
+    public function test_admin_personal_project_and_review_urls_redirect_to_administration(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $owned = Project::factory()->create(['user_id' => $admin->id]);
+        $this->actingAs($admin);
+        $this->get(route('account.projects'))->assertRedirect(route('admin.index', ['section' => 'projects']));
+        $this->get(route('account.projects', ['q' => 'old saved search', 'status' => 'draft']))
+            ->assertRedirect(route('admin.index', ['section' => 'projects']));
+        $this->get(route('account.dashboard', ['tab' => 'projects']))
+            ->assertRedirect(route('admin.index', ['section' => 'projects']));
+        $this->get(route('account.dashboard'))->assertRedirect(route('admin.index'));
+        $this->get(route('account.dashboard', ['tab' => 'reviews']))
+            ->assertRedirect(route('admin.index', ['section' => 'reviews']));
+        $this->get(route('account.reviews'))->assertRedirect(route('admin.index', ['section' => 'reviews']));
+        $this->assertDatabaseHas('projects', ['id' => $owned->id, 'user_id' => $admin->id]);
+    }
+
+    public function test_admin_navigation_keeps_admin_tools_without_my_projects(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $this->actingAs($admin);
+        foreach ([route('home'), route('admin.index'), route('account.profile'),
+            route('account.dashboard', ['tab' => 'bookmarks']),
+            route('account.dashboard', ['tab' => 'notifications'])] as $url) {
+            $response = $this->get($url)->assertOk();
+            $xpath = $this->xpath($response->getContent());
+            $this->assertSame(0, $xpath->query('//a[@href="'.route('account.projects').'"]')->length);
+            $this->assertSame(1, $xpath->query('//aside[@id="sidebar"]//a[@href="'.route('admin.index').'"]')->length);
+            foreach ([route('messages.index'), route('account.profile'), route('account.dashboard', ['tab' => 'notifications'])] as $destination) {
+                $this->assertSame(1, $xpath->query('//aside[@id="sidebar"]/nav//a[@href="'.$destination.'"]')->length);
             }
         }
     }

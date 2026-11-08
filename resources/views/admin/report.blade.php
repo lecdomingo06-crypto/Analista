@@ -15,7 +15,6 @@
 <a class="projects-back page-back admin-back" href="{{ $backUrl }}"><x-icon name="arrow-left" />Back to reports</a>
 <header class="projects-header admin-page-header">
     <h1>Review a <em>report.</em></h1>
-    <p>Inspect the reported content and record your decision.</p>
 </header>
 <div class="stack admin-report-content">
     <section class="panel stack admin-report-summary" aria-labelledby="report-heading">
@@ -37,7 +36,7 @@
     </section>
     <section class="panel stack admin-report-decision" aria-labelledby="report-decision-heading">
         <h2 id="report-decision-heading">Report decision</h2>
-        <form method="POST" action="{{ route('admin.reports.moderate', ['report' => $report, ...$listFilters]) }}" class="stack">
+        <form method="POST" action="{{ route('admin.reports.moderate', ['report' => $report, ...$listFilters]) }}" class="stack" data-confirm-report data-confirm-subject="{{ $subject?->title ?? $subject?->name ?? 'Reported content' }}">
             @csrf
             <input type="hidden" name="report_id" value="{{ $report->id }}">
             <div class="form-grid">

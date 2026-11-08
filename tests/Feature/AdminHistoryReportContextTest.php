@@ -85,7 +85,7 @@ class AdminHistoryReportContextTest extends TestCase
     {
         $admin = User::factory()->admin()->create(['name' => 'Oak Administrator']);
         $reporter = User::factory()->create(['name' => 'Cedar Reporter']);
-        $project = Project::factory()->approved()->create(['title' => 'Orchard thesis']);
+        $project = Project::factory()->approved()->create(['id' => 99, 'title' => 'Orchard thesis']);
         $report = $this->report($reporter, 'project', $project->id);
         $expected = $this->record($admin, $report);
         $collision = AdminAudit::record($admin, 'project.hidden', 'project', $report->id, ['status' => 'approved'], ['status' => 'hidden']);
@@ -104,7 +104,8 @@ class AdminHistoryReportContextTest extends TestCase
         }
         $response = $this->get($this->historyUrl())->assertOk();
         $row = $this->historyRow($response->getContent(), $collision->id);
-        $this->assertStringContainsString($collision->targetLabel(), $row->textContent);
+        $this->assertStringContainsString('Project unavailable', $row->textContent);
+        $this->assertStringNotContainsString($collision->targetLabel(), $row->textContent);
         $this->assertStringNotContainsString('Orchard thesis', $row->textContent);
         $this->assertStringNotContainsString('Cedar Reporter', $row->textContent);
         $this->assertSame(0, $row->getElementsByTagName('a')->length);
@@ -164,7 +165,8 @@ class AdminHistoryReportContextTest extends TestCase
         $this->assertTrue($response->viewData('historySubjects')['project']->isEmpty());
         $this->assertStringContainsString('Surviving Reporter', $this->historyRow($response->getContent(), $subjectEntry->id)->textContent);
         $deletedRow = $this->historyRow($response->getContent(), $removedEntry->id);
-        $this->assertStringContainsString($removedEntry->targetLabel(), $deletedRow->textContent);
+        $this->assertStringContainsString('Report unavailable', $deletedRow->textContent);
+        $this->assertStringNotContainsString($removedEntry->targetLabel(), $deletedRow->textContent);
         $this->assertSame(0, $deletedRow->getElementsByTagName('a')->length);
         $this->assertSame($before, AdminAction::orderBy('id')->get()->toJson());
     }
@@ -178,7 +180,7 @@ class AdminHistoryReportContextTest extends TestCase
     {
         $document = new \DOMDocument;
         @$document->loadHTML('<?xml encoding="UTF-8">'.$html);
-        $rows = (new \DOMXPath($document))->query('//tbody[@data-action-id="'.$id.'"]/tr[contains(@class,"admin-history-row")]');
+        $rows = (new \DOMXPath($document))->query('//article[@data-action-id="'.$id.'"]');
         $this->assertCount(1, $rows);
 
         return $rows->item(0);

@@ -34,6 +34,20 @@
 .evaluator-card-actions .evaluator-message{background:var(--evaluator-surface);border-color:var(--evaluator-secondary-border);color:var(--evaluator-heading)}
 .evaluator-card-actions .evaluator-message:hover{background:var(--evaluator-badge);border-color:var(--evaluator-secondary-hover-border);color:var(--evaluator-heading);opacity:1}
 .reviewer-card.evaluator-card{display:flex;flex-direction:column;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}.reviewer-card .evaluator-card-description{flex:1}
+.reviewer-card .evaluator-card-badges{flex-wrap:nowrap;min-width:0;min-height:31.5px}
+.reviewer-card .evaluator-card-badges>.verified{display:inline-block;flex:0 0 auto;max-width:calc(100% - 54px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle}
+.reviewer-card .evaluator-card-topic{flex:0 0 auto;white-space:nowrap}
+.reviewer-card .evaluator-card-topic-more{padding-inline:10px}
+.reviewer-card .evaluator-card-person h3{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.reviewer-card .evaluator-card-description{min-height:1.65em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.reviewer-card .evaluator-card-actions{flex-wrap:nowrap}
+@media(max-width:520px){.reviewer-card .evaluator-card-actions{gap:8px}.reviewer-card .evaluator-card-actions .btn{font-size:14px;padding-inline:10px}}
+@media(max-width:360px){
+    .reviewer-card .evaluator-card-person{gap:10px}.reviewer-card .evaluator-card-person .avatar{width:48px;height:48px;flex-shrink:0}
+    .reviewer-card .evaluator-card-person span:not(.avatar){font-size:14px}
+    .reviewer-card .evaluator-card-meta{gap:10px}.reviewer-card .evaluator-card-meta .availability,.reviewer-card .evaluator-card-rating{font-size:12px}
+    .reviewer-card .evaluator-card-actions .btn{font-size:13px;padding-inline:8px;gap:5px}
+}
 @media(hover:hover){.reviewer-card.evaluator-card:hover{transform:translateY(-2px);border-color:var(--evaluator-border);box-shadow:var(--evaluator-shadow-hover)}}
 @media(max-width:520px){.evaluator-card{padding:20px}}
 @media(prefers-reduced-motion:reduce){.reviewer-card.evaluator-card{transition:none}.reviewer-card.evaluator-card:hover{transform:none}}

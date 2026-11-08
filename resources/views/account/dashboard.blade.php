@@ -26,8 +26,8 @@
     @include('account.partials.workspace-menu', ['current' => $tab])
 @else
 <nav class="tabs" aria-label="Your space sections">
-    @foreach(['projects' => 'My projects', ...(in_array($user->role, ['student', 'evaluator'], true) ? ['reviews' => $user->role === 'evaluator' ? 'My reviews' : 'Review requests'] : []), 'bookmarks' => 'Saved tutorials'] as $key => $label)
-        <a href="{{ $key === 'projects' ? route('account.projects') : ($key === 'reviews' ? route('account.reviews') : route('tutorials.index', ['saved' => 1])) }}" class="tab {{ $tab === $key ? 'active' : '' }}" @if($tab === $key) aria-current="page" @endif>{{ $label }}</a>
+    @foreach(['administration' => 'Administration', 'bookmarks' => 'Saved tutorials'] as $key => $label)
+        <a href="{{ $key === 'administration' ? route('admin.index') : route('tutorials.index', ['saved' => 1]) }}" class="tab {{ $tab === $key ? 'active' : '' }}" @if($tab === $key) aria-current="page" @endif>{{ $label }}</a>
     @endforeach
 </nav>
 @endif

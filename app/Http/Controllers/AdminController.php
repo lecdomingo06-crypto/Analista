@@ -174,6 +174,27 @@ class AdminController extends Controller
         });
     }
 
+    public function showProject(Request $request, Project $project): View
+    {
+        $this->authorizeAdmin($request);
+        $context = $request->validate([
+            'q' => ['nullable', 'string', 'max:200'],
+            'status' => ['nullable', 'string', Rule::in(['submitted', 'all', 'draft', 'pending', 'approved', 'completed', 'needs_changes', 'rejected', 'hidden'])],
+            'projects_page' => ['nullable', 'integer', 'min:1', 'max:1000000'],
+        ]);
+        $listFilters = ['status' => $context['status'] ?? 'submitted'];
+        if (trim($context['q'] ?? '') !== '') {
+            $listFilters['q'] = trim($context['q']);
+        }
+        if (isset($context['projects_page'])) {
+            $listFilters['projects_page'] = (int) $context['projects_page'];
+        }
+        $backUrl = route('admin.index', ['section' => 'projects', ...$listFilters]);
+        $project->load(['owner:id,name', 'documents' => fn ($query) => $query->orderByDesc('version')])->loadCount('documents');
+
+        return view('admin.project', compact('project', 'backUrl'));
+    }
+
     public function moderateProject(Request $request, Project $project): RedirectResponse
     {
         $this->authorizeAdmin($request);
@@ -181,7 +202,9 @@ class AdminController extends Controller
         $data = $request->validate([
             'decision' => ['required', Rule::in(['approve', 'needs_changes', 'reject', 'hide'])],
             'reason' => [Rule::requiredIf($request->input('decision') !== 'approve'), 'nullable', 'string', 'max:2000'],
-        ]);
+        ], [
+            'reason.required' => 'Add a decision note before requesting changes, rejecting, or hiding a project.',
+        ], ['reason' => 'decision note']);
 
         $status = [
             'approve' => 'approved', 'needs_changes' => 'needs_changes', 'reject' => 'rejected', 'hide' => 'hidden',
@@ -199,7 +222,9 @@ class AdminController extends Controller
             }
         }, 3);
 
-        return back()->with('success', 'Project moderation saved. The project members have been notified.');
+        return back()->with('success', $status === 'hidden'
+            ? 'Project hidden from community listings. The project members have been notified.'
+            : 'Project moderation saved. The project members have been notified.');
     }
 
     public function moderate(Request $request, Report $report): RedirectResponse

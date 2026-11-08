@@ -327,7 +327,12 @@ class SensitiveFileAccessHistoryTest extends TestCase
         $admin = User::factory()->admin()->create();
         $response = $this->actingAs($admin)->get(route('admin.index', ['section' => 'file-access']))->assertOk()
             ->assertDontSee($actor->name)->assertDontSee($actor->email)->assertDontSee($project->title);
-        $this->assertSame('Thesis PDF #'.$fileId, $this->accessHeading($response->getContent(), $entryId));
+        $this->assertSame('Thesis PDF', $this->accessHeading($response->getContent(), $entryId));
+        $this->assertNoTechnicalMetadata($response->getContent(), $entryId);
+        $this->assertSame('Thesis PDF #'.$fileId, $entry->fileLabel());
+        $this->assertDatabaseHas('sensitive_file_accesses', [
+            'id' => $entryId, 'file_id' => $fileId, 'project_id' => $projectId, 'version' => 1,
+        ]);
     }
 
     public function test_file_access_headings_use_current_escaped_project_titles_without_copying_titles_into_history(): void
@@ -347,9 +352,17 @@ class SensitiveFileAccessHistoryTest extends TestCase
         $response = $this->get($url)->assertOk();
         foreach (['thesis_pdf', 'review_pdf'] as $type) {
             $this->assertSame($project->title, $this->accessHeading($response->getContent(), $entries[$type]->id));
-            $response->assertSee($entries[$type]->fileLabel());
+            $this->assertNoTechnicalMetadata($response->getContent(), $entries[$type]->id);
         }
-        $this->assertSame($entries['evaluator_evidence']->fileLabel(), $this->accessHeading($response->getContent(), $entries['evaluator_evidence']->id));
+        $this->assertSame('Evaluator evidence', $this->accessHeading($response->getContent(), $entries['evaluator_evidence']->id));
+        $this->assertNoTechnicalMetadata($response->getContent(), $entries['evaluator_evidence']->id);
+        foreach ($entries as $entry) {
+            $this->assertDatabaseHas('sensitive_file_accesses', [
+                'id' => $entry->id, 'file_type' => $entry->file_type, 'file_id' => $entry->file_id,
+                'project_id' => $entry->project_id, 'verification_id' => $entry->verification_id,
+                'version' => $entry->version,
+            ]);
+        }
 
         $renamedTitle = '<script>alert("title")</script> & "Cedar revised thesis"';
         $project->update(['title' => $renamedTitle]);
@@ -357,7 +370,13 @@ class SensitiveFileAccessHistoryTest extends TestCase
         foreach (['thesis_pdf', 'review_pdf'] as $type) {
             $this->assertSame($renamedTitle, $this->accessHeading($renamed->getContent(), $entries[$type]->id));
         }
-        $this->assertSame($entries['evaluator_evidence']->fileLabel(), $this->accessHeading($renamed->getContent(), $entries['evaluator_evidence']->id));
+        $this->assertSame('Evaluator evidence', $this->accessHeading($renamed->getContent(), $entries['evaluator_evidence']->id));
+        $project->delete();
+        $deleted = $this->get($url)->assertOk();
+        foreach (['thesis_pdf' => 'Thesis PDF', 'review_pdf' => 'Review PDF'] as $type => $label) {
+            $this->assertSame($label, $this->accessHeading($deleted->getContent(), $entries[$type]->id));
+            $this->assertNoTechnicalMetadata($deleted->getContent(), $entries[$type]->id);
+        }
         $this->assertSame($storedRows, SensitiveFileAccess::orderBy('id')->get()->toJson());
         $this->assertStringNotContainsString('Cedar campus thesis', $storedRows);
         $this->assertStringNotContainsString('Cedar revised thesis', SensitiveFileAccess::all()->toJson());
@@ -372,6 +391,19 @@ class SensitiveFileAccessHistoryTest extends TestCase
         $this->assertCount(1, $headings);
 
         return trim($headings->item(0)->textContent);
+    }
+
+    private function assertNoTechnicalMetadata(string $html, int $entryId): void
+    {
+        $document = new \DOMDocument;
+        @$document->loadHTML('<?xml encoding="UTF-8">'.$html);
+        $entries = (new \DOMXPath($document))->query('//article[@data-access-id="'.$entryId.'"]');
+        $this->assertCount(1, $entries);
+        $entry = $entries->item(0);
+        $this->assertDoesNotMatchRegularExpression('/(?:Thesis PDF|Review PDF|Evaluator evidence|Project|Application|Entry)\s+#\d+|PDF version\s+\d+/u', $entry->textContent);
+        $this->assertStringContainsString('Download requested', $entry->textContent);
+        $this->assertCount(1, (new \DOMXPath($document))->query('.//p', $entry));
+        $this->assertCount(1, (new \DOMXPath($document))->query('.//time[@datetime]', $entry));
     }
 
     private function thesis(): array

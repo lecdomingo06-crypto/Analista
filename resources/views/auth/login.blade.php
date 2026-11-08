@@ -17,7 +17,7 @@
     </header>
     <form method="post" action="{{ route('login') }}" class="registration-card">
         @csrf
-        <label class="field">Email address<input type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="email" placeholder="you@university.edu"></label>
+        <label class="field">Email address or admin username<input type="text" name="email" value="{{ old('email') }}" maxlength="255" required autofocus autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Email address" aria-describedby="login-identifier-help"><span class="hint" id="login-identifier-help">Students and evaluators must use their email address.</span></label>
         <label class="field">Password<input type="password" name="password" required autocomplete="current-password" placeholder="Enter your password"></label>
         <div class="registration-login-options">
             <label class="registration-terms"><input type="checkbox" name="remember" value="1">Remember me</label>

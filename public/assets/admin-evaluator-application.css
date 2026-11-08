@@ -1,0 +1,61 @@
+/* Administration controls stay separate from the shared application resume. */
+.admin-verification-page .admin-application-toolbar{
+    display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;
+    gap:14px 24px;min-width:0
+}
+.admin-verification-page .admin-application-state{
+    display:flex;align-items:center;flex-wrap:wrap;gap:8px;min-width:0
+}
+.admin-verification-page .admin-application-status{
+    display:flex;align-items:center;flex-wrap:wrap;gap:8px;min-width:0
+}
+.admin-verification-page .admin-application-toolbar>.admin-account-note{
+    flex:0 0 100%;min-width:0;padding-top:12px;border-top:1px solid var(--project-border)
+}
+.admin-verification-page .main-content .admin-application-meta{
+    min-width:0;color:var(--project-copy);font:400 13px/1.7 var(--font-sans);
+    overflow-wrap:anywhere
+}
+.admin-verification-page .main-content .admin-review-heading>h2{
+    margin:0;color:var(--project-heading);font:600 21px/1.4 var(--font-sans)
+}
+.admin-verification-page .main-content .admin-review-heading>p{
+    margin:8px 0 0;color:var(--project-copy);font:400 14px/1.75 var(--font-sans)
+}
+.admin-verification-page .admin-review-checklist{
+    min-width:0;margin:0;border-color:var(--project-border);border-radius:8px;padding:16px
+}
+.admin-verification-page .admin-review-checklist legend{
+    padding:0 6px;color:var(--project-heading);font:600 14px/1.6 var(--font-sans)
+}
+.admin-verification-page .admin-review-checklist>.stack{gap:14px}
+.admin-verification-page .main-content .admin-review-checklist label{
+    display:flex;align-items:flex-start;gap:10px;min-width:0;
+    color:var(--project-detail);font:400 14px/1.75 var(--font-sans)
+}
+.admin-verification-page .admin-review-checklist input[type=checkbox]{
+    flex:0 0 auto;width:16px;height:16px;margin:5px 0 0
+}
+.admin-verification-page .admin-review-panel :is(form,.field,.actions){min-width:0}
+.admin-verification-page .admin-review-panel textarea{min-width:0;max-width:100%;resize:vertical}
+.admin-verification-page .admin-review-panel .actions>.btn{flex:0 1 auto}
+.admin-verification-page .main-content .admin-review-history>.panel{
+    padding:0;border-radius:12px;overflow:hidden
+}
+.admin-verification-page .admin-review-history>.panel>summary{
+    min-height:48px;padding:16px 20px;color:var(--project-heading);
+    font:500 14px/1.75 var(--font-sans);cursor:pointer;overflow-wrap:anywhere
+}
+.admin-verification-page .admin-review-history>.panel[open]>summary{
+    border-bottom:1px solid var(--project-border)
+}
+.admin-verification-page .admin-review-history>.panel>.stack{padding:20px}
+.admin-verification-page .main-content .admin-review-history>.panel>.stack p{
+    font-size:14px;line-height:1.75
+}
+@media(max-width:520px){
+    .admin-verification-page .admin-review-checklist{padding:14px 12px}
+    .admin-verification-page .admin-review-panel .actions>.btn{flex:1 1 100%}
+    .admin-verification-page .admin-review-history>.panel>summary{padding:16px}
+    .admin-verification-page .admin-review-history>.panel>.stack{padding:16px}
+}

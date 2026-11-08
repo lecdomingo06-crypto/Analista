@@ -2,10 +2,13 @@
   const region = document.querySelector('[data-toast-region]');
   if (!region) return;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const initialized = new WeakSet();
 
-  region.querySelectorAll('[data-toast]').forEach(toast => {
+  function initializeToast(toast) {
+    if (initialized.has(toast)) return;
     const close = toast.querySelector('[data-toast-close]');
     if (!close) return;
+    initialized.add(toast);
     close.hidden = false;
     const timed = ['success', 'info'].includes(toast.dataset.toastType);
     const message = toast.querySelector('.toast-message')?.textContent || '';
@@ -41,6 +44,9 @@
         }
       }
       toast.classList.add('is-leaving');
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      window.removeEventListener('pagehide', pause);
+      window.removeEventListener('pageshow', resume);
       if (reducedMotion.matches) toast.remove();
       else setTimeout(() => toast.remove(), 220);
     };
@@ -55,10 +61,20 @@
     toast.addEventListener('pointerleave', resume);
     toast.addEventListener('focusin', pause);
     toast.addEventListener('focusout', () => requestAnimationFrame(resume));
-    document.addEventListener('visibilitychange', () => document.hidden ? pause() : resume());
+    const onVisibilityChange = () => document.hidden ? pause() : resume();
+    document.addEventListener('visibilitychange', onVisibilityChange);
     // A restored page may retain its DOM after its old timers were suspended.
     window.addEventListener('pagehide', pause);
     window.addEventListener('pageshow', resume);
     resume();
-  });
+  }
+
+  region.querySelectorAll('[data-toast]').forEach(initializeToast);
+  new MutationObserver(records => {
+    for (const record of records) {
+      for (const node of record.addedNodes) {
+        if (node instanceof HTMLElement && node.matches('[data-toast]')) initializeToast(node);
+      }
+    }
+  }).observe(region, { childList: true });
 })();

@@ -97,6 +97,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [AdminController::class, 'dashboard'])->name('index');
         Route::get('/evaluators/{user}', [AdminController::class, 'showEvaluatorVerification'])->name('evaluators.show');
         Route::post('/evaluators/{user}', [AdminController::class, 'moderateEvaluator'])->name('evaluators.moderate');
+        Route::get('/projects/{project}', [AdminController::class, 'showProject'])->name('projects.show');
         Route::post('/projects/{project}', [AdminController::class, 'moderateProject'])->name('projects.moderate');
         Route::get('/reports/{report}', [AdminController::class, 'showReport'])->name('reports.show');
         Route::post('/reports/{report}', [AdminController::class, 'moderate'])->name('reports.moderate');
