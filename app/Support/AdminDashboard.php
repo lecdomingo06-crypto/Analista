@@ -57,7 +57,7 @@ final class AdminDashboard
             $filterSelects[] = ['name' => 'status', 'label' => 'Status', 'options' => $statusOptions];
         }
         if (in_array($section, ['users', 'file-access'], true)) {
-            $filterSelects[] = ['name' => 'role', 'label' => 'Role', 'options' => ['' => 'All roles', 'student' => 'Students', 'evaluator' => 'Evaluators', 'admin' => 'Administrators']];
+            $filterSelects[] = ['name' => 'role', 'label' => $section === 'file-access' ? 'Accessed by role' : 'Role', 'options' => ['' => 'All roles', 'student' => 'Students', 'evaluator' => 'Evaluators', 'admin' => 'Administrators']];
         }
         if ($section === 'file-access') {
             $filterSelects[] = ['name' => 'file_type', 'label' => 'File type', 'options' => ['' => 'All file types', ...SensitiveFileAccess::TYPE_LABELS]];
@@ -88,6 +88,7 @@ final class AdminDashboard
         $historyReports = collect();
         $historySubjects = ['project' => collect(), 'user' => collect()];
         $historyTargets = ['evaluator' => collect(), 'user' => collect(), 'project' => collect(), 'tutorial' => collect()];
+        $fileAccessContexts = [];
         $query = null;
         $q = $filters['q'];
         $status = $filters['status'];
@@ -260,6 +261,7 @@ final class AdminDashboard
                 $query->where('file_type', $filters['file_type']);
             }
             $fileAccesses = $query->orderByDesc('id')->paginate(20, ['*'], 'file_access_page')->withQueryString();
+            $fileAccessContexts = FileAccessContext::forEntries($fileAccesses->getCollection());
         }
 
         $trends = [];
@@ -303,7 +305,7 @@ final class AdminDashboard
             'tutorials' => 'Search title, category, or creator',
             'invitations' => 'Search invited email address',
             'history' => 'Search person, project, tutorial, or administrator',
-            'file-access' => 'Search account name or record ID',
+            'file-access' => 'Search the person who accessed a file',
             default => '',
         };
         $resultCount = match ($section) {
@@ -317,7 +319,7 @@ final class AdminDashboard
         };
 
         return compact('section', 'stats', 'filters', 'filterSelects', 'searchPlaceholder', 'resultCount',
-            'evaluators', 'projects', 'reviews', 'reports', 'reportSubjects', 'users', 'tutorials', 'invitations', 'history', 'historyReports', 'historySubjects', 'historyTargets', 'fileAccesses', 'trends', 'overviewCharts');
+            'evaluators', 'projects', 'reviews', 'reports', 'reportSubjects', 'users', 'tutorials', 'invitations', 'history', 'historyReports', 'historySubjects', 'historyTargets', 'fileAccesses', 'fileAccessContexts', 'trends', 'overviewCharts');
     }
 
     private static function statusChart(array $counts, array $labels, array $required, bool $segments = false): array

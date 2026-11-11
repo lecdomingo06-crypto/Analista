@@ -32,16 +32,24 @@ class ReviewNavigationTest extends TestCase
     {
         foreach ([User::factory()->create(), User::factory()->evaluator()->create(), User::factory()->admin()->create()] as $user) {
             $this->actingAs($user)->get(route('account.dashboard'))
-                ->assertRedirect(route($user->role === 'evaluator' ? 'account.reviews' : 'account.projects'));
+                ->assertRedirect(route(match ($user->role) {
+                    'admin' => 'admin.index',
+                    'evaluator' => 'account.reviews',
+                    default => 'account.projects',
+                }));
             $response = $this->get(route('guidelines'))->assertOk()->assertDontSee('My workspace');
             $xpath = $this->xpath($response->getContent());
             $this->assertSame(0, $xpath->query('//aside[@id="sidebar"]/nav//a[@href="'.route('account.dashboard').'"]')->length);
-            $this->assertSame($user->role === 'evaluator' ? 0 : 1,
+            $this->assertSame($user->role === 'student' ? 1 : 0,
                 $xpath->query('//aside[@id="sidebar"]/nav//a[@href="'.route('account.projects').'"]')->length);
             $this->assertSame($user->role === 'evaluator' ? 1 : 0,
                 $xpath->query('//aside[@id="sidebar"]/nav//a[@href="'.route('account.reviews').'"]')->length);
             $this->get(route('account.dashboard', ['tab' => 'projects', 'q' => 'campus']))
-                ->assertRedirect(route('account.projects', ['q' => 'campus']));
+                ->assertRedirect(match ($user->role) {
+                    'admin' => route('admin.index', ['section' => 'projects']),
+                    'evaluator' => route('account.ratings'),
+                    default => route('account.projects', ['q' => 'campus']),
+                });
         }
     }
 
@@ -57,14 +65,14 @@ class ReviewNavigationTest extends TestCase
                 'success' => 'Your review update was saved.',
                 '_flash' => ['old' => ['success'], 'new' => []],
             ])->get(route($route, $query))
-                ->assertRedirect(route('account.projects'));
+                ->assertRedirect(route('admin.index', ['section' => 'reviews']));
 
-            $destination = $this->get(route('account.projects'))
+            $destination = $this->get(route('admin.index', ['section' => 'reviews']))
                 ->assertOk()->assertSessionHasNoErrors()->assertSee('Your review update was saved.')
-                ->assertViewHas('status', '');
+                ->assertViewHas('filters', fn ($filters) => $filters['status'] === '');
             $xpath = $this->xpath($destination->getContent());
             $this->assertSame(0, $xpath->query('//a[@href="'.route('account.reviews').'" or contains(@href,"tab=reviews")]')->length);
-            $this->get(route('account.projects'))->assertOk()->assertDontSee('Your review update was saved.');
+            $this->get(route('admin.index', ['section' => 'reviews']))->assertOk()->assertDontSee('Your review update was saved.');
         }
 
         $this->get(route('account.dashboard', ['tab' => 'bookmarks']))->assertOk()

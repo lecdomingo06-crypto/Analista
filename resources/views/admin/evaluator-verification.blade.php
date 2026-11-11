@@ -30,7 +30,6 @@
         @if($evaluator->is_suspended)<span class="badge">Account suspended</span>@endif
     </div>
     @if($verification)<p class="admin-application-meta small">Submitted <time datetime="{{ $verification->created_at->toIso8601String() }}">{{ $verification->created_at->format('M j, Y · g:i a') }}</time></p>@endif
-    @if($evaluator->moderation_note && $evaluator->moderation_note !== "Approved directly at the project owner's request.")<div class="admin-account-note"><span class="section-label">Current admin note</span><p class="small">{{ $evaluator->moderation_note }}</p></div>@endif
 </div>
 
 @unless($verification)

@@ -20,7 +20,7 @@ final class AdminAudit
 
     private const FLAGS = ['is_suspended', 'accepting_requests', 'is_published', 'featured', 'active'];
 
-    private const TUTORIAL_FIELDS = ['title', 'category', 'excerpt', 'body', 'youtube_video_id', 'video_creator', 'is_published', 'featured'];
+    private const TUTORIAL_FIELDS = ['title', 'category', 'excerpt', 'body', 'youtube_video_id', 'video_creator', 'video_path', 'video_original_name', 'video_mime_type', 'video_size', 'is_published', 'featured'];
 
     public static function record(
         User $actor,

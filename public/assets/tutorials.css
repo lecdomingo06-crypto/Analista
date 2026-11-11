@@ -12,7 +12,7 @@
 .learning-header h1 em{font:italic 400 1em/1.2 var(--font-serif)}
 .learning-header p{font-size:17px;line-height:1.65;max-width:640px;color:var(--learning-card-copy)}
 .learning-library-tools{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
-.learning-library-links{min-width:0}.learning-library-links a{display:inline-flex;align-items:center;gap:5px;font:400 13px/1.5 var(--font-sans);color:var(--learning-card-heading)}.learning-library-links .icon{width:14px;height:14px}.learning-library-links a:hover{text-decoration:underline;text-underline-offset:4px}
+.learning-library-links{display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px;min-width:0}.learning-library-links a{display:inline-flex;align-items:center;gap:5px;min-height:40px;max-width:100%;font:400 13px/1.5 var(--font-sans);color:var(--learning-card-heading)}.learning-library-links .icon{width:14px;height:14px}.learning-library-links a:hover{text-decoration:underline;text-underline-offset:4px}
 .learning-view{display:inline-flex;flex-shrink:0;gap:2px;margin-left:auto;border:1px solid var(--learning-card-border);border-radius:7px;padding:3px;background:var(--learning-card-surface)}
 .learning-view[hidden]{display:none}.learning-view button{display:grid;place-items:center;min-width:36px;min-height:36px;padding:8px;border:0;border-radius:4px;background:transparent;color:var(--learning-card-copy);cursor:pointer}
 .learning-view .icon{width:18px;height:18px}.learning-view button[aria-pressed=true]{background:var(--hover);color:var(--learning-card-heading)}.learning-view button:hover{color:var(--learning-card-heading)}

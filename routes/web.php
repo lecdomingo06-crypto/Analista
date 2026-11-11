@@ -6,12 +6,14 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommunityChatController;
 use App\Http\Controllers\DirectMessageController;
 use App\Http\Controllers\EvaluatorVerificationController;
+use App\Http\Controllers\EvaluatorTutorialController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\ProfilePhotoController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\TutorialVideoController;
 use App\Http\Middleware\EnsureActive;
 use App\Http\Middleware\ThrottleCommunityChat;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +23,7 @@ Route::get('/evaluators', [PublicController::class, 'evaluators'])->name('evalua
 Route::get('/evaluators/{evaluator}', [PublicController::class, 'evaluator'])->name('evaluators.show');
 Route::get('/tutorials', [PublicController::class, 'tutorials'])->name('tutorials.index');
 Route::get('/tutorials/{tutorial:slug}', [PublicController::class, 'tutorial'])->name('tutorials.show');
+Route::get('/tutorial-videos/{tutorial:slug}', [TutorialVideoController::class, 'show'])->name('tutorials.video');
 Route::get('/guidelines', [PublicController::class, 'guidelines'])->name('guidelines');
 Route::view('/faq', 'faq')->name('faq');
 Route::get('/session-status', [AuthController::class, 'sessionStatus'])->name('session.status');
@@ -82,7 +85,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/account/projects/{project}/reviews', [AccountController::class, 'projectReviews'])->name('account.projects.reviews');
     Route::get('/account/projects/{project}', [ProjectController::class, 'show'])->name('account.projects.show');
     Route::get('/account/reviews', [AccountController::class, 'dashboard'])->defaults('section', 'reviews')->name('account.reviews');
+    Route::get('/account/ratings', [AccountController::class, 'ratings'])->name('account.ratings');
     Route::get('/account/profile', [AccountController::class, 'profile'])->name('account.profile');
+    Route::get('/account/tutorials', [EvaluatorTutorialController::class, 'index'])->name('account.tutorials.index');
+    Route::get('/account/tutorials/create', [EvaluatorTutorialController::class, 'create'])->name('account.tutorials.create');
+    Route::post('/account/tutorials', [EvaluatorTutorialController::class, 'store'])->middleware('throttle:10,1')->name('account.tutorials.store');
+    Route::get('/account/tutorials/{tutorial:slug}/edit', [EvaluatorTutorialController::class, 'edit'])->name('account.tutorials.edit');
+    Route::put('/account/tutorials/{tutorial:slug}', [EvaluatorTutorialController::class, 'update'])->middleware('throttle:20,1')->name('account.tutorials.update');
+    Route::delete('/account/tutorials/{tutorial:slug}', [EvaluatorTutorialController::class, 'destroy'])->name('account.tutorials.destroy');
     Route::put('/account/profile', [AccountController::class, 'updateProfile'])->name('account.profile.update');
     Route::put('/account/profile/password', [AccountController::class, 'updatePassword'])
         ->middleware('throttle:5,1')->name('account.profile.password');

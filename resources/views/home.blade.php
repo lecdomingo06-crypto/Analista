@@ -38,7 +38,7 @@
         <div class="home-video-cards">
             @forelse($tutorials as $tutorial)
                 <a class="home-video-card" href="{{ route('tutorials.show', $tutorial) }}">
-                    <div class="home-video-thumbnail"><img src="{{ $tutorial->thumbnail_url }}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"><span aria-hidden="true"><x-icon name="play"/></span></div>
+                    <div class="home-video-thumbnail"><x-tutorial-thumbnail :tutorial="$tutorial"/><span aria-hidden="true"><x-icon name="play"/></span></div>
                     <div class="home-video-copy">
                         <span class="home-video-topic">{{ $tutorial->category }}</span>
                         <h3>{{ $tutorial->title }}</h3>

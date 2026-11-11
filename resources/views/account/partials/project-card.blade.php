@@ -25,7 +25,9 @@
         <span><x-icon name="file-text"/>{{ $project->documents_count }} {{ Str::plural('document version', $project->documents_count) }}</span>
         <span><x-icon name="message-circle"/>{{ $reviews->count() }} {{ Str::plural('review request', $reviews->count()) }}</span>
     </div>
-    @include('projects.partials.review-progress')
+    <div class="my-project-review-progress">
+        @include('account.partials.project-review-status')
+    </div>
     @if($project->moderation_note)<p class="small my-project-note"><strong>Admin note:</strong> {{ $project->moderation_note }}</p>@endif
     <div class="actions my-project-actions">
         <a class="btn btn-small btn-primary my-project-open" href="{{ route('account.projects.show', $project) }}">View project <x-icon name="arrow-up-right"/></a>

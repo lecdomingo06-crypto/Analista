@@ -1,7 +1,5 @@
 /* Shared action feedback floats above the page without moving its content. */
-.toast-region{
-    --toast-top:24px;
-    --toast-edge:24px;
+:is(.toast-region,.notifications-dialog){
     --toast-surface:#fff;
     --toast-border:#d9e5ef;
     --toast-heading:#111113;
@@ -21,6 +19,10 @@
     --toast-info-ink:#315e80;
     --toast-warning-bg:#faf0dd;
     --toast-warning-ink:#805e21;
+}
+.toast-region{
+    --toast-top:24px;
+    --toast-edge:24px;
     position:fixed;
     z-index:70;
     top:calc(var(--toast-top) - 12px + env(safe-area-inset-top));
@@ -113,7 +115,7 @@
 .toast-close:focus-visible{outline:2px solid var(--toast-accent-ink);outline-offset:2px}
 .toast.is-leaving{animation:none;opacity:0;transform:translateX(12px);pointer-events:none}
 @keyframes toast-enter{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
-:root[data-theme=dark] .toast-region{
+:root[data-theme=dark] :is(.toast-region,.notifications-dialog){
     --toast-surface:#17233b;
     --toast-border:#34445f;
     --toast-heading:#edf3ff;

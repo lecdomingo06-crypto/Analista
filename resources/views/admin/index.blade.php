@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="{{ asset('assets/admin.css') }}?v={{ filemtime(public_path('assets/admin.css')) }}">
 @if($section === 'projects')<link rel="stylesheet" href="{{ asset('assets/admin-project-cards.css') }}?v={{ filemtime(public_path('assets/admin-project-cards.css')) }}">@endif
 @if($section === 'reviews')<link rel="stylesheet" href="{{ asset('assets/admin-review-monitoring.css') }}?v={{ filemtime(public_path('assets/admin-review-monitoring.css')) }}">@endif
+@if($section === 'file-access')<link rel="stylesheet" href="{{ asset('assets/admin-file-access.css') }}?v={{ filemtime(public_path('assets/admin-file-access.css')) }}">@endif
 @endpush
 @section('content')
 @include('projects.partials.sky')

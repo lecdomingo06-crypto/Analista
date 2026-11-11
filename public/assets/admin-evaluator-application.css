@@ -9,9 +9,6 @@
 .admin-verification-page .admin-application-status{
     display:flex;align-items:center;flex-wrap:wrap;gap:8px;min-width:0
 }
-.admin-verification-page .admin-application-toolbar>.admin-account-note{
-    flex:0 0 100%;min-width:0;padding-top:12px;border-top:1px solid var(--project-border)
-}
 .admin-verification-page .main-content .admin-application-meta{
     min-width:0;color:var(--project-copy);font:400 13px/1.7 var(--font-sans);
     overflow-wrap:anywhere

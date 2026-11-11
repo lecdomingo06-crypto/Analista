@@ -9,11 +9,13 @@
     @if(filled($tutorial->excerpt))<p class="learning-description">{{ $tutorial->excerpt }}</p>@endif
 </header>
 <article class="learning-article" aria-labelledby="tutorial-title">
+    @unless($tutorial->is_published)<p class="tutorial-draft-notice"><strong>Draft preview.</strong> Publish this tutorial when it is ready to share.</p>@endunless
     <header class="learning-article-header">
         <div class="learning-article-topics"><span class="learning-topic">{{ $tutorial->category }}</span><span class="learning-kind"><x-icon :name="$tutorial->is_video ? 'play' : 'book'"/>{{ $tutorial->is_video ? 'Video tutorial' : 'Reading guide' }}</span></div>
         <h2 id="tutorial-title">{{ $tutorial->title }}</h2>
         <div class="learning-toolbar">
             <span class="learning-creator">{{ $tutorial->is_video ? 'Video by '.$tutorial->video_creator : 'By '.($tutorial->author?->name ?? 'The Analista community') }}</span>
+            @if(auth()->user()?->isEvaluator() && (int) $tutorial->user_id === (int) auth()->id())<a class="btn btn-small" href="{{ route('account.tutorials.edit', $tutorial) }}"><x-icon name="edit"/>Edit tutorial</a>@endif
             @auth
                 <form method="post" action="{{ route('account.bookmarks.toggle', $tutorial) }}">@csrf<button @class(['btn', 'btn-small', 'is-saved' => $saved]) type="submit" aria-pressed="{{ $saved ? 'true' : 'false' }}"><x-icon name="bookmark"/>{{ $saved ? 'Saved for later' : 'Save for later' }}</button></form>
             @else
@@ -21,7 +23,10 @@
             @endauth
         </div>
     </header>
-    @if($tutorial->is_video)
+    @if($tutorial->has_uploaded_video)
+        <div class="learning-player"><video controls playsinline preload="metadata" aria-label="{{ $tutorial->title }}"><source src="{{ route('tutorials.video', $tutorial) }}" type="{{ $tutorial->video_mime_type }}">Your browser cannot play this video.</video></div>
+        <div class="learning-source"><span><x-icon name="play"/> Uploaded video by {{ $tutorial->video_creator }}</span></div>
+    @elseif($tutorial->is_youtube_video)
         <div class="learning-player" data-video-player data-video-embed="{{ $tutorial->embed_url }}" data-video-title="{{ $tutorial->title }}">
             <button class="learning-poster" type="button" data-video-play aria-label="Play {{ $tutorial->title }}" hidden>
                 <img src="{{ $tutorial->thumbnail_url }}" alt="" decoding="async" referrerpolicy="no-referrer">
@@ -47,5 +52,6 @@
 <link rel="preload" href="{{ asset('assets/fonts/Newsreader-Italic-Latin.woff2') }}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{{ asset('assets/tutorials.css') }}?v={{ filemtime(public_path('assets/tutorials.css')) }}">
 <link rel="stylesheet" href="{{ asset('assets/tutorial-detail.css') }}?v={{ filemtime(public_path('assets/tutorial-detail.css')) }}">
+<link rel="stylesheet" href="{{ asset('assets/tutorial-publishing.css') }}?v={{ filemtime(public_path('assets/tutorial-publishing.css')) }}">
 @endpush
 @push('scripts')<script src="{{ asset('assets/tutorials.js') }}?v={{ filemtime(public_path('assets/tutorials.js')) }}" defer></script>@endpush

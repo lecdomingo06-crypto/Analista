@@ -20,3 +20,7 @@ The app loads a privacy-enhanced YouTube player when a visitor presses Play, and
 The layout was adapted from [Bryl Lim?s blog](https://www.bryllim.com/blog): thumbnail rows, a small pixel heading, list/grid controls, and thin separators. Analista retains its shared navigation and Geist fonts.
 
 Run `php artisan migrate` and `php artisan db:seed --class=TutorialSeeder` to install the video columns and initial collection. The content seeder preserves existing editorial changes and written guides. Public discovery shows published videos; existing written guide links and bookmarks continue to work.
+
+Approved, active evaluators can open **My tutorials → Create tutorial** to publish a YouTube link or upload an MP4/WebM video up to 30 MB. They can save drafts, edit their own tutorials, replace a video, and delete their posts after confirmation. Students can watch published tutorials and save them for later. Administrators can manage the full library, including featuring or unpublishing evaluator posts.
+
+Uploaded videos are stored on the private local disk and delivered through the tutorial video route, with byte-range support for playback and seeking. Draft pages and videos are accessible only to their approved author and administrators. Replacing or deleting a video removes the retired upload after the database transaction commits. Deployment PHP upload and POST limits must allow a 30 MB video plus its form data; no additional video hosting service is required for uploads.

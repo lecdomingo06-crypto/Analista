@@ -12,19 +12,20 @@
     <article class="panel admin-video-card" data-tutorial-id="{{ $tutorial->id }}" aria-labelledby="admin-video-title-{{ $tutorial->id }}">
         @if($tutorial->is_video)
             @if($tutorial->is_published)
-                <a class="admin-video-thumbnail" href="{{ route('tutorials.show', $tutorial->slug) }}" aria-label="Watch {{ $tutorial->title }}"><img src="{{ $tutorial->thumbnail_url }}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"><span class="admin-video-play" aria-hidden="true"><x-icon name="play" /></span></a>
+                <a class="admin-video-thumbnail" href="{{ route('tutorials.show', $tutorial->slug) }}" aria-label="Watch {{ $tutorial->title }}"><x-tutorial-thumbnail :tutorial="$tutorial"/><span class="admin-video-play" aria-hidden="true"><x-icon name="play" /></span></a>
             @else
-                <div class="admin-video-thumbnail"><img src="{{ $tutorial->thumbnail_url }}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></div>
+                <div class="admin-video-thumbnail"><x-tutorial-thumbnail :tutorial="$tutorial"/></div>
             @endif
         @else
             <div class="admin-video-thumbnail admin-video-thumbnail-fallback"><x-icon name="book" /><span>Reading guide</span></div>
         @endif
-        <div class="admin-video-badges"><x-status :status="$tutorial->is_published ? 'published' : 'draft'" />@if($tutorial->featured)<span class="badge">Featured</span>@endif</div>
+        <div class="admin-video-badges"><x-status :status="$tutorial->is_published ? 'published' : 'draft'" />@if($tutorial->has_uploaded_video)<span class="badge">Uploaded video</span>@endif @if($tutorial->featured)<span class="badge">Featured</span>@endif</div>
         <div class="admin-video-copy">
             <span class="admin-video-category">{{ $tutorial->category }}</span>
             <h3 class="admin-video-title" id="admin-video-title-{{ $tutorial->id }}" title="{{ $tutorial->title }}">{{ $tutorial->title }}</h3>
             @if(filled($tutorial->excerpt))<p class="admin-video-excerpt">{{ $tutorial->excerpt }}</p>@endif
-            <p class="hint admin-video-creator">{{ $tutorial->is_video ? $tutorial->video_creator : 'Text guide · add a YouTube link to convert it to a video' }}</p>
+            <p class="hint admin-video-creator">{{ $tutorial->is_video ? $tutorial->video_creator : 'Reading guide' }}</p>
+            @if($tutorial->author)<p class="hint">Author: {{ $tutorial->author->name }}</p>@endif
         </div>
         @if($tutorial->is_published)<div class="admin-video-watch"><a class="btn btn-primary btn-small" href="{{ route('tutorials.show', $tutorial->slug) }}">{{ $tutorial->is_video ? 'Watch video' : 'View guide' }} <x-icon name="arrow-up-right" /></a></div>@endif
         <div class="admin-video-actions">
@@ -50,7 +51,7 @@
 @endforeach
 </div>
 @else
-    <x-empty title="The library is ready for your first video." text="Add a useful YouTube tutorial to help students take their next step." />
+    <x-empty title="The library is ready for your first video." text="Add a video link or upload a tutorial to help students take their next step." />
 @endif
 <x-pagination :paginator="$tutorials" />
 @push('scripts')

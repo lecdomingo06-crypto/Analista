@@ -34,26 +34,18 @@ class MyProjectsTest extends TestCase
             ->assertSee($group->title)->assertDontSee($private->title)->assertDontSee($public->title);
     }
 
-    public function test_student_and_evaluator_projects_are_scoped_to_owned_or_group_projects_and_assigned_reviews_are_excluded(): void
+    public function test_student_projects_are_scoped_to_owned_or_group_projects(): void
     {
-        foreach (['student', 'evaluator'] as $role) {
-            $user = $role === 'evaluator' ? User::factory()->evaluator()->create() : User::factory()->create(['role' => $role]);
-            $owned = Project::factory()->create(['user_id' => $user->id]);
-            $group = Project::factory()->create();
-            $group->members()->attach($user);
-            $unrelated = Project::factory()->publicListing()->create();
-            $assigned = $role === 'evaluator' ? ReviewRequest::factory()->accepted()->create(['evaluator_id' => $user->id]) : null;
+        $user = User::factory()->create();
+        $owned = Project::factory()->create(['user_id' => $user->id]);
+        $group = Project::factory()->create();
+        $group->members()->attach($user);
+        $unrelated = Project::factory()->publicListing()->create();
 
-            $response = $this->actingAs($user)->get(route('account.projects'))->assertOk()
-                ->assertViewHas('projects', fn ($items) => $items->total() === 2 && $items->getCollection()->pluck('id')->sort()->values()->all() === [$owned->id, $group->id])
-                ->assertSee($owned->title)->assertSee($group->title)->assertDontSee($unrelated->title);
-            if ($role === 'evaluator') {
-                $response->assertDontSee($assigned->project->title)
-                    ->assertDontSee('href="'.route('projects.create').'"', false);
-            } else {
-                $response->assertSee('href="'.route('projects.create').'"', false);
-            }
-        }
+        $this->actingAs($user)->get(route('account.projects'))->assertOk()
+            ->assertViewHas('projects', fn ($items) => $items->total() === 2 && $items->getCollection()->pluck('id')->sort()->values()->all() === [$owned->id, $group->id])
+            ->assertSee($owned->title)->assertSee($group->title)->assertDontSee($unrelated->title)
+            ->assertSee('href="'.route('projects.create').'"', false);
     }
 
     public function test_admin_personal_project_and_review_urls_redirect_to_administration(): void

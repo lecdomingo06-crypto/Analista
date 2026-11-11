@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\Project;
+use App\Models\Rating;
 use App\Models\ReviewRequest;
 use App\Models\Tutorial;
 use App\Models\User;
@@ -41,6 +42,11 @@ class AccountController extends Controller
                 $tab === 'reviews' || $request->routeIs('account.reviews') => ['section' => 'reviews'],
                 default => [],
             });
+        }
+        if ($user->role === 'evaluator' && in_array($tab, ['projects', 'ratings'], true)) {
+            $request->session()->reflash();
+
+            return redirect()->route('account.ratings');
         }
         if (($tab === 'reviews' || $request->routeIs('account.reviews')) && ! in_array($user->role, ['student', 'evaluator'], true)) {
             $request->session()->reflash();
@@ -125,6 +131,11 @@ class AccountController extends Controller
 
             return redirect()->route('admin.index', ['section' => 'projects']);
         }
+        if ($user->role === 'evaluator') {
+            $request->session()->reflash();
+
+            return redirect()->route('account.ratings');
+        }
         $statuses = ['draft', 'pending', 'approved', 'completed', 'needs_changes', 'rejected', 'hidden'];
         $request->validate([
             'q' => ['nullable', 'string', 'max:200'],
@@ -151,6 +162,33 @@ class AccountController extends Controller
             ->withQueryString();
 
         return view('account.projects', compact('user', 'projects', 'search', 'status', 'statuses'));
+    }
+
+    public function ratings(Request $request): View
+    {
+        $user = $request->user();
+        abort_unless($user->role === 'evaluator', 403);
+        $request->validate([
+            'stars' => ['nullable', 'integer', 'between:1,5'],
+            'page' => ['nullable', 'integer', 'min:1'],
+        ]);
+        $selectedRating = $request->string('stars')->toString();
+        $query = Rating::where('evaluator_id', $user->id);
+        $counts = (clone $query)->selectRaw('rating, COUNT(*) AS total')->groupBy('rating')->pluck('total', 'rating');
+        $ratingDistribution = [];
+        $weightedTotal = 0;
+        foreach (range(5, 1) as $stars) {
+            $ratingDistribution[$stars] = (int) ($counts[$stars] ?? 0);
+            $weightedTotal += $stars * $ratingDistribution[$stars];
+        }
+        $total = array_sum($ratingDistribution);
+        $summary = ['total' => $total, 'average' => $total ? (float) ($weightedTotal / $total) : null];
+        $ratings = $query
+            ->when($selectedRating !== '', fn ($query) => $query->where('rating', (int) $selectedRating))
+            ->with(['author:id,name,profile_photo_path', 'reviewRequest:id,project_id,evaluator_id,status', 'reviewRequest.project:id,title'])
+            ->latest()->orderByDesc('id')->paginate(12)->withQueryString();
+
+        return view('account.ratings', compact('user', 'ratings', 'summary', 'ratingDistribution', 'selectedRating'));
     }
 
     public function projectReviews(Request $request, Project $project): View

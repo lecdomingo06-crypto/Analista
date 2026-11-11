@@ -100,7 +100,8 @@ class PublicPagesTest extends TestCase
         foreach (['reviews', 'notifications', 'bookmarks'] as $tab) {
             $this->get(route('account.dashboard', ['tab' => $tab]))->assertOk()->assertViewHas('tab', $tab);
         }
-        $this->get(route('account.projects'))->assertOk();
+        $this->get(route('account.projects'))->assertRedirect(route('account.ratings'));
+        $this->get(route('account.ratings'))->assertOk()->assertSee('My ratings');
 
         $this->get(route('account.profile'))->assertOk()->assertSee($evaluator->email)
             ->assertDontSee('name="headline"', false)->assertDontSee('name="review_modes[]"', false);

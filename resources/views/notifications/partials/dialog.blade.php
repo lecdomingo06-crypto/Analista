@@ -2,11 +2,15 @@
     data-state-url="{{ route('account.notifications.state') }}"
     data-read-all-url="{{ route('account.notifications.readall') }}"
     aria-labelledby="notifications-title" aria-modal="true">
-    <button class="notifications-close" type="button" data-notifications-close aria-label="Close notifications" title="Close (Esc)"><span aria-hidden="true">×</span></button>
     <div class="notifications-content">
         <header class="notifications-heading">
-            <h2 id="notifications-title">Notifications</h2>
-            <p>Your review conversations and community updates, together.</p>
+            <span class="notifications-heading-icon" aria-hidden="true"><x-icon name="bell"/></span>
+            <div class="notifications-heading-copy">
+                <span class="notifications-brand" aria-hidden="true"><x-icon name="mark"/>analista<span>.</span></span>
+                <h2 id="notifications-title">Notifications</h2>
+                <p>Your latest community updates.</p>
+            </div>
+            <button class="notifications-close" type="button" data-notifications-close aria-label="Close notifications" title="Close (Esc)"><span aria-hidden="true">×</span></button>
         </header>
         <div class="notifications-toolbar">
             <span data-notifications-unread aria-live="polite"></span>
@@ -27,7 +31,7 @@
         </div>
         <p class="notifications-status" data-notifications-status role="status" aria-live="polite"></p>
         <button class="notifications-retry" type="button" data-notifications-retry hidden>Try again</button>
-        <footer class="notifications-footer"><a href="{{ route('account.dashboard', ['tab' => 'notifications']) }}">All notifications &amp; conversations <x-icon name="arrow-up-right"/></a></footer>
+        <footer class="notifications-footer"><a href="{{ route('account.dashboard', ['tab' => 'notifications']) }}">View all notifications <x-icon name="arrow-up-right"/></a></footer>
     </div>
     <template data-notifications-system-icon><x-icon name="bell"/></template>
 </dialog>

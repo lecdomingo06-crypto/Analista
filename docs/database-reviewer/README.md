@@ -2,6 +2,10 @@
 
 Created November 8, 2026 from the local `analista` database schema. The diagrams include all **29 tables, 275 columns and 35 enforced foreign keys**. No live account records, credentials, messages or private document contents are included.
 
+## Single PDF reviewer
+
+[Download the 13-page PDF](Analista-database-reviewer.pdf). It includes six beginner study pages covering terminology, relationships, SELECT and JOIN queries, practice questions with answers, and the table catalog, followed by all seven diagrams. Diagram pages use larger sizes to preserve readable column labels when zoomed.
+
 ## Study order
 
 1. **01-start-here.png** — the student / project / PDF / evaluator / review flow, plus a fictional example of columns and rows.

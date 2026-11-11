@@ -11,7 +11,7 @@ use App\Models\Tutorial;
 use App\Models\User;
 use App\Support\AdminAudit;
 use App\Support\AdminDashboard;
-use App\Support\YouTubeVideo;
+use App\Support\TutorialPublishing;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -376,15 +376,7 @@ class AdminController extends Controller
     public function storeTutorial(Request $request): RedirectResponse
     {
         $this->authorizeAdmin($request);
-        $data = $this->tutorialData($request);
-        $data['user_id'] = $request->user()->id;
-        $data['slug'] = $this->uniqueSlug($data['title']);
-        DB::transaction(function () use ($request, $data) {
-            $tutorial = Tutorial::create($data);
-            AdminAudit::record($request->user(), 'tutorial.created', 'tutorial', $tutorial->id, [], [
-                'is_published' => $tutorial->is_published, 'featured' => $tutorial->featured,
-            ]);
-        }, 3);
+        TutorialPublishing::save($request);
 
         return back()->with('success', 'Tutorial created.');
     }
@@ -392,19 +384,7 @@ class AdminController extends Controller
     public function updateTutorial(Request $request, Tutorial $tutorial): RedirectResponse
     {
         $this->authorizeAdmin($request);
-        $data = $this->tutorialData($request);
-        DB::transaction(function () use ($request, $tutorial, $data) {
-            $tutorial = Tutorial::query()->lockForUpdate()->findOrFail($tutorial->id);
-            $before = ['is_published' => $tutorial->is_published, 'featured' => $tutorial->featured];
-            $tutorial->fill($data);
-            $changedFields = array_keys($tutorial->getDirty());
-            if ($changedFields !== []) {
-                $tutorial->save();
-                AdminAudit::record($request->user(), 'tutorial.updated', 'tutorial', $tutorial->id, $before, [
-                    'is_published' => $tutorial->is_published, 'featured' => $tutorial->featured,
-                ], null, ['changed_fields' => $changedFields]);
-            }
-        }, 3);
+        TutorialPublishing::save($request, $tutorial);
 
         return back()->with('success', 'Tutorial updated.');
     }
@@ -412,12 +392,7 @@ class AdminController extends Controller
     public function destroyTutorial(Request $request, Tutorial $tutorial): RedirectResponse
     {
         $this->authorizeAdmin($request);
-        DB::transaction(function () use ($request, $tutorial) {
-            $tutorial = Tutorial::query()->lockForUpdate()->findOrFail($tutorial->id);
-            $before = ['is_published' => $tutorial->is_published, 'featured' => $tutorial->featured];
-            $tutorial->delete();
-            AdminAudit::record($request->user(), 'tutorial.deleted', 'tutorial', $tutorial->id, $before);
-        }, 3);
+        TutorialPublishing::destroy($request->user(), $tutorial);
 
         return back()->with('success', 'Tutorial deleted.');
     }
@@ -539,48 +514,6 @@ class AdminController extends Controller
         return $state;
     }
 
-    private function tutorialData(Request $request): array
-    {
-        $this->sanitizeInput($request, ['title', 'category', 'excerpt', 'body', 'video_creator']);
-        $data = $request->validate([
-            'title' => ['required', 'string', 'max:180'],
-            'category' => ['required', 'string', 'max:80'],
-            'excerpt' => ['required', 'string', 'max:500'],
-            'youtube_url' => ['bail', 'required', 'string', 'max:2048', function (string $attribute, mixed $value, \Closure $fail): void {
-                if (YouTubeVideo::idFromUrl($value) === null) {
-                    $fail('Enter a valid HTTPS YouTube video link, such as https://www.youtube.com/watch?v=VIDEO_ID.');
-                }
-            }],
-            'video_creator' => ['required', 'string', 'max:120'],
-            'body' => ['nullable', 'string', 'max:60000'],
-            'is_published' => ['sometimes', 'boolean'],
-            'featured' => ['sometimes', 'boolean'],
-        ]);
-        foreach (['title', 'category', 'excerpt', 'video_creator'] as $field) {
-            $data[$field] = trim(strip_tags($data[$field]));
-            if ($data[$field] === '') {
-                throw ValidationException::withMessages([$field => 'Please enter text for this field.']);
-            }
-        }
-        $data['youtube_video_id'] = YouTubeVideo::idFromUrl($data['youtube_url']);
-        unset($data['youtube_url']);
-        $data['body'] = trim(strip_tags($data['body'] ?? ''));
-        $data['is_published'] = $request->boolean('is_published');
-        $data['featured'] = $request->boolean('featured');
-
-        return $data;
-    }
-
-    private function uniqueSlug(string $title): string
-    {
-        $base = Str::slug($title) ?: 'tutorial';
-        $slug = $base;
-        for ($number = 2; Tutorial::where('slug', $slug)->exists(); $number++) {
-            $slug = $base.'-'.$number;
-        }
-
-        return $slug;
-    }
 
     private function plain(?string $value): ?string
     {

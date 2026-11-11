@@ -29,7 +29,7 @@
 .my-projects-page .my-projects-filter-clear a{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:9px 0;color:var(--project-heading);font:400 14px/1.5 var(--font-sans)}
 .my-projects-page .my-projects-filter-clear:hover,.my-projects-page .my-projects-filter-clear a:hover{text-decoration:underline;text-underline-offset:4px}
 .my-projects-page .my-projects-results{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 20px;margin:24px 0 16px;font:400 14px/1.6 var(--font-sans);color:var(--project-copy)}
-.my-projects-page .my-projects-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:20px;align-items:start}
+.my-projects-page .my-projects-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:20px;align-items:stretch;grid-auto-rows:1fr}
 .my-projects-page .my-project-card.panel.stack{min-width:0;margin:0;padding:24px;border:1px solid var(--project-border);border-radius:20px;background:var(--project-surface);box-shadow:var(--project-shadow);gap:18px;overflow-wrap:anywhere}
 .my-projects-page .my-project-meta.actions{gap:9px;flex-wrap:wrap}
 .my-projects-page .my-project-card .status{display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:5px 12px;border:1px solid transparent;border-radius:999px;background:linear-gradient(145deg,var(--project-tech-top),var(--project-tech-bg));box-shadow:var(--project-capsule-shadow);color:var(--project-tech-text);font:600 13px/1.5 var(--font-sans)}
@@ -54,13 +54,22 @@
 .my-projects-page .my-project-card-compact .my-project-meta{gap:8px}
 .my-projects-page .my-project-category{display:inline-flex;align-items:center;max-width:100%;padding:5px 12px;border:1px solid transparent;border-radius:999px;background:linear-gradient(145deg,var(--project-category-top),var(--project-category-bg));box-shadow:var(--project-capsule-shadow);color:var(--project-category-text);font:600 13px/1.5 var(--font-sans)}
 .my-projects-page .my-project-card-compact .my-project-heading h3{font:600 20px/1.45 var(--font-sans);letter-spacing:-.15px}
-.my-projects-page .my-project-card-compact .my-project-heading h3 a{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere}
+.my-projects-page .my-project-card-compact .my-project-heading h3 a{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;min-height:2.9em;overflow:hidden;overflow-wrap:anywhere}
 .my-projects-page .my-project-card-compact .my-project-heading>p{margin:8px 0 0;font:400 15px/1.5 var(--font-sans);overflow-wrap:anywhere}
-.my-projects-page .my-project-summary{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;margin:0;overflow:hidden;overflow-wrap:anywhere;color:var(--project-copy);font:400 16px/1.65 var(--font-sans)}
+.my-projects-page .my-project-summary{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;min-height:4.95em;margin:0;overflow:hidden;overflow-wrap:anywhere;color:var(--project-copy);font:400 16px/1.65 var(--font-sans)}
 .my-projects-page .my-project-stats{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px 12px;color:var(--project-copy);font:400 13px/1.6 var(--font-sans)}
 .my-projects-page .my-project-stats>span{display:inline-flex;align-items:center;gap:5px;min-width:0}
 .my-projects-page .my-project-stats .icon{width:15px;height:15px;flex-shrink:0}
-.my-projects-page .my-project-card-compact .my-project-actions{gap:8px;align-items:flex-start}
+.my-projects-page .my-project-review-progress{min-height:59px}
+.my-projects-page .my-project-review-state{display:grid;gap:4px}
+.my-projects-page .my-project-review-state strong{display:flex;align-items:center;gap:7px;color:var(--project-heading);font:600 14px/1.5 var(--font-sans)}
+.my-projects-page .my-project-review-state .icon{width:16px;height:16px;flex-shrink:0;color:var(--project-copy)}
+.my-projects-page .my-project-review-state p{margin:0;color:var(--project-copy);font:400 13px/1.5 var(--font-sans)}
+.my-projects-page .my-project-review-state.is-completed{--my-project-review-color:var(--project-progress-fill)}
+.my-projects-page .my-project-review-state.is-ongoing{--my-project-review-color:#b42318;--project-progress-fill:#b42318;--project-progress-track:#fee4e2}
+:root[data-theme=dark] .my-projects-page .my-project-review-state.is-ongoing{--my-project-review-color:#fda29b;--project-progress-fill:#fda29b;--project-progress-track:#512b2d}
+.my-projects-page .my-project-review-state:is(.is-completed,.is-ongoing) :is(strong,p,.icon,.project-volunteer-progress){color:var(--my-project-review-color)}
+.my-projects-page .my-project-card-compact .my-project-actions{gap:8px;align-items:flex-start;margin-top:auto}
 .my-projects-page .my-project-card-compact .my-project-actions>.btn,.my-projects-page .my-project-review-menu{flex:1 1 110px;min-width:0;max-width:100%}
 .my-projects-page .my-project-review-menu>summary.btn{display:flex;justify-content:center;width:100%;list-style:none;cursor:pointer}
 .my-projects-page .my-project-review-menu>summary::-webkit-details-marker{display:none}

@@ -1,0 +1,1 @@
+The `tutorial-sample.mp4` and `tutorial-sample.webm` files are small, original canvas recordings generated with Chrome MediaRecorder for tutorial upload and playback tests. Both contain a synthetic Analista test screen; they contain no external video or personal data.

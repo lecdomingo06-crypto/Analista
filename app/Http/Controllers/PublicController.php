@@ -24,8 +24,8 @@ class PublicController extends Controller
         }
 
         $request->session()->put('home.featured_evaluator_ids', $reviewers->modelKeys());
-        $tutorials = Tutorial::where('is_published', true)->whereNotNull('youtube_video_id')->orderByDesc('featured')->orderBy('id')->take(6)->get();
-        $stats = ['evaluators' => $this->reviewers()->count(), 'projects' => Project::whereIn('status', ['approved', 'completed'])->where('is_public', true)->count(), 'tutorials' => Tutorial::where('is_published', true)->whereNotNull('youtube_video_id')->count(), 'reviews' => ReviewRequest::where('status', 'completed')->count()];
+        $tutorials = Tutorial::where('is_published', true)->videos()->orderByDesc('featured')->orderBy('id')->take(6)->get();
+        $stats = ['evaluators' => $this->reviewers()->count(), 'projects' => Project::whereIn('status', ['approved', 'completed'])->where('is_public', true)->count(), 'tutorials' => Tutorial::where('is_published', true)->videos()->count(), 'reviews' => ReviewRequest::where('status', 'completed')->count()];
         return view('home', compact('reviewers', 'tutorials', 'stats'));
     }
     public function evaluators(Request $request)
@@ -59,7 +59,7 @@ class PublicController extends Controller
     }
     public function tutorials(Request $request)
     {
-        $query = Tutorial::where('is_published', true)->whereNotNull('youtube_video_id')->with('author');
+        $query = Tutorial::where('is_published', true)->videos()->with('author');
         if ($request->filled('q')) {
             $term = mb_substr($request->string('q')->toString(), 0, 100);
             $query->where(fn ($q) => $q->where('title', 'like', "%{$term}%")->orWhere('excerpt', 'like', "%{$term}%")->orWhere('video_creator', 'like', "%{$term}%"));
@@ -67,12 +67,12 @@ class PublicController extends Controller
         if ($request->filled('category')) $query->where('category', $request->query('category'));
         if ($request->boolean('saved') && auth()->check()) $query->whereHas('bookmarkedBy', fn ($q) => $q->where('users.id', auth()->id()));
         $tutorials = $query->orderByDesc('featured')->orderBy('id')->paginate(10)->withQueryString();
-        $categories = Tutorial::where('is_published', true)->whereNotNull('youtube_video_id')->distinct()->orderBy('category')->pluck('category');
+        $categories = Tutorial::where('is_published', true)->videos()->distinct()->orderBy('category')->pluck('category');
         return view('tutorials.index', compact('tutorials', 'categories'));
     }
     public function tutorial(Tutorial $tutorial)
     {
-        abort_unless($tutorial->is_published || auth()->user()?->isAdmin(), 404);
+        abort_unless($tutorial->canView(auth()->user()), 404);
         $saved = auth()->check() && auth()->user()->bookmarks()->where('tutorials.id', $tutorial->id)->exists();
         return view('tutorials.show', compact('tutorial', 'saved'));
     }

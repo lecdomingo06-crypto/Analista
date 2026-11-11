@@ -270,7 +270,7 @@ class SensitiveFileAccessHistoryTest extends TestCase
         $this->actingAs($admin);
         $response = $this->get(route('admin.index', ['section' => 'file-access', 'file_type' => 'thesis_pdf', 'role' => 'student', 'q' => 'Cedar']));
         $response->assertOk()->assertViewHas('fileAccesses', fn ($items) => $items->total() === 22)
-            ->assertDontSee($actor->email)->assertDontSee('PRIVATE_THESIS_NAME')->assertSee($project->title);
+            ->assertDontSee($actor->email)->assertSee('PRIVATE_THESIS_NAME.pdf')->assertSee($project->title);
         parse_str(parse_url($response->viewData('fileAccesses')->nextPageUrl(), PHP_URL_QUERY), $query);
         $this->assertSame('file-access', $query['section']);
         $this->assertSame('thesis_pdf', $query['file_type']);
@@ -327,7 +327,8 @@ class SensitiveFileAccessHistoryTest extends TestCase
         $admin = User::factory()->admin()->create();
         $response = $this->actingAs($admin)->get(route('admin.index', ['section' => 'file-access']))->assertOk()
             ->assertDontSee($actor->name)->assertDontSee($actor->email)->assertDontSee($project->title);
-        $this->assertSame('Thesis PDF', $this->accessHeading($response->getContent(), $entryId));
+        $this->assertSame('Former account requested a thesis PDF download', $this->accessHeading($response->getContent(), $entryId));
+        $response->assertSee('File no longer available')->assertSee('Unavailable');
         $this->assertNoTechnicalMetadata($response->getContent(), $entryId);
         $this->assertSame('Thesis PDF #'.$fileId, $entry->fileLabel());
         $this->assertDatabaseHas('sensitive_file_accesses', [
@@ -335,14 +336,15 @@ class SensitiveFileAccessHistoryTest extends TestCase
         ]);
     }
 
-    public function test_file_access_headings_use_current_escaped_project_titles_without_copying_titles_into_history(): void
+    public function test_file_access_context_uses_current_escaped_names_and_titles_without_copying_them_into_history(): void
     {
         [$project, $document] = $this->thesis();
         $project->update(['title' => 'Cedar campus thesis']);
         $review = $this->review($project, $document, ['status' => 'completed']);
         $this->prepareReviewOutput($review);
         [, $evidence] = $this->evidence();
-        $this->actingAs(User::factory()->admin()->create());
+        $admin = User::factory()->admin()->create(['name' => 'Review Administrator']);
+        $this->actingAs($admin);
         $this->get(route('documents.download', $document))->assertOk();
         $this->get(route('reviews.output', $review))->assertOk();
         $this->get(route('account.evaluator-evidence.download', $evidence))->assertOk();
@@ -351,10 +353,12 @@ class SensitiveFileAccessHistoryTest extends TestCase
         $url = route('admin.index', ['section' => 'file-access']);
         $response = $this->get($url)->assertOk();
         foreach (['thesis_pdf', 'review_pdf'] as $type) {
-            $this->assertSame($project->title, $this->accessHeading($response->getContent(), $entries[$type]->id));
+            $action = $type === 'thesis_pdf' ? 'thesis' : 'review';
+            $this->assertSame('Review Administrator requested a '.$action.' PDF download', $this->accessHeading($response->getContent(), $entries[$type]->id));
+            $this->assertSame($project->title, $this->accessDetail($response->getContent(), $entries[$type]->id, 'Project'));
             $this->assertNoTechnicalMetadata($response->getContent(), $entries[$type]->id);
         }
-        $this->assertSame('Evaluator evidence', $this->accessHeading($response->getContent(), $entries['evaluator_evidence']->id));
+        $this->assertSame('Review Administrator requested a verification file download', $this->accessHeading($response->getContent(), $entries['evaluator_evidence']->id));
         $this->assertNoTechnicalMetadata($response->getContent(), $entries['evaluator_evidence']->id);
         foreach ($entries as $entry) {
             $this->assertDatabaseHas('sensitive_file_accesses', [
@@ -368,19 +372,90 @@ class SensitiveFileAccessHistoryTest extends TestCase
         $project->update(['title' => $renamedTitle]);
         $renamed = $this->get($url)->assertOk()->assertSee(e($renamedTitle), false)->assertDontSee($renamedTitle, false);
         foreach (['thesis_pdf', 'review_pdf'] as $type) {
-            $this->assertSame($renamedTitle, $this->accessHeading($renamed->getContent(), $entries[$type]->id));
+            $this->assertSame($renamedTitle, $this->accessDetail($renamed->getContent(), $entries[$type]->id, 'Project'));
         }
-        $this->assertSame('Evaluator evidence', $this->accessHeading($renamed->getContent(), $entries['evaluator_evidence']->id));
+        $this->assertSame('Review Administrator requested a verification file download', $this->accessHeading($renamed->getContent(), $entries['evaluator_evidence']->id));
         $project->delete();
         $deleted = $this->get($url)->assertOk();
         foreach (['thesis_pdf' => 'Thesis PDF', 'review_pdf' => 'Review PDF'] as $type => $label) {
-            $this->assertSame($label, $this->accessHeading($deleted->getContent(), $entries[$type]->id));
+            $this->assertStringContainsString('requested a ', $this->accessHeading($deleted->getContent(), $entries[$type]->id));
+            $this->assertSame('', $this->accessDetail($deleted->getContent(), $entries[$type]->id, 'Project'));
+            $this->assertSame('File no longer available', $this->accessDetail($deleted->getContent(), $entries[$type]->id, 'File'));
             $this->assertNoTechnicalMetadata($deleted->getContent(), $entries[$type]->id);
         }
         $this->assertSame($storedRows, SensitiveFileAccess::orderBy('id')->get()->toJson());
         $this->assertStringNotContainsString('Cedar campus thesis', $storedRows);
         $this->assertStringNotContainsString('Cedar revised thesis', SensitiveFileAccess::all()->toJson());
         $this->assertDatabaseCount('admin_actions', 0);
+    }
+
+    public function test_access_context_distinguishes_the_viewer_from_the_file_submitter_for_each_file_type(): void
+    {
+        [$project, $document] = $this->thesis();
+        $uploader = User::factory()->create(['name' => 'Student Uploader']);
+        $document->update(['user_id' => $uploader->id, 'original_name' => 'Research manuscript.pdf']);
+        $reviewer = User::factory()->evaluator()->create(['name' => 'Assigned Evaluator']);
+        $review = $this->review($project, $document, ['status' => 'completed', 'evaluator_id' => $reviewer->id]);
+        $this->prepareReviewOutput($review);
+        [$applicant, $evidence] = $this->evidence();
+        $applicant->update(['name' => 'Evidence Applicant']);
+        $evidence->update(['original_name' => '<img src=x onerror=alert(1)> & background.pdf']);
+        $admin = User::factory()->admin()->create(['name' => 'File Reviewer']);
+        $this->actingAs($admin);
+        $this->get(route('documents.download', $document))->assertOk();
+        $this->get(route('reviews.output', $review))->assertOk();
+        $this->get(route('account.evaluator-evidence.download', $evidence))->assertOk();
+        $rows = SensitiveFileAccess::all()->keyBy('file_type');
+        $before = SensitiveFileAccess::orderBy('id')->get()->toJson();
+        $url = route('admin.index', ['section' => 'file-access']);
+        $response = $this->get($url)->assertOk()->assertSee('Evaluator verification')
+            ->assertSee(e($evidence->original_name), false)->assertDontSee($evidence->original_name, false)
+            ->assertDontSee($document->path)->assertDontSee($review->output_path)->assertDontSee($evidence->path)
+            ->assertDontSee($admin->email)->assertDontSee($applicant->email);
+        foreach (['thesis_pdf' => [$document->original_name, 'Student Uploader'], 'review_pdf' => [$review->output_original_name, 'Assigned Evaluator'], 'evaluator_evidence' => [$evidence->original_name, 'Evidence Applicant']] as $type => [$filename, $submitter]) {
+            $entry = $rows[$type];
+            $this->assertStringStartsWith('File Reviewer requested ', $this->accessHeading($response->getContent(), $entry->id));
+            $this->assertSame($filename, $this->accessDetail($response->getContent(), $entry->id, 'File'));
+            $this->assertSame($submitter, $this->accessDetail($response->getContent(), $entry->id, 'Submitted by'));
+            $this->assertNoTechnicalMetadata($response->getContent(), $entry->id);
+        }
+        $applicant->update(['name' => 'Updated Applicant']);
+        $evidence->update(['original_name' => 'Updated professional background.pdf']);
+        $renamed = $this->get($url)->assertOk();
+        $this->assertSame('Updated Applicant', $this->accessDetail($renamed->getContent(), $rows['evaluator_evidence']->id, 'Submitted by'));
+        $this->assertSame('Updated professional background.pdf', $this->accessDetail($renamed->getContent(), $rows['evaluator_evidence']->id, 'File'));
+        $evidence->delete();
+        $deleted = $this->get($url)->assertOk()->assertDontSee('Updated professional background.pdf')->assertDontSee('Updated Applicant');
+        $this->assertSame('File no longer available', $this->accessDetail($deleted->getContent(), $rows['evaluator_evidence']->id, 'File'));
+        $this->assertSame($before, SensitiveFileAccess::orderBy('id')->get()->toJson());
+        $this->assertStringNotContainsString('Student Uploader', $before);
+        $this->assertDatabaseCount('admin_actions', 0);
+    }
+
+    public function test_access_context_does_not_associate_files_from_a_different_recorded_parent(): void
+    {
+        [$project, $document] = $this->thesis();
+        [$otherProject, $otherDocument] = $this->thesis();
+        [$applicant, $evidence] = $this->evidence();
+        [$otherApplicant, $otherEvidence] = $this->evidence();
+        $admin = User::factory()->admin()->create();
+        $thesisEntry = SensitiveFileAccess::create(['actor_id' => $admin->id, 'actor_role' => 'admin', 'file_type' => 'thesis_pdf', 'file_id' => $otherDocument->id, 'project_id' => $project->id]);
+        $evidenceEntry = SensitiveFileAccess::create(['actor_id' => $admin->id, 'actor_role' => 'admin', 'file_type' => 'evaluator_evidence', 'file_id' => $otherEvidence->id, 'verification_id' => $evidence->evaluator_verification_id]);
+        $response = $this->actingAs($admin)->get(route('admin.index', ['section' => 'file-access']))->assertOk();
+        foreach ([$thesisEntry, $evidenceEntry] as $entry) {
+            $this->assertSame('File no longer available', $this->accessDetail($response->getContent(), $entry->id, 'File'));
+            $this->assertSame('Unavailable', $this->accessDetail($response->getContent(), $entry->id, 'Submitted by'));
+        }
+        $response->assertDontSee($otherProject->owner->name)->assertDontSee($otherApplicant->name);
+    }
+
+    private function accessDetail(string $html, int $entryId, string $label): string
+    {
+        $document = new \DOMDocument;
+        @$document->loadHTML('<?xml encoding="UTF-8">'.$html);
+        $values = (new \DOMXPath($document))->query('//article[@data-access-id="'.$entryId.'"]//dl/div[dt="'.$label.'"]/dd');
+
+        return $values->length ? trim($values->item(0)->textContent) : '';
     }
 
     private function accessHeading(string $html, int $entryId): string
@@ -402,7 +477,7 @@ class SensitiveFileAccessHistoryTest extends TestCase
         $entry = $entries->item(0);
         $this->assertDoesNotMatchRegularExpression('/(?:Thesis PDF|Review PDF|Evaluator evidence|Project|Application|Entry)\s+#\d+|PDF version\s+\d+/u', $entry->textContent);
         $this->assertStringContainsString('Download requested', $entry->textContent);
-        $this->assertCount(1, (new \DOMXPath($document))->query('.//p', $entry));
+        $this->assertGreaterThanOrEqual(2, (new \DOMXPath($document))->query('.//dl/div', $entry)->length);
         $this->assertCount(1, (new \DOMXPath($document))->query('.//time[@datetime]', $entry));
     }
 

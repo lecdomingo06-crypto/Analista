@@ -1,0 +1,26 @@
+.admin-page .admin-file-access-entry{display:grid;grid-template-columns:40px minmax(0,1fr);align-items:start;gap:14px;padding:24px 0}
+.admin-file-access-icon{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid var(--project-border);border-radius:12px;background:var(--project-sky-wash,#edf7ff);color:var(--project-heading)}
+.admin-file-access-icon>.icon{width:21px;height:21px}
+.admin-file-access-content{min-width:0}
+.admin-page .admin-file-access-content .admin-history-heading{align-items:flex-start;gap:8px 20px}
+.admin-page .admin-file-access-content h3{flex:1 1 300px;min-width:0;font:400 16px/1.6 var(--font-sans);letter-spacing:0;overflow-wrap:anywhere}
+.admin-page .admin-file-access-content h3 strong{font-weight:600}
+.admin-file-access-content time{flex-shrink:0;padding-top:3px;color:var(--project-copy);font:400 13px/1.6 var(--font-sans);white-space:nowrap}
+.admin-file-access-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-top:10px;color:var(--project-copy);font:400 13px/1.5 var(--font-sans)}
+.admin-file-access-type{display:inline-flex;align-items:center;min-height:27px;padding:4px 10px;border:1px solid var(--project-border);border-radius:999px;background:var(--project-control,#f4f8fc);color:var(--project-heading);font-weight:600}
+.admin-file-access-action::before{content:"";display:inline-block;width:4px;height:4px;margin-right:8px;border-radius:50%;background:currentColor;vertical-align:middle}
+.admin-file-access-details{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:12px 24px;min-width:0;margin:14px 0 0;padding:14px 16px;border:1px solid var(--project-border);border-radius:12px;background:var(--project-field,#f7fafc)}
+.admin-file-access-details>div{min-width:0}
+.admin-file-access-details dt{margin:0 0 3px;color:var(--project-copy);font:400 13px/1.5 var(--font-sans)}
+.admin-file-access-details dd{margin:0;color:var(--project-heading);font:500 15px/1.6 var(--font-sans);overflow-wrap:anywhere}
+.admin-file-access-project{grid-column:1/-1}
+:root[data-theme=dark] .admin-file-access-icon{background:var(--night-field,#21314d)}
+:root[data-theme=dark] .admin-file-access-type{background:var(--night-field,#21314d)}
+:root[data-theme=dark] .admin-file-access-details{background:var(--night-panel,#17233b)}
+@media(max-width:600px){
+    .admin-page .admin-file-access-entry{grid-template-columns:32px minmax(0,1fr);gap:10px;padding:20px 0}
+    .admin-file-access-icon{width:32px;height:32px;border-radius:10px}
+    .admin-file-access-icon>.icon{width:18px;height:18px}
+    .admin-file-access-details{grid-template-columns:minmax(0,1fr);gap:12px;padding:12px}
+    .admin-file-access-content time{padding-top:0;font-size:12px;white-space:normal}
+}

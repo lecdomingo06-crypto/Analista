@@ -2,11 +2,16 @@
     @php
         $workspaceRole = auth()->user()->role;
         $workspaceSections = [
-            'projects' => ['label' => 'My projects', 'icon' => 'folder', 'url' => route('account.projects')],
+            ($workspaceRole === 'evaluator' ? 'ratings' : 'projects') => $workspaceRole === 'evaluator'
+                ? ['label' => 'My ratings', 'icon' => 'star', 'url' => route('account.ratings')]
+                : ['label' => 'My projects', 'icon' => 'folder', 'url' => route('account.projects')],
             'reviews' => ['label' => $workspaceRole === 'evaluator' ? 'My reviews' : 'Review requests', 'icon' => 'inbox', 'url' => route('account.reviews')],
             'bookmarks' => ['label' => 'Saved tutorials', 'icon' => 'bookmark', 'url' => route('tutorials.index', ['saved' => 1])],
         ];
-        $workspaceCurrent = $workspaceSections[$current] ?? $workspaceSections['projects'];
+        if (auth()->user()->isEvaluator()) {
+            $workspaceSections['tutorials'] = ['label' => 'My tutorials', 'icon' => 'play', 'url' => route('account.tutorials.index')];
+        }
+        $workspaceCurrent = $workspaceSections[$current] ?? $workspaceSections[$workspaceRole === 'evaluator' ? 'ratings' : 'projects'];
     @endphp
     <div class="workspace-menu-slot {{ ($library ?? false) ? 'workspace-menu-slot-library' : '' }}">
         <details class="workspace-menu" data-workspace-menu>
